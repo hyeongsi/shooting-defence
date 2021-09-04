@@ -145,7 +145,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 102714569}
-  m_LocalRotation: {x: 0.15936305, y: 0.09969967, z: -0.016179029, w: 0.9820396}
+  m_LocalRotation: {x: 0.15936309, y: 0.09969967, z: -0.016179033, w: 0.9820396}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -221,7 +221,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170791092}
-  m_LocalRotation: {x: 0.13019232, y: 0.1474235, z: -0.019579753, w: 0.9802719}
+  m_LocalRotation: {x: 0.13019234, y: 0.14742352, z: -0.019579753, w: 0.9802719}
   m_LocalPosition: {x: 0, y: 6, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -378,7 +378,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bbdb7845572d82c40a937ab6c92d9747, type: 2}
+  - {fileID: 2100000, guid: 4690a74a744955c429400981c8e1bc95, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -550,7 +550,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0c6415c1232332a448269fb3c1941316, type: 2}
+  - {fileID: 2100000, guid: 6d818365c584b8641af18fd130de61a6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -647,7 +647,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 416108964}
-  m_LocalRotation: {x: 0.13019235, y: 0.14742349, z: -0.01957968, w: 0.9802719}
+  m_LocalRotation: {x: 0.13019235, y: 0.1474235, z: -0.019579682, w: 0.9802719}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -783,7 +783,7 @@ GameObject:
   m_Layer: 0
   m_Name: CM StateDrivenCamera1
   m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -796,10 +796,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 512004953}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f98a014c83db9c499a3754be617689d, type: 3}
+  m_Script: {fileID: 11500000, guid: 64dab93b78279fd4f83b339343e7d009, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraSelector: {fileID: 0}
+  cameraSelector: {fileID: 512004957}
   cameraState: 0
   aimCamFlag: 0
   deadCamFlag: 0
@@ -841,42 +841,20 @@ MonoBehaviour:
     m_VirtualCamera: {fileID: 2144282256}
     m_ActivateAfter: 0
     m_MinDuration: 0
-  - m_FullHash: 1501332924
-    m_VirtualCamera: {fileID: 0}
-    m_ActivateAfter: 0
-    m_MinDuration: 0
   - m_FullHash: -1312193957
     m_VirtualCamera: {fileID: 998962359}
     m_ActivateAfter: 0
     m_MinDuration: 0
   m_DefaultBlend:
-    m_Style: 7
+    m_Style: 1
     m_Time: 0.5
     m_CustomCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  m_CustomBlends: {fileID: 11400000, guid: dd88ba015cd9db245a95e9e3097cee4f, type: 2}
+  m_CustomBlends: {fileID: 11400000, guid: 8bbc372b493f6e34a84cc56c0ea521a0, type: 2}
   m_ParentHash:
   - m_Hash: -2065065719
     m_ParentHash: 756556552
@@ -915,7 +893,7 @@ Animator:
   m_GameObject: {fileID: 512004953}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 42a58d6fa1454b94698e4a87d8ed5b57, type: 2}
+  m_Controller: {fileID: 9100000, guid: b51b9e8cf57ef6d4ab100ae53329a1f2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -936,7 +914,7 @@ GameObject:
   m_Layer: 0
   m_Name: GroundChecker
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1020,7 +998,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 589295885}
-  m_LocalRotation: {x: 0.10268287, y: 0.10046448, z: -0.010424679, w: 0.9895729}
+  m_LocalRotation: {x: 0.102682866, y: 0.100464486, z: -0.01042468, w: 0.9895729}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1074,7 +1052,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 724446868}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 951f0391aff7e8b459f55185042b8b38, type: 3}
+  m_Script: {fileID: 11500000, guid: e402c6ff39770374dbce6e2af2078c2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 724446871}
@@ -1083,9 +1061,9 @@ MonoBehaviour:
   cameraFunction: {fileID: 512004954}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1048576
+    m_Bits: 3145728
   weapon: {fileID: 1745979454}
-  smoothingSpeed: 10
+  smoothingSpeed: 5
   horizontal: 0
   vertical: 0
   sprintFlag: 0
@@ -1093,7 +1071,7 @@ MonoBehaviour:
   isGrounded: 0
   moveSpeed: 5
   sprintSpeed: 8
-  aimMoveSpeed: 3.5
+  aimMoveSpeed: 3
   jumpHeight: 3
   gravity: -20
   groundCheckDistance: 0.4
@@ -1193,7 +1171,7 @@ GameObject:
   - component: {fileID: 998962360}
   - component: {fileID: 998962359}
   m_Layer: 0
-  m_Name: CM Test
+  m_Name: CM Spectate
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -1306,7 +1284,7 @@ MonoBehaviour:
   m_DeadZoneHeight: 0
   m_SoftZoneWidth: 0.8
   m_SoftZoneHeight: 0.8
-  m_BiasX: 0
+  m_BiasX: 0.10000002
   m_BiasY: 0
   m_CenterOnActivate: 1
 --- !u!114 &1077183770
@@ -1432,8 +1410,8 @@ MonoBehaviour:
   m_DeadZoneHeight: 0
   m_SoftZoneWidth: 0.8
   m_SoftZoneHeight: 0.8
-  m_BiasX: 0
-  m_BiasY: 0
+  m_BiasX: 0.17
+  m_BiasY: -0.050000027
   m_CenterOnActivate: 1
 --- !u!114 &1416301010
 MonoBehaviour:
@@ -1567,7 +1545,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4693cb1f63a68fa4e903d4664a9d8e4a, type: 2}
+  - {fileID: 2100000, guid: 0bad65d98b2568a42b78fefda74e5da1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1605,15 +1583,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1745979449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9c07c1fa7d94b548a4480a26e4b78de, type: 3}
+  m_Script: {fileID: 11500000, guid: 52eccb2b8635ed542a45e51f27931e15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isAutomatic: 1
   magazineSize: 30
   bulletsLeft: 30
   bulletsPerShot: 1
-  reloadTime: 2.5
-  nextShotDelay: 0.1
+  reloadTime: 2.2
+  nextShotDelay: 0.09
   isShooting: 0
   isReadyToShoot: 1
   isReloading: 0
@@ -1674,7 +1652,7 @@ MonoBehaviour:
   m_DeadZoneHeight: 0
   m_SoftZoneWidth: 0.8
   m_SoftZoneHeight: 0.8
-  m_BiasX: 0
+  m_BiasX: 0.11999998
   m_BiasY: 0
   m_CenterOnActivate: 1
 --- !u!114 &1832488165
@@ -1807,7 +1785,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bbdb7845572d82c40a937ab6c92d9747, type: 2}
+  - {fileID: 2100000, guid: 4690a74a744955c429400981c8e1bc95, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
