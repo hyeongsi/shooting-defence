@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Resources(NJH)/TempGameScene.unity
+    guid: 20ee5fbf951e25a4d9ff1ea0fdeac291
   m_configObjects: {}
