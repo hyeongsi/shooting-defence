@@ -5,6 +5,8 @@ using UnityEngine;
 // 맵 불러오기, 저장, 현재 맵 정보
 public class MapManager : MonoBehaviour
 {
+    int[,] blockObjectData;
+    int[,] turretObjectData;
     // 건축물 타입
     // 맵 크기 (x,y)
     // 맵 크기에 따른 건축물 배열 (x,y,z)
@@ -59,5 +61,20 @@ public class MapManager : MonoBehaviour
     }
     #endregion
 
+    public void InitMapData(Vector2 mapSize)
+    {
+        // 맵 데이터 맵 크기에 맞게 생성
+        blockObjectData = new int[(int)mapSize.y, (int)mapSize.x];
+        turretObjectData = new int[(int)mapSize.y, (int)mapSize.x];
 
+        // 초기화
+        for(int y = 0; y < mapSize.y; y++)
+        {
+            for (int x = 0; x < mapSize.x; x++)
+            {
+                blockObjectData[y,x] = 0;
+                turretObjectData[y,x] = 0;
+            }
+        }
+    }
 }
