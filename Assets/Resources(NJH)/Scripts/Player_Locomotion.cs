@@ -7,7 +7,11 @@ public class Player_Locomotion : MonoBehaviour
     [SerializeField] CharacterController characterController;
     [SerializeField] Transform groundChecker;
     [SerializeField] Transform cameraTransform;
+    [SerializeField] Transform aimingTarget;
     [SerializeField] Player_CameraFunction cameraFunction;
+
+    public Cinemachine.AxisState xAxis;
+    public Cinemachine.AxisState yAxis;
 
     [SerializeField] LayerMask groundLayer;
 
@@ -21,11 +25,12 @@ public class Player_Locomotion : MonoBehaviour
     public bool sprintFlag;
     public bool aimFlag;
     public bool isGrounded;
+    public bool rotateLock;
 
     [Header("플레이어 값")]
     public float moveSpeed = 5f;
-    public float sprintSpeed = 8f;
-    public float aimMoveSpeed = 2f;
+    public float sprintSpeed = 6.5f;
+    public float aimMoveSpeed = 3f;
     public float jumpHeight = 3f;
     public float gravity = -9.81f;
     public float groundCheckDistance = 0.4f;
@@ -42,9 +47,10 @@ public class Player_Locomotion : MonoBehaviour
     private void FixedUpdate()
     {
         Loco_Move();
-        Loco_CharacterRotate();
+        Loco_Rotate();
         GroundCheck();
         SetDirection();
+        
     }
 
     private void Update()
@@ -58,22 +64,21 @@ public class Player_Locomotion : MonoBehaviour
     {
         moveDirection = cameraTransform.forward * vertical;
         moveDirection += cameraTransform.right * horizontal;
-        moveDirection.y = 0f;   // 반드시 먼저 0으로 만들고 정규화 해야함
+        moveDirection.y = 0f;   // 먼저 0으로 만들고 정규화 함
         moveDirection.Normalize();
     }
 
-    void Loco_CharacterRotate()
+    void Loco_Rotate()
     {
-        // moveDirection이 Vector3.zero면 입력이 없음 => 방향을 그대로 유지
-        if (moveDirection == Vector3.zero)
-        {
-            moveDirection = transform.forward;
-        }
+        xAxis.Update(Time.deltaTime);
+        yAxis.Update(Time.deltaTime);
 
-        Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothingSpeed * Time.deltaTime);
-        transform.rotation = playerRotation;
+        aimingTarget.eulerAngles = new Vector3(yAxis.Value, xAxis.Value, 0f);
 
+        float cameraYaxis = cameraTransform.rotation.eulerAngles.y;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, cameraYaxis, 0f), smoothingSpeed * Time.deltaTime);
+
+        weapon.transform.forward = aimingTarget.forward;
     }
 
     void GroundCheck()
@@ -87,7 +92,6 @@ public class Player_Locomotion : MonoBehaviour
         characterController.Move(velocity * Time.deltaTime);
     }
 
-
     #region 행동 관련
     void Loco_Move()
     {
@@ -98,6 +102,9 @@ public class Player_Locomotion : MonoBehaviour
 
         if (moveDirection.magnitude > 0f)
         {
+            // 이동 시 입력 카메라 방향대로 회전하도록 잠금 해제
+            rotateLock = false;
+
             // 조준 상태 이동
             if (aimFlag == true) 
             {
@@ -113,6 +120,8 @@ public class Player_Locomotion : MonoBehaviour
                 characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
             }
         }
+        // 움직이지 않을 때 카메라 방향대로 회전하지 않도록 잠금
+        rotateLock = true;
     }
 
     void Loco_Jump()
@@ -133,6 +142,7 @@ public class Player_Locomotion : MonoBehaviour
 
     void Loco_UseWeapon()
     {
+        
         weapon.WeaponKeyInput();
     }
 

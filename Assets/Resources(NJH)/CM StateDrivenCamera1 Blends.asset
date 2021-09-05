@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CM StateDrivenCamera1 Blends
   m_EditorClassIdentifier: 
   m_CustomBlends:
-  - m_From: CM Default
+  - m_From: CM Idle
     m_To: CM Aim
     m_Blend:
       m_Style: 7
@@ -43,7 +43,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 0
   - m_From: CM Aim
-    m_To: CM Default
+    m_To: CM Idle
     m_Blend:
       m_Style: 7
       m_Time: 0.5
