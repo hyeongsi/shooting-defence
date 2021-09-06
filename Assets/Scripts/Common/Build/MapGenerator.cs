@@ -16,25 +16,55 @@ public class MapGenerator : MonoBehaviour
     private int rayermask;
 
     public Transform[] tilePrefab;
-    private uint selectPrefab = 1;
+    private uint selectPrefab = 0;
+    private float currentRotationAngle = 0;
+    private const float rotationAngle = 90.0f;
 
-    private bool FindBlocks(Vector3 point)
+    private bool isEditMode = true;
+
+    public bool IsEditMode
     {
-        Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
-        Collider[] collider = new Collider[1];  // 콜라이더 부분 null 하면 OverlapSphereNonAlloc 결과가 무조건 0만 나오게 되어 무조건 만들어 넣어주어 함
-        Vector3 centerPoint = new Vector3();
+        get { return isEditMode; }
+        set { isEditMode = value; }
+    }
 
-        for(int y = 0; y < newBlockSize.y; y++)
+    private bool FindBlocks(Vector3 point, Vector3 newBlockSize)
+    {
+        const float CHECK_RADIUS_SIZE = 0.33f;
+        Vector3 findBlocksVector;
+        Collider[] collider = new Collider[1];  // 콜라이더 부분 null 하면 OverlapSphereNonAlloc 결과가 무조건 0만 나오게 되어 무조건 만들어 넣어주어 함
+
+        if (Physics.OverlapSphereNonAlloc(point, CHECK_RADIUS_SIZE, collider, rayermask) != 0)
+            return true;
+
+        for (int y = 1; y < (newBlockSize.y / 2); y++)
         {
-            centerPoint.y = point.y + newBlockSize.y / 2 + y;
-            for (int x = 0; x < newBlockSize.x; x++)
+            findBlocksVector = point;
+            findBlocksVector.y += y;
+            for (int x = 1; x < (newBlockSize.x / 2); x++)
             {
-                centerPoint.x = point.x + newBlockSize.x / 2 + x;
-                for (int z = 0; z < newBlockSize.z; z++)
+                findBlocksVector.x += x;
+                for (int z = 1; z < (newBlockSize.z / 2); z++)
                 {
-                    centerPoint.z = point.z + newBlockSize.z / 2 + z;
-                    if (Physics.OverlapSphereNonAlloc(centerPoint, newBlockSize.y/3, collider, rayermask) != 0)
-                        return true; 
+                    findBlocksVector.z += z;
+                    if (Physics.OverlapSphereNonAlloc(findBlocksVector, CHECK_RADIUS_SIZE, collider, rayermask) != 0)
+                        return true;
+                }
+            }
+        }
+
+        for (int y = -1; y > (-newBlockSize.y / 2); y--)
+        {
+            findBlocksVector = point;
+            findBlocksVector.y += y;
+            for (int x = -1; x > (-newBlockSize.x / 2); x--)
+            {
+                findBlocksVector.x += x;
+                for (int z = -1; z > (-newBlockSize.z / 2); z--)
+                {
+                    findBlocksVector.z += z;
+                    if (Physics.OverlapSphereNonAlloc(findBlocksVector, CHECK_RADIUS_SIZE, collider, rayermask) != 0)
+                        return true;
                 }
             }
         }
@@ -44,45 +74,31 @@ public class MapGenerator : MonoBehaviour
     private Vector3 FindDirection(Vector3 point, Vector3 blockSize)
     {
         Vector3 pointVector = Vector3.zero;
-        Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
 
-        // 왼쪽 하단 기준으로 생성되기 때문에, 크기가 큰 오브젝트의 경우, 해당 크기만큼 이동한 뒤 생성해야 함
         // float 계산 시 오차가 발생 하기 때문에, 0.01을 오차 범위로 두고 계산
-        if (point.x >= -0.09f && point.x <= 0.01f)
+        if(point.x >= (blockSize.x/2 - 0.01f) && point.x <= (blockSize.x / 2 + 0.01f))
         {
-            pointVector.x = Vector3.left.x * newBlockSize.x;
-            pointVector.y = Vector3.left.y * newBlockSize.y;
-            pointVector.z = Vector3.left.z * newBlockSize.z;
+            pointVector = Vector3.right;
         }
-        else if (point.y >= -0.09f && point.y <= 0.01f)
+        else if (point.y >= (blockSize.y/2 - 0.01f) && point.y <= (blockSize.y/2 + 0.01f))
         {
-            pointVector.x = Vector3.down.x * newBlockSize.x;
-            pointVector.y = Vector3.down.y * newBlockSize.y;
-            pointVector.z = Vector3.down.z * newBlockSize.z;
+            pointVector = Vector3.up;
         }
-        else if (point.z >= -0.09f && point.z <= 0.01f)
+        else if (point.z >= (blockSize.z / 2 - 0.01f) && point.z <= (blockSize.z / 2 + 0.01f))
         {
-            pointVector.x = Vector3.back.x * newBlockSize.x;
-            pointVector.y = Vector3.back.y * newBlockSize.y;
-            pointVector.z = Vector3.back.z * newBlockSize.z;
+            pointVector = Vector3.forward;
         }
-        else if(point.x >= (blockSize.x - 0.01f) && point.x <= (blockSize.x + 0.01f))
+        else if (point.x >= (-blockSize.x / 2 - 0.01f) && point.x <= (-blockSize.x / 2 + 0.01f))
         {
-            pointVector.x = Vector3.right.x * blockSize.x;
-            pointVector.y = Vector3.right.y * blockSize.y;
-            pointVector.z = Vector3.right.z * blockSize.z;
+            pointVector = Vector3.left;
         }
-        else if (point.y >= (blockSize.y - 0.01f) && point.y <= (blockSize.y + 0.01f))
+        else if (point.y >= (-blockSize.y / 2 - 0.01f) && point.y <= (-blockSize.y / 2 + 0.01f))
         {
-            pointVector.x = Vector3.up.x * blockSize.x;
-            pointVector.y = Vector3.up.y * blockSize.y;
-            pointVector.z = Vector3.up.z * blockSize.z;
+            pointVector = Vector3.down;
         }
-        else if (point.z >= (blockSize.z - 0.01f) && point.z <= (blockSize.z + 0.01f))
+        else if (point.z >= (-blockSize.z / 2 - 0.01f) && point.z <= (-blockSize.z / 2 + 0.01f))
         {
-            pointVector.x = Vector3.forward.x * blockSize.x;
-            pointVector.y = Vector3.forward.y * blockSize.y;
-            pointVector.z = Vector3.forward.z * blockSize.z;
+            pointVector = Vector3.back;
         }
 
         return pointVector;
@@ -90,15 +106,23 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateBlock(RaycastHit hit, Block block)         // 블럭 생성
     {
-        Vector3 createPosition;
+        Vector3 createDirection;
+        Vector3 createBlockPosition;
 
         if (selectPrefab >= 0 && selectPrefab < tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
         {
-            createPosition = FindDirection(hit.point - hit.transform.position, block.BlockSize);
-            if (FindBlocks(hit.transform.position + createPosition )) // 설치 위치에 블럭이 이미 존재하면 생성 X
+            createDirection = FindDirection(hit.point - hit.transform.position, block.BlockSize);
+            Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
+
+            // 생성될 블럭 위치 계산
+            createBlockPosition.x = hit.transform.position.x + createDirection.x * newBlockSize.x;
+            createBlockPosition.y = hit.transform.position.y + createDirection.y * newBlockSize.y;
+            createBlockPosition.z = hit.transform.position.z + createDirection.z * newBlockSize.z;
+
+            if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 생성 X
                 return;
 
-            Transform newBlock = Instantiate(tilePrefab[selectPrefab], hit.transform.position + createPosition, Quaternion.Euler(Vector3.zero)) as Transform;
+            Transform newBlock = Instantiate(tilePrefab[selectPrefab], createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
             switch(block.BlockType)     // 블록 유형에 따라 부모 오브젝트 설정, (정리)
             {
                 case BlockType.BLOCK:
@@ -113,7 +137,9 @@ public class MapGenerator : MonoBehaviour
                 default:
                     newBlock.parent = childBlockGameObject.transform;
                     return;
-            } 
+            }
+
+            newBlock.localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
         }
     }
     private void Start()
@@ -123,7 +149,12 @@ public class MapGenerator : MonoBehaviour
 
     private void Update()
     {  
-        if (Input.GetMouseButtonUp(0))
+        if(Input.GetKeyDown(KeyCode.R))     // 블럭 회전
+        {
+            currentRotationAngle += rotationAngle;
+        }
+
+        if (Input.GetMouseButtonUp(0))      // 좌클릭, 블럭 생성
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -133,7 +164,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(1))      // 우클릭, 블럭 삭제
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
