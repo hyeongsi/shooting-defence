@@ -8,6 +8,8 @@ public class Weapon_Gun : MonoBehaviour
     Camera camera;
     Transform shootPoint;
 
+    Cinemachine.CinemachineImpulseSource impulseSource;
+
     Animator animator;
 
     [SerializeField] Text bulletText;
@@ -32,22 +34,17 @@ public class Weapon_Gun : MonoBehaviour
 
     private void Start()
     {
+        camera = GetComponentInParent<Player_Locomotion>().camera;
+        impulseSource = GetComponent<Cinemachine.CinemachineImpulseSource>();
         animator = GetComponent<Animator>();
         bulletsLeft = magazineSize;
         isReadyToShoot = true;
+
     }
 
     private void Update()
     {
         bulletText.text = bulletsLeft.ToString();
-        if(bulletsLeft <= 0)
-        {
-            reloadText.gameObject.SetActive(true);
-        }
-        else
-        {
-            reloadText.gameObject.SetActive(false);
-        }
     }
 
     public void WeaponKeyInput()
@@ -62,15 +59,21 @@ public class Weapon_Gun : MonoBehaviour
         {
             Weapon_Shoot();
         }
+
         // 재장전
         if (Input.GetKeyDown(KeyCode.R))
         {
             Weapon_Reload();
         }
-        // 탄창의 모든 탄 소모
-        if(isShooting && bulletsLeft <= 0)
+
+        // 탄창의 모든 탄 소모 or 남은 탄 전체의 20퍼센트
+        if(isShooting && bulletsLeft <= 0 || bulletsLeft <= Mathf.Round(magazineSize * 0.2f))
         {
-            Debug.Log("재장전 해야합니다");
+            reloadText.gameObject.SetActive(true);
+        }
+        else
+        {
+            reloadText.gameObject.SetActive(false);
         }
     }
 
@@ -113,10 +116,13 @@ public class Weapon_Gun : MonoBehaviour
         
         while(burstBulletCount > 0 && bulletsLeft > 0)
         {
+            impulseSource.GenerateImpulse(transform.forward);
+
             animator.SetTrigger("Shoot");
+
             bulletsLeft--;
             burstBulletCount--;
-            Debug.Log("점사" + burstBulletCount);
+            
             yield return new WaitForSeconds(burstFireDelay);
         }
 
@@ -126,8 +132,11 @@ public class Weapon_Gun : MonoBehaviour
     IEnumerator Co_PelletShot() // 슬라이드 후퇴 한 번에 여러발(샷건)
     {
         isburstShot = false;
+
         bulletsLeft--;
+
         animator.SetTrigger("Shoot");
+
         while (burstBulletCount > 0)
         {
             burstBulletCount--;

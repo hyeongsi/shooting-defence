@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Player_Locomotion : MonoBehaviour
 {
+    public Camera camera;
+
     [SerializeField] CharacterController characterController;
     [SerializeField] Animator animator;
     [SerializeField] Transform groundChecker;
-    [SerializeField] Transform cameraTransform;
     [SerializeField] Transform aimingTarget;
     [SerializeField] Player_CameraFunction cameraFunction;
 
@@ -63,8 +64,8 @@ public class Player_Locomotion : MonoBehaviour
     
     void SetDirection()
     {
-        moveDirection = cameraTransform.forward * vertical;
-        moveDirection += cameraTransform.right * horizontal;
+        moveDirection = camera.transform.forward * vertical;
+        moveDirection += camera.transform.right * horizontal;
         moveDirection.y = 0f;   // 먼저 0으로 만들고 정규화 함
         moveDirection.Normalize();
     }
@@ -76,7 +77,7 @@ public class Player_Locomotion : MonoBehaviour
 
         aimingTarget.eulerAngles = new Vector3(yAxis.Value, xAxis.Value, 0f);
 
-        float cameraYaxis = cameraTransform.rotation.eulerAngles.y;
+        float cameraYaxis = camera.transform.rotation.eulerAngles.y;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, cameraYaxis, 0f), smoothingSpeed * Time.deltaTime);
 
         weapon.transform.forward = aimingTarget.forward;

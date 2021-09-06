@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43965626, g: 0.48004222, b: 0.52496874, a: 1}
+  m_IndirectSpecularColor: {r: 0.4396563, g: 0.48004222, b: 0.52496916, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -252,7 +252,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170791092}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 4.6, z: -3.5}
+  m_LocalPosition: {x: 0.8, y: 4.6, z: -3.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1259,7 +1259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damping: {x: 0, y: 0, z: 0}
-  ShoulderOffset: {x: 1, y: 0.2, z: 0}
+  ShoulderOffset: {x: 0.8, y: 0.2, z: 0}
   VerticalArmLength: 0.4
   CameraSide: 1
   CameraDistance: 3.5
@@ -1431,10 +1431,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba715da8a412b8a4d98bc18f9dda0257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 170791096}
   characterController: {fileID: 724446871}
   animator: {fileID: 320592626}
   groundChecker: {fileID: 546756331}
-  cameraTransform: {fileID: 170791093}
   aimingTarget: {fileID: 365964052}
   cameraFunction: {fileID: 512004954}
   xAxis:
@@ -1484,8 +1484,8 @@ MonoBehaviour:
   aimFlag: 0
   isGrounded: 0
   rotateLock: 0
-  moveSpeed: 3
-  sprintSpeed: 4
+  moveSpeed: 4
+  sprintSpeed: 5
   aimMoveSpeed: 3
   jumpHeight: 2.5
   gravity: -20
@@ -1817,7 +1817,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 15
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1828,7 +1828,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "! \uC7AC\uC7A5\uC804 !"
+  m_Text: "\uC7AC\uC7A5\uC804"
 --- !u!222 &1022387862
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3112,6 +3112,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 724446869}
     m_Modifications:
+    - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
+        type: 3}
+      propertyPath: m_ImpulseDefinition.m_RepeatMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
+        type: 3}
+      propertyPath: m_ImpulseDefinition.m_ImpactRadius
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
+        type: 3}
+      propertyPath: m_ImpulseDefinition.m_AmplitudeGain
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
+        type: 3}
+      propertyPath: m_ImpulseDefinition.m_DirectionMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
+        type: 3}
+      propertyPath: m_ImpulseDefinition.m_FrequencyGain
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
+        type: 3}
+      propertyPath: m_ImpulseDefinition.m_DissipationMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
+        type: 3}
+      propertyPath: m_ImpulseDefinition.m_TimeEnvelope.m_ScaleWithImpact
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8648667314074233392, guid: 80b70a07ae5b6f8489f601f012d257b5,
         type: 3}
       propertyPath: m_Name
@@ -3187,6 +3222,11 @@ PrefabInstance:
       propertyPath: reloadText
       value: 
       objectReference: {fileID: 1022387861}
+    - target: {fileID: 8648667314074233398, guid: 80b70a07ae5b6f8489f601f012d257b5,
+        type: 3}
+      propertyPath: nextShotDelay
+      value: 0.085
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80b70a07ae5b6f8489f601f012d257b5, type: 3}
 --- !u!1 &1422962222
@@ -3825,6 +3865,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1843544675}
   - component: {fileID: 1843544674}
+  - component: {fileID: 1843544676}
   m_Layer: 0
   m_Name: CM Aim
   m_TagString: Untagged
@@ -3875,13 +3916,28 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1843544673}
   m_LocalRotation: {x: -0.11916354, y: 0.37893698, z: -0.049275417, w: -0.9163944}
-  m_LocalPosition: {x: 1, y: 4.6, z: -3.5}
+  m_LocalPosition: {x: 0.8, y: 4.6, z: -3.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 675991280}
   m_Father: {fileID: 512004956}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1843544676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843544673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ChannelMask: -1
+  m_Gain: 1
+  m_Use2DDistance: 0
 --- !u!1 &1864744452
 GameObject:
   m_ObjectHideFlags: 0
