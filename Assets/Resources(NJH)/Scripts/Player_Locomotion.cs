@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player_Locomotion : MonoBehaviour
 {
     [SerializeField] CharacterController characterController;
+    [SerializeField] Animator animator;
     [SerializeField] Transform groundChecker;
     [SerializeField] Transform cameraTransform;
     [SerializeField] Transform aimingTarget;
@@ -100,6 +101,9 @@ public class Player_Locomotion : MonoBehaviour
         sprintFlag = Input.GetButton("Sprint");
         aimFlag = cameraFunction.aimCamFlag;
 
+        animator.SetFloat("Input_Horizontal", horizontal);
+        animator.SetFloat("Input_Vertical", vertical);
+
         if (moveDirection.magnitude > 0f)
         {
             // 이동 시 입력 카메라 방향대로 회전하도록 잠금 해제
@@ -142,7 +146,6 @@ public class Player_Locomotion : MonoBehaviour
 
     void Loco_UseWeapon()
     {
-        
         weapon.WeaponKeyInput();
     }
 
