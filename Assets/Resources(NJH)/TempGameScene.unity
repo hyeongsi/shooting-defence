@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4396563, g: 0.48004222, b: 0.52496916, a: 1}
+  m_IndirectSpecularColor: {r: 0.43965626, g: 0.48004222, b: 0.52496874, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -252,7 +252,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170791092}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.8, y: 4.6, z: -3.5}
+  m_LocalPosition: {x: 0.8, y: 18.283, z: -3.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1407,7 +1407,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 724446868}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4, z: 0}
+  m_LocalPosition: {x: 0, y: 17.683, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 320592625}
@@ -1482,15 +1482,17 @@ MonoBehaviour:
   vertical: 0
   sprintFlag: 0
   aimFlag: 0
+  moveFlag: 0
   isGrounded: 0
   rotateLock: 0
   moveSpeed: 4
-  sprintSpeed: 5
-  aimMoveSpeed: 3
-  jumpHeight: 2.5
+  sprintSpeed: 7
+  aimMoveSpeed: 2.5
+  jumpHeight: 2.2
   gravity: -20
   groundCheckDistance: 0.4
   stamina: 10
+  waitForRefillStamina: 1.5
 --- !u!143 &724446871
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1642,7 +1644,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 998962358}
-  m_LocalRotation: {x: 0.13236415, y: 0.6946076, z: -0.13236412, w: 0.6946076}
+  m_LocalRotation: {x: 0.020963192, y: 0.70679605, z: -0.020963192, w: 0.706796}
   m_LocalPosition: {x: -40.71, y: 20.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3115,7 +3117,7 @@ PrefabInstance:
     - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
         type: 3}
       propertyPath: m_ImpulseDefinition.m_RepeatMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
         type: 3}
@@ -3125,7 +3127,7 @@ PrefabInstance:
     - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
         type: 3}
       propertyPath: m_ImpulseDefinition.m_AmplitudeGain
-      value: 0.02
+      value: 0.025
       objectReference: {fileID: 0}
     - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
         type: 3}
@@ -3135,7 +3137,7 @@ PrefabInstance:
     - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
         type: 3}
       propertyPath: m_ImpulseDefinition.m_FrequencyGain
-      value: 0.02
+      value: 0.025
       objectReference: {fileID: 0}
     - target: {fileID: -8441230356490520126, guid: 80b70a07ae5b6f8489f601f012d257b5,
         type: 3}
@@ -3916,7 +3918,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1843544673}
   m_LocalRotation: {x: -0.11916354, y: 0.37893698, z: -0.049275417, w: -0.9163944}
-  m_LocalPosition: {x: 0.8, y: 4.6, z: -3.5}
+  m_LocalPosition: {x: 0.8, y: 18.283, z: -3.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 675991280}

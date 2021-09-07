@@ -26,17 +26,19 @@ public class Player_Locomotion : MonoBehaviour
     public float vertical;
     public bool sprintFlag;
     public bool aimFlag;
+    public bool moveFlag;
     public bool isGrounded;
     public bool rotateLock;
 
     [Header("플레이어 값")]
-    public float moveSpeed = 5f;
-    public float sprintSpeed = 6.5f;
-    public float aimMoveSpeed = 3f;
-    public float jumpHeight = 3f;
+    public float moveSpeed;
+    public float sprintSpeed;
+    public float aimMoveSpeed;
+    public float jumpHeight;
     public float gravity = -9.81f;
     public float groundCheckDistance = 0.4f;
-    public float stamina = 10f;
+    public float stamina;
+    public float waitForRefillStamina;
 
     Vector3 moveDirection;
     Vector3 velocity;
@@ -60,6 +62,7 @@ public class Player_Locomotion : MonoBehaviour
         cameraFunction.CameraUpdtate();
         Loco_Jump();
         Loco_UseWeapon();
+        SetAnimatorParameter();
     }
     
     void SetDirection()
@@ -68,6 +71,16 @@ public class Player_Locomotion : MonoBehaviour
         moveDirection += camera.transform.right * horizontal;
         moveDirection.y = 0f;   // 먼저 0으로 만들고 정규화 함
         moveDirection.Normalize();
+    }
+    
+    void SetAnimatorParameter()
+    {
+        animator.SetFloat("Input_Horizontal", horizontal, 0.1f, Time.deltaTime);
+        animator.SetFloat("Input_Vertical", vertical, 0.1f, Time.deltaTime);
+        animator.SetBool("SprintFlag", sprintFlag);
+        animator.SetBool("AimFlag", aimFlag);
+        animator.SetBool("MoveFlag", moveFlag);
+        animator.SetBool("isGrounded", isGrounded);
     }
 
     void Loco_Rotate()
@@ -88,7 +101,7 @@ public class Player_Locomotion : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundChecker.position, groundCheckDistance, groundLayer);
         if (isGrounded && velocity.y < 0f)
         {
-            velocity.y = -2f;
+            velocity.y = -2f; // 땅으로 누름
         }
         velocity.y += gravity * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
@@ -97,36 +110,52 @@ public class Player_Locomotion : MonoBehaviour
     #region 행동 관련
     void Loco_Move()
     {
+        float speed = moveSpeed;
+        moveFlag = false;
+
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
-        sprintFlag = Input.GetButton("Sprint");
+        sprintFlag = Input.GetButton("Sprint") && aimFlag == false && weapon.isShooting == false;
         aimFlag = cameraFunction.aimCamFlag;
 
-        animator.SetFloat("Input_Horizontal", horizontal);
-        animator.SetFloat("Input_Vertical", vertical);
+        if (aimFlag == true)
+        {
+            speed = aimMoveSpeed;
+            horizontal *= 0.5f;
+            vertical *= 0.5f;
+        }
+        else if (sprintFlag == true)
+        {
+            speed = sprintSpeed;
+            horizontal *= 2f;
+            vertical *= 2f;
+
+        }
 
         if (moveDirection.magnitude > 0f)
         {
-            // 이동 시 입력 카메라 방향대로 회전하도록 잠금 해제
-            rotateLock = false;
-
-            // 조준 상태 이동
-            if (aimFlag == true) 
-            {
-                characterController.Move(moveDirection * aimMoveSpeed * Time.deltaTime);
-            }
-            // 일반 이동
-            else
-            {
-                if (sprintFlag == true)
-                {
-                    characterController.Move(moveDirection * sprintSpeed * Time.deltaTime);
-                }
-                characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
-            }
+            moveFlag = true;
+            characterController.Move(moveDirection * speed * Time.deltaTime);
         }
-        // 움직이지 않을 때 카메라 방향대로 회전하지 않도록 잠금
-        rotateLock = true;
+
+        //if (moveDirection.magnitude > 0f)
+        //{
+        //    // 조준 상태 이동
+        //    if (aimFlag == true)
+        //    {
+        //        characterController.Move(moveDirection * aimMoveSpeed * Time.deltaTime);
+        //    }
+        //    //일반 이동
+        //    else
+        //    {
+        //        if (sprintFlag == true)
+        //        {
+        //            //스태미나 소모
+        //            characterController.Move(moveDirection * sprintSpeed * Time.deltaTime);
+        //        }
+        //        characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
+        //    }
+        //}
     }
 
     void Loco_Jump()
@@ -135,6 +164,7 @@ public class Player_Locomotion : MonoBehaviour
         {
             if (isGrounded == true)
             {
+                animator.CrossFade("Player_JumpLoop", 0.25f);
                 velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             }
             else
@@ -145,9 +175,28 @@ public class Player_Locomotion : MonoBehaviour
         }
     }
 
+    #region 스태미나 사용(작성 필요)
+    void Loco_UseStamina()
+    {
+
+    }
+
+    IEnumerator Co_UseStamina()
+    {
+        yield return null;
+    }
+
+    IEnumerator Co_ReFillStamina()
+    {
+        yield return new WaitForSeconds(waitForRefillStamina);
+    }
+    #endregion
+
+
     void Loco_UseWeapon()
     {
         weapon.WeaponKeyInput();
+        animator.SetBool("FireFlag", weapon.isShooting);
     }
 
     #endregion

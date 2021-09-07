@@ -67,8 +67,16 @@ public class Weapon_Gun : MonoBehaviour
         }
 
         // 탄창의 모든 탄 소모 or 남은 탄 전체의 20퍼센트
-        if(isShooting && bulletsLeft <= 0 || bulletsLeft <= Mathf.Round(magazineSize * 0.2f))
+        if(bulletsLeft <= Mathf.Round(magazineSize * 0.2f))
         {
+            if(bulletsLeft <= 0)
+            {
+                reloadText.text = "재장전";
+            }
+            else
+            {
+                reloadText.text = "탄약 적음";
+            }
             reloadText.gameObject.SetActive(true);
         }
         else
