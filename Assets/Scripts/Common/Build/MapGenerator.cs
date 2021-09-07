@@ -19,6 +19,8 @@ public class MapGenerator : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
     private int rayermask;
+    private Vector3 scrennCenter;
+    private Block block;
 
     private uint selectPrefab = 0;
     private float currentRotationAngle = 0;
@@ -116,8 +118,7 @@ public class MapGenerator : MonoBehaviour
         if (transparentObject == null)
             return;
 
-        // material 만으로 비교하면, 인식 불가, .name 도 마찬가지, shader로 비교해야 둘이 비교 가능
-        if (transparentObject.transform.GetChild(0).GetComponent<Renderer>().material.shader == blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].shader)   // 설치 불가 라면 생성 X
+        if (transparentObject.transform.GetChild(0).GetComponent<Renderer>().material.name == blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
             return;
 
         switch (transparentObject.GetComponent<Block>().BlockType)     // 블록 유형에 따라 부모 오브젝트 설정, (정리)
@@ -198,6 +199,7 @@ public class MapGenerator : MonoBehaviour
     private void Start()
     {
         rayermask = 1 << LayerMask.NameToLayer("Block");
+        scrennCenter = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
     }
 
     private void Update()
@@ -208,7 +210,7 @@ public class MapGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))     // 블럭 회전
             currentRotationAngle += rotationAngle;
 
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        ray = Camera.main.ScreenPointToRay(scrennCenter);
         if (Physics.Raycast(ray, out hit, 100.0f, rayermask))
         {
             if (Input.GetMouseButtonUp(0))           // 좌클릭, 블럭 생성
@@ -219,10 +221,11 @@ public class MapGenerator : MonoBehaviour
             }
             else
             {
+                block = hit.transform.GetComponent<Block>();
                 if (transparentObject == null)
-                    GenerateTransparentBlock(hit, hit.transform.GetComponent<Block>());
+                    GenerateTransparentBlock(hit, block);
                 else
-                    SetTransparentBlockTransform(hit, hit.transform.GetComponent<Block>());
+                    SetTransparentBlockTransform(hit, block);
             }
         }else
         {
