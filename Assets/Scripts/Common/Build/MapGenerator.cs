@@ -37,7 +37,7 @@ public class MapGenerator : MonoBehaviour
 
     private bool FindBlocks(Vector3 point, Vector3 newBlockSize)
     {
-        const float CHECK_RADIUS_SIZE = 0.33f;
+        const float CHECK_RADIUS_SIZE = 0.47f;
         Vector3 findBlocksVector;
         Collider[] collider = new Collider[1];  // 콜라이더 부분 null 하면 OverlapSphereNonAlloc 결과가 무조건 0만 나오게 되어 무조건 만들어 넣어주어 함
 
@@ -116,6 +116,10 @@ public class MapGenerator : MonoBehaviour
         if (transparentObject == null)
             return;
 
+        // material 만으로 비교하면, 인식 불가, .name 도 마찬가지, shader로 비교해야 둘이 비교 가능
+        if (transparentObject.transform.GetChild(0).GetComponent<Renderer>().material.shader == blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].shader)   // 설치 불가 라면 생성 X
+            return;
+
         switch (transparentObject.GetComponent<Block>().BlockType)     // 블록 유형에 따라 부모 오브젝트 설정, (정리)
         {
             case BlockType.BLOCK:
@@ -155,17 +159,17 @@ public class MapGenerator : MonoBehaviour
             transparentObject = newBlock.gameObject;
             transparentObject.transform.parent = parentTransparentObject.transform;
 
+            newBlock.gameObject.layer = (int)LayerNumbering.DEFAULT;
+            newBlock.localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
+
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
-            {
-                newBlock.GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
-            }
-            else
             {
                 newBlock.GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
             }
-
-            newBlock.gameObject.layer = (int)LayerNumbering.DEFAULT;
-            newBlock.localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
+            else
+            {
+                newBlock.GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+            }
         }
     }
 
