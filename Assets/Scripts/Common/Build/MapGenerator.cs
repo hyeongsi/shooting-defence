@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour
     private Vector3 scrennCenter;
     private Block block;
 
-    private uint selectPrefab = 0;
+    private uint selectPrefab = 3;
     private float currentRotationAngle = 0;
     private const float rotationAngle = 90.0f;
 
@@ -85,27 +85,27 @@ public class MapGenerator : MonoBehaviour
         Vector3 pointVector = Vector3.zero;
 
         // float 계산 시 오차가 발생 하기 때문에, 0.01을 오차 범위로 두고 계산
-        if(point.x >= (blockSize.x/2 - 0.01f) && point.x <= (blockSize.x / 2 + 0.01f))
+        if(point.x >= (blockSize.x - 0.01f) && point.x <= (blockSize.x + 0.01f))
         {
             pointVector = Vector3.right;
         }
-        else if (point.y >= (blockSize.y/2 - 0.01f) && point.y <= (blockSize.y/2 + 0.01f))
+        else if (point.y >= (blockSize.y - 0.01f) && point.y <= (blockSize.y + 0.01f))
         {
             pointVector = Vector3.up;
         }
-        else if (point.z >= (blockSize.z / 2 - 0.01f) && point.z <= (blockSize.z / 2 + 0.01f))
+        else if (point.z >= (blockSize.z - 0.01f) && point.z <= (blockSize.z + 0.01f))
         {
             pointVector = Vector3.forward;
         }
-        else if (point.x >= (-blockSize.x / 2 - 0.01f) && point.x <= (-blockSize.x / 2 + 0.01f))
+        else if (point.x >= (-blockSize.x - 0.01f) && point.x <= (-blockSize.x + 0.01f))
         {
             pointVector = Vector3.left;
         }
-        else if (point.y >= (-blockSize.y / 2 - 0.01f) && point.y <= (-blockSize.y / 2 + 0.01f))
+        else if (point.y >= (-blockSize.y - 0.01f) && point.y <= (-blockSize.y + 0.01f))
         {
             pointVector = Vector3.down;
         }
-        else if (point.z >= (-blockSize.z / 2 - 0.01f) && point.z <= (-blockSize.z / 2 + 0.01f))
+        else if (point.z >= (-blockSize.z - 0.01f) && point.z <= (-blockSize.z + 0.01f))
         {
             pointVector = Vector3.back;
         }
@@ -118,7 +118,7 @@ public class MapGenerator : MonoBehaviour
         if (transparentObject == null)
             return;
 
-        if (transparentObject.transform.GetChild(0).GetComponent<Renderer>().material.name == blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
+        if (transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.name == blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
             return;
 
         switch (transparentObject.GetComponent<Block>().BlockType)     // 블록 유형에 따라 부모 오브젝트 설정, (정리)
@@ -138,7 +138,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         transparentObject.gameObject.layer = (int)LayerNumbering.BLOCK;
-        transparentObject.transform.GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.YELLOW_GRID_COLOR_MATERIAL];
+        transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.YELLOW_GRID_COLOR_MATERIAL];
         transparentObject = null;
     }
     public void GenerateTransparentBlock(RaycastHit hit, Block block)         // 블럭 생성
@@ -152,9 +152,12 @@ public class MapGenerator : MonoBehaviour
             Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
 
             // 생성될 블럭 위치 계산
-            createBlockPosition.x = hit.transform.position.x + createDirection.x * newBlockSize.x;
-            createBlockPosition.y = hit.transform.position.y + createDirection.y * newBlockSize.y;
-            createBlockPosition.z = hit.transform.position.z + createDirection.z * newBlockSize.z;
+            if (newBlockSize.y < 1.0f)
+                newBlockSize.y = 1.0f;
+
+            createBlockPosition.x = hit.transform.position.x + (createDirection.x * newBlockSize.x);
+            createBlockPosition.y = hit.transform.position.y + (createDirection.y * newBlockSize.y);
+            createBlockPosition.z = hit.transform.position.z + (createDirection.z * newBlockSize.z);
 
             Transform newBlock = Instantiate(tilePrefab[selectPrefab], createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
             transparentObject = newBlock.gameObject;
@@ -165,11 +168,11 @@ public class MapGenerator : MonoBehaviour
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
-                newBlock.GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
             }
             else
             {
-                newBlock.GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
             }
         }
     }
@@ -185,9 +188,21 @@ public class MapGenerator : MonoBehaviour
             Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
 
             // 생성될 블럭 위치 계산
-            createBlockPosition.x = hit.transform.position.x + createDirection.x * newBlockSize.x;
-            createBlockPosition.y = hit.transform.position.y + createDirection.y * newBlockSize.y;
-            createBlockPosition.z = hit.transform.position.z + createDirection.z * newBlockSize.z;
+            if (newBlockSize.y < 1.0f)
+                newBlockSize.y = 1.0f;
+
+            createBlockPosition.x = hit.transform.position.x + (createDirection.x * newBlockSize.x);
+            createBlockPosition.y = hit.transform.position.y + (createDirection.y * newBlockSize.y);
+            createBlockPosition.z = hit.transform.position.z + (createDirection.z * newBlockSize.z);
+
+            if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
+            {
+                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+            }
+            else
+            {
+                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+            }
 
             if (transparentObject.transform.position != createBlockPosition)
                 transparentObject.transform.position = createBlockPosition;
