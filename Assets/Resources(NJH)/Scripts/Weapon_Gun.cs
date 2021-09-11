@@ -126,7 +126,10 @@ public class Weapon_Gun : MonoBehaviour
         {
             impulseSource.GenerateImpulse(transform.forward);
 
-            animator.SetTrigger("Shoot");
+            if(animator != null)
+            {
+                animator.SetTrigger("Shoot");
+            }
 
             bulletsLeft--;
             burstBulletCount--;
@@ -143,7 +146,10 @@ public class Weapon_Gun : MonoBehaviour
 
         bulletsLeft--;
 
-        animator.SetTrigger("Shoot");
+        if(animator != null)
+        {
+            animator.SetTrigger("Shoot");
+        }
 
         while (burstBulletCount > 0)
         {
