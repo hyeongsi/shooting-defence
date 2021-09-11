@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour
     private Vector3 scrennCenter;
     private Block block;
 
-    private uint selectPrefab = 3;
+    private uint selectPrefab = 2;
     private float currentRotationAngle = 0;
     private const float rotationAngle = 90.0f;
 
@@ -40,38 +40,22 @@ public class MapGenerator : MonoBehaviour
     private bool FindBlocks(Vector3 point, Vector3 newBlockSize)
     {
         const float CHECK_RADIUS_SIZE = 0.47f;
+        const float GAP = 0.5f;     // 1칸 블럭의 중앙에서 판단해야 하기 때문에 +0.5 수행
         Vector3 findBlocksVector;
         Collider[] collider = new Collider[1];  // 콜라이더 부분 null 하면 OverlapSphereNonAlloc 결과가 무조건 0만 나오게 되어 무조건 만들어 넣어주어 함
 
-        if (Physics.OverlapSphereNonAlloc(point, CHECK_RADIUS_SIZE, collider, rayermask) != 0)
-            return true;
+        findBlocksVector = point;
 
-        for (int y = 1; y < (newBlockSize.y / 2); y++)
+        for (int y = (int)point.y; y < (int)point.y + newBlockSize.y; y++)
         {
-            findBlocksVector = point;
-            findBlocksVector.y += y;
-            for (int x = 1; x < (newBlockSize.x / 2); x++)
+            findBlocksVector.y = y + GAP;
+            for (int z = (int)point.z; z < (int)point.z + newBlockSize.z; z++)
             {
-                findBlocksVector.x += x;
-                for (int z = 1; z < (newBlockSize.z / 2); z++)
+                findBlocksVector.z = z + GAP;
+                for (int x = (int)point.x; x < (int)point.x + newBlockSize.x; x++)
                 {
-                    findBlocksVector.z += z;
-                    if (Physics.OverlapSphereNonAlloc(findBlocksVector, CHECK_RADIUS_SIZE, collider, rayermask) != 0)
-                        return true;
-                }
-            }
-        }
+                    findBlocksVector.x = x + GAP;
 
-        for (int y = -1; y > (-newBlockSize.y / 2); y--)
-        {
-            findBlocksVector = point;
-            findBlocksVector.y += y;
-            for (int x = -1; x > (-newBlockSize.x / 2); x--)
-            {
-                findBlocksVector.x += x;
-                for (int z = -1; z > (-newBlockSize.z / 2); z--)
-                {
-                    findBlocksVector.z += z;
                     if (Physics.OverlapSphereNonAlloc(findBlocksVector, CHECK_RADIUS_SIZE, collider, rayermask) != 0)
                         return true;
                 }
@@ -85,7 +69,7 @@ public class MapGenerator : MonoBehaviour
         Vector3 pointVector = Vector3.zero;
 
         // float 계산 시 오차가 발생 하기 때문에, 0.01을 오차 범위로 두고 계산
-        if(point.x >= (blockSize.x - 0.01f) && point.x <= (blockSize.x + 0.01f))
+        if (point.x >= (blockSize.x - 0.01f) && point.x <= (blockSize.x + 0.01f))
         {
             pointVector = Vector3.right;
         }
@@ -97,17 +81,37 @@ public class MapGenerator : MonoBehaviour
         {
             pointVector = Vector3.forward;
         }
-        else if (point.x >= (-blockSize.x - 0.01f) && point.x <= (-blockSize.x + 0.01f))
+        else if (point.x >= -0.01f && point.x <= 0.01f) 
         {
             pointVector = Vector3.left;
         }
-        else if (point.y >= (-blockSize.y - 0.01f) && point.y <= (-blockSize.y + 0.01f))
+        else if (point.y >= -0.01f && point.y <= 0.01f)
         {
             pointVector = Vector3.down;
         }
-        else if (point.z >= (-blockSize.z - 0.01f) && point.z <= (-blockSize.z + 0.01f))
+        else if (point.z >= -0.01f && point.z <= 0.01f)
         {
             pointVector = Vector3.back;
+        }
+
+        return pointVector;
+    }
+
+    private Vector3 FindSpawnPosition(Vector3 position, Vector3 point, Vector3 direction, Vector3 newBlockSize)
+    {
+        Vector3 pointVector = Vector3.zero;
+
+        if (direction == Vector3.right || direction == Vector3.forward || direction == Vector3.up)
+        {
+            pointVector.x = position.x + Mathf.Floor(point.x);
+            pointVector.y = position.y + Mathf.Floor(point.y);
+            pointVector.z = position.z + Mathf.Floor(point.z);
+        }
+        else
+        {
+            pointVector.x = position.x + (direction.x * newBlockSize.x) + Mathf.Floor(point.x);
+            pointVector.y = position.y + (direction.y * newBlockSize.y) + Mathf.Floor(point.y);
+            pointVector.z = position.z + (direction.z * newBlockSize.z) + Mathf.Floor(point.z);
         }
 
         return pointVector;
@@ -145,26 +149,22 @@ public class MapGenerator : MonoBehaviour
     {
         Vector3 createDirection;
         Vector3 createBlockPosition;
+        Vector3 point;
 
         if (selectPrefab >= 0 && selectPrefab < tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
         {
-            createDirection = FindDirection(hit.point - hit.transform.position, block.BlockSize);
+            point = hit.point - hit.transform.position;
+
+            createDirection = FindDirection(point, block.BlockSize);
             Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
-
-            // 생성될 블럭 위치 계산
-            if (newBlockSize.y < 1.0f)
-                newBlockSize.y = 1.0f;
-
-            createBlockPosition.x = hit.transform.position.x + (createDirection.x * newBlockSize.x);
-            createBlockPosition.y = hit.transform.position.y + (createDirection.y * newBlockSize.y);
-            createBlockPosition.z = hit.transform.position.z + (createDirection.z * newBlockSize.z);
+            createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
 
             Transform newBlock = Instantiate(tilePrefab[selectPrefab], createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
             transparentObject = newBlock.gameObject;
             transparentObject.transform.parent = parentTransparentObject.transform;
 
             newBlock.gameObject.layer = (int)LayerNumbering.DEFAULT;
-            newBlock.localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
+            newBlock.GetChild(0).localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
@@ -181,19 +181,15 @@ public class MapGenerator : MonoBehaviour
     {
         Vector3 createDirection;
         Vector3 createBlockPosition;
+        Vector3 point;
 
         if (selectPrefab >= 0 && selectPrefab < tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
         {
-            createDirection = FindDirection(hit.point - hit.transform.position, block.BlockSize);
+            point = hit.point - hit.transform.position;
+
+            createDirection = FindDirection(point, block.BlockSize);
             Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
-
-            // 생성될 블럭 위치 계산
-            if (newBlockSize.y < 1.0f)
-                newBlockSize.y = 1.0f;
-
-            createBlockPosition.x = hit.transform.position.x + (createDirection.x * newBlockSize.x);
-            createBlockPosition.y = hit.transform.position.y + (createDirection.y * newBlockSize.y);
-            createBlockPosition.z = hit.transform.position.z + (createDirection.z * newBlockSize.z);
+            createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
@@ -207,7 +203,7 @@ public class MapGenerator : MonoBehaviour
             if (transparentObject.transform.position != createBlockPosition)
                 transparentObject.transform.position = createBlockPosition;
 
-            transparentObject.transform.localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
+            transparentObject.transform.GetChild(0).localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
         }
     }
 
