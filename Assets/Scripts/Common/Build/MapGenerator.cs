@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour
     private Vector3 scrennCenter;
     private Block block;
 
-    private uint selectPrefab = 2;
+    private int selectPrefab = 2;
     private float currentRotationAngle = 0;
     private const float rotationAngle = 90.0f;
 
@@ -31,6 +31,16 @@ public class MapGenerator : MonoBehaviour
 
     public Transform[] tilePrefab;
 
+    public int SelectPrefab
+    {
+        set 
+        {
+            if (tilePrefab.Length <= value)
+                return;
+
+            selectPrefab = value; 
+        }
+    }
     public bool IsEditMode
     {
         get { return isEditMode; }

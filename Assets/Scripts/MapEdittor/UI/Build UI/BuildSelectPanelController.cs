@@ -33,6 +33,11 @@ public class BuildSelectPanelController : MonoBehaviour
 
     private void SetChildRectTransform(int buttonNumber)
     {
+        for(int i = 0; i < childCount; i ++)
+        {
+            childRectTransform[i].gameObject.SetActive(false);
+        }
+
         childRectTransform[buttonNumber].gameObject.SetActive(true);
         setSizeVector.x = rectTransform.sizeDelta.x - PADDING_SIZE;
         setSizeVector.y = rectTransform.sizeDelta.y - PADDING_SIZE;
@@ -48,6 +53,13 @@ public class BuildSelectPanelController : MonoBehaviour
             return;
         }
 
+        if (childRectTransform[buttonNumber].gameObject.activeSelf)
+        {
+            childRectTransform[buttonNumber].gameObject.SetActive(false);
+            gameObject.SetActive(false);
+            return;
+        }
+            
         buttonCount = transform.GetChild(buttonNumber).childCount;
         SetRectTransform(buttonCount);
         SetChildRectTransform(buttonNumber);
