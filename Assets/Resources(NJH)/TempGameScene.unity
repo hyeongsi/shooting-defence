@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4396563, g: 0.48004222, b: 0.52496916, a: 1}
+  m_IndirectSpecularColor: {r: 0.43965623, g: 0.48004222, b: 0.5249687, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -529,6 +529,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &279593153 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8648667314074233398, guid: 80b70a07ae5b6f8489f601f012d257b5,
+    type: 3}
+  m_PrefabInstance: {fileID: 942146147}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a56639f86489d4787d6c9737640529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &335841776
@@ -1354,7 +1366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 170791096}
   characterController: {fileID: 724446871}
-  animator: {fileID: 0}
+  animator: {fileID: 3648465668591405112}
   groundChecker: {fileID: 546756331}
   aimingTarget: {fileID: 365964052}
   cameraFunction: {fileID: 512004954}
@@ -1397,7 +1409,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 3145728
-  weapon: {fileID: 0}
+  weapon: {fileID: 279593153}
   smoothingSpeed: 10
   horizontal: 0
   vertical: 0
