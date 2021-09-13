@@ -92,8 +92,6 @@ public class Player_Locomotion : MonoBehaviour
 
         float cameraYaxis = camera.transform.rotation.eulerAngles.y;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, cameraYaxis, 0f), smoothingSpeed * Time.deltaTime);
-
-        weapon.transform.forward = aimingTarget.forward;
     }
 
     void GroundCheck()
@@ -124,7 +122,7 @@ public class Player_Locomotion : MonoBehaviour
             horizontal *= 0.5f;
             vertical *= 0.5f;
         }
-        else if (sprintFlag == true)
+        else if (sprintFlag == true && vertical > 0)
         {
             speed = sprintSpeed;
             horizontal *= 2f;
