@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class Player_Locomotion : MonoBehaviour
 {
@@ -12,14 +13,17 @@ public class Player_Locomotion : MonoBehaviour
     [SerializeField] Transform aimingTarget;
     [SerializeField] Player_CameraFunction cameraFunction;
 
-    public Cinemachine.AxisState xAxis;
-    public Cinemachine.AxisState yAxis;
-
     [SerializeField] LayerMask groundLayer;
 
     [SerializeField] Weapon_Gun weapon;
 
-    public float smoothingSpeed = 5f;
+    [Header("애니메이션 리깅")]
+    [SerializeField] Rig rigLayer_WeaponFire;
+    [SerializeField] Rig rigLayer_WeaponSprint;
+    [SerializeField] Rig rigLayer_WeaponAim;
+
+    public Cinemachine.AxisState xAxis;
+    public Cinemachine.AxisState yAxis;
 
     [Header("플레이어 상태")]
     public float horizontal;
@@ -39,6 +43,7 @@ public class Player_Locomotion : MonoBehaviour
     public float groundCheckDistance = 0.4f;
     public float stamina;
     public float waitForRefillStamina;
+    public float smoothingSpeed = 15f;
 
     Vector3 moveDirection;
     Vector3 velocity;
@@ -50,16 +55,17 @@ public class Player_Locomotion : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Loco_Move();
-        Loco_Rotate();
         GroundCheck();
         SetDirection();
-        
+        cameraFunction.CameraUpdtate();
+
+        Loco_Move();
+        Loco_Rotate();
+        RigUpdate();
     }
 
     private void Update()
     {
-        cameraFunction.CameraUpdtate();
         Loco_Jump();
         Loco_UseWeapon();
         SetAnimatorParameter();
@@ -195,6 +201,40 @@ public class Player_Locomotion : MonoBehaviour
     {
         weapon.WeaponKeyInput();
         animator.SetBool("FireFlag", weapon.isShooting);
+
+    }
+
+    void RigUpdate()
+    {
+        // 달리기
+        if(sprintFlag == true)
+        {
+            rigLayer_WeaponSprint.weight += Time.deltaTime * smoothingSpeed * 0.6f;
+        }
+        else
+        {
+            rigLayer_WeaponSprint.weight -= Time.deltaTime * smoothingSpeed * 0.6f;
+        }
+
+        // 사격
+        if (weapon.isShooting == true)
+        {
+            rigLayer_WeaponFire.weight += Time.deltaTime * smoothingSpeed * 0.7f;
+        }
+        else
+        {
+            rigLayer_WeaponFire.weight -= Time.deltaTime * smoothingSpeed * 0.7f;
+        }
+
+        // 조준
+        if(aimFlag == true)
+        {
+            rigLayer_WeaponAim.weight += Time.deltaTime * smoothingSpeed * 0.8f;
+        }
+        else
+        {
+            rigLayer_WeaponAim.weight -= Time.deltaTime * smoothingSpeed * 0.8f;
+        }
     }
 
     #endregion
