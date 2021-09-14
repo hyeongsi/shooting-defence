@@ -4,14 +4,7 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject parentBlockGameObject = null;
-    [SerializeField]
-    private GameObject parentBarricadeGameObject = null;
-    [SerializeField]
-    private GameObject parentTurretGameObject = null;
-    [SerializeField]
-    private GameObject parentTransparentObject = null;
+    private GameObject[] parentGameObject = null;
     private GameObject transparentObject = null;
 
     private Ray ray;
@@ -20,6 +13,7 @@ public class MapGenerator : MonoBehaviour
     private Vector3 scrennCenter;
     private Block block;
 
+    private int selectObjctType = 0;
     private int selectPrefab = 2;
     private float currentRotationAngle = 0;
     private const float rotationAngle = 90.0f;
@@ -27,14 +21,43 @@ public class MapGenerator : MonoBehaviour
     private bool isBuildMode = true;
     private bool isEditMode = true;
 
-    public int SelectPrefab
+    #region property
+    public int SelectObjctType
     {
-        set 
+        set
         {
-            if (MapManager.Instance.tilePrefab.Length <= value)
+            if (MapManager.Instance.mapObject.transform.childCount-1 <= value && 0 > value)
                 return;
 
-            selectPrefab = value; 
+            selectObjctType = value;
+        }
+    }
+    public int SelectPrefab
+    {
+        set
+        {
+            int prefabSize;
+            switch (selectObjctType)
+            {
+                case (int)MapType.BLOCK:
+                    prefabSize = MapManager.Instance.tilePrefab.Length;
+                    break;
+                case (int)MapType.TURRET:
+                    prefabSize = MapManager.Instance.turretPrefab.Length;
+                    break;
+                case (int)MapType.BARRICADE:
+                    prefabSize = MapManager.Instance.barricadePrefab.Length;
+                    break;
+                default:
+                    return;
+            }
+            if (prefabSize == 0)
+                return;
+
+            if (prefabSize <= value && 0 > value)
+                return;
+
+            selectPrefab = value;
         }
     }
     public bool IsEditMode
@@ -42,6 +65,8 @@ public class MapGenerator : MonoBehaviour
         get { return isEditMode; }
         set { isEditMode = value; }
     }
+    #endregion
+
 
     private bool FindBlocks(Vector3 point, Vector3 newBlockSize)
     {
@@ -87,7 +112,7 @@ public class MapGenerator : MonoBehaviour
         {
             pointVector = Vector3.forward;
         }
-        else if (point.x >= -0.01f && point.x <= 0.01f) 
+        else if (point.x >= -0.01f && point.x <= 0.01f)
         {
             pointVector = Vector3.left;
         }
@@ -134,16 +159,16 @@ public class MapGenerator : MonoBehaviour
         switch (transparentObject.GetComponent<Block>().BlockType)     // 블록 유형에 따라 부모 오브젝트 설정, (정리)
         {
             case BlockType.BLOCK:
-                transparentObject.transform.parent = parentBlockGameObject.transform;
+                transparentObject.transform.parent = parentGameObject[(int)BlockType.BLOCK].transform;
                 break;
             case BlockType.BARRICADE:
-                transparentObject.transform.parent = parentTurretGameObject.transform;
+                transparentObject.transform.parent = parentGameObject[(int)BlockType.BARRICADE].transform;
                 break;
             case BlockType.TURRET:
-                transparentObject.transform.parent = parentBarricadeGameObject.transform;
+                transparentObject.transform.parent = parentGameObject[(int)BlockType.TURRET].transform;
                 break;
             default:
-                transparentObject.transform.parent = parentBlockGameObject.transform;
+                transparentObject.transform.parent = parentGameObject[(int)BlockType.BLOCK].transform;
                 break;
         }
 
@@ -167,7 +192,7 @@ public class MapGenerator : MonoBehaviour
 
             Transform newBlock = Instantiate(MapManager.Instance.tilePrefab[selectPrefab], createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
             transparentObject = newBlock.gameObject;
-            transparentObject.transform.parent = parentTransparentObject.transform;
+            transparentObject.transform.parent = parentGameObject[selectObjctType].transform;
 
             newBlock.gameObject.layer = (int)LayerNumbering.DEFAULT;
             newBlock.GetChild(0).localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
@@ -217,6 +242,12 @@ public class MapGenerator : MonoBehaviour
     {
         rayermask = 1 << LayerMask.NameToLayer("Block");
         scrennCenter = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
+
+        parentGameObject = new GameObject[MapManager.Instance.mapObject.transform.childCount];
+        for (int i = 0; i < MapManager.Instance.mapObject.transform.childCount; i ++)
+        {
+            parentGameObject[i] = MapManager.Instance.mapObject.transform.GetChild(i).gameObject;
+        }
     }
 
     private void Update()

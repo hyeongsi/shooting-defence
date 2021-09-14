@@ -17,7 +17,7 @@ public class MapManager : MonoBehaviour
 
     public GameObject mapObjectPrefab;
     public GameObject mapObject;
-
+   
     private BinaryFormatter bf;
     private FileStream file;
     private string path;
@@ -104,7 +104,7 @@ public class MapManager : MonoBehaviour
         // 저장되어 있는 데이터로 블럭들 생성
         for (int i = 0; i < editMapDataCollection.editmapData.Count; i ++)
         {
-            switch(editMapDataCollection.editmapData[i].mapType)
+            switch(editMapDataCollection.editmapData[i].objectType)
             {
                 case (int)MapType.BLOCK:
                     instantiateGameObjectTransform = Instantiate(tilePrefab[editMapDataCollection.editmapData[i].mapNumber].transform);
@@ -120,7 +120,7 @@ public class MapManager : MonoBehaviour
             }
 
             instantiateGameObjectTransform.position = new Vector3(editMapDataCollection.editmapData[i].positionX, editMapDataCollection.editmapData[i].positionY, editMapDataCollection.editmapData[i].positionZ);  // 위치 설정
-            instantiateGameObjectTransform.parent = mapObject.transform.GetChild(editMapDataCollection.editmapData[i].mapType);     // 부모 객체 설정
+            instantiateGameObjectTransform.parent = mapObject.transform.GetChild(editMapDataCollection.editmapData[i].objectType);     // 부모 객체 설정
             instantiateGameObjectTransform.GetChild(0).localRotation = Quaternion.Euler(editMapDataCollection.editmapData[i].rotationX, editMapDataCollection.editmapData[i].rotationY, editMapDataCollection.editmapData[i].rotationZ);
         }
     }
@@ -218,14 +218,14 @@ public class EditMapData
     public float rotationY = 0.0f;
     public float rotationZ = 0.0f;
 
-    public int mapType = 0;     // 블럭, 타워, 장애물 구분
+    public int objectType = 0;     // 블럭, 타워, 장애물 구분
     public int mapNumber = 0;   // 선택 맵데이터 종류, type 블럭이면 : 블럭1, 블럭2, type 타워면 : 타워1, 타워2 등등
 
     public EditMapData()
     { 
     
     }
-    public EditMapData(float x, float y, float z, float rX, float rY, float rZ, int mapType, int mapNumber)
+    public EditMapData(float x, float y, float z, float rX, float rY, float rZ, int objectType, int mapNumber)
     {
         positionX = x;
         positionY = y;
@@ -235,7 +235,7 @@ public class EditMapData
         rotationY = rY;
         rotationZ = rZ;
 
-        this.mapType = mapType;
+        this.objectType = objectType;
         this.mapNumber = mapNumber;    }
 }
 
