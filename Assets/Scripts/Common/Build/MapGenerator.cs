@@ -14,8 +14,6 @@ public class MapGenerator : MonoBehaviour
     private GameObject parentTransparentObject = null;
     private GameObject transparentObject = null;
 
-    public Material[] blockMaterial;
-
     private Ray ray;
     private RaycastHit hit;
     private int rayermask;
@@ -29,13 +27,11 @@ public class MapGenerator : MonoBehaviour
     private bool isBuildMode = true;
     private bool isEditMode = true;
 
-    public Transform[] tilePrefab;
-
     public int SelectPrefab
     {
         set 
         {
-            if (tilePrefab.Length <= value)
+            if (MapManager.Instance.tilePrefab.Length <= value)
                 return;
 
             selectPrefab = value; 
@@ -132,7 +128,7 @@ public class MapGenerator : MonoBehaviour
         if (transparentObject == null)
             return;
 
-        if (transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.name == blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
+        if (transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.name == MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
             return;
 
         switch (transparentObject.GetComponent<Block>().BlockType)     // 블록 유형에 따라 부모 오브젝트 설정, (정리)
@@ -152,7 +148,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         transparentObject.gameObject.layer = (int)LayerNumbering.BLOCK;
-        transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.YELLOW_GRID_COLOR_MATERIAL];
+        transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.YELLOW_GRID_COLOR_MATERIAL];
         transparentObject = null;
     }
     public void GenerateTransparentBlock(RaycastHit hit, Block block)         // 블럭 생성
@@ -161,15 +157,15 @@ public class MapGenerator : MonoBehaviour
         Vector3 createBlockPosition;
         Vector3 point;
 
-        if (selectPrefab >= 0 && selectPrefab < tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
+        if (selectPrefab >= 0 && selectPrefab < MapManager.Instance.tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
         {
             point = hit.point - hit.transform.position;
 
             createDirection = FindDirection(point, block.BlockSize);
-            Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
+            Vector3 newBlockSize = MapManager.Instance.tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
             createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
 
-            Transform newBlock = Instantiate(tilePrefab[selectPrefab], createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
+            Transform newBlock = Instantiate(MapManager.Instance.tilePrefab[selectPrefab], createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
             transparentObject = newBlock.gameObject;
             transparentObject.transform.parent = parentTransparentObject.transform;
 
@@ -178,11 +174,11 @@ public class MapGenerator : MonoBehaviour
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
             }
             else
             {
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
             }
         }
     }
@@ -193,21 +189,21 @@ public class MapGenerator : MonoBehaviour
         Vector3 createBlockPosition;
         Vector3 point;
 
-        if (selectPrefab >= 0 && selectPrefab < tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
+        if (selectPrefab >= 0 && selectPrefab < MapManager.Instance.tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
         {
             point = hit.point - hit.transform.position;
 
             createDirection = FindDirection(point, block.BlockSize);
-            Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
+            Vector3 newBlockSize = MapManager.Instance.tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
             createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
-                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
             }
             else
             {
-                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
             }
 
             if (transparentObject.transform.position != createBlockPosition)
@@ -253,13 +249,6 @@ public class MapGenerator : MonoBehaviour
             if (transparentObject != null)
                 DestroyImmediate(transparentObject);
         }
-    }
-
-    private enum TransparentMaterialColor
-    {
-        GREEN_COLOR_MATERIAL = 0,
-        RED_COLOR_MATERIAL = 1,
-        YELLOW_GRID_COLOR_MATERIAL = 2,
     }
 
     private enum LayerNumbering
