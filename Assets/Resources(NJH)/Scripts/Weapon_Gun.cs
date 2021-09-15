@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Weapon_Gun : MonoBehaviour
 {
+    Player_Manager playerManager;
+
     Camera camera;
     Transform shootPoint;
 
@@ -34,16 +36,19 @@ public class Weapon_Gun : MonoBehaviour
 
     private void Start()
     {
-        camera = GetComponentInParent<Player_Locomotion>().camera;
+        playerManager = GetComponentInParent<Player_Manager>();
+        camera = playerManager.camera;
+        bulletText = playerManager.bulletText;
+        reloadText = playerManager.reloadText;
+
         impulseSource = GetComponent<Cinemachine.CinemachineImpulseSource>();
         animator = GetComponent<Animator>();
         bulletsLeft = magazineSize;
         isReadyToShoot = true;
-
     }
 
     private void Update()
-    {
+    {        
         bulletText.text = bulletsLeft.ToString();
     }
 
@@ -85,10 +90,23 @@ public class Weapon_Gun : MonoBehaviour
         }
     }
 
+    void HitScan()
+    {
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            if (hit.collider.gameObject != null)
+            {
+                Debug.Log(hit.collider.gameObject);
+            }
+        }
+    }
+
     void Weapon_Shoot()
     {
         burstBulletCount = bulletsPerShot;
         StartCoroutine(Co_Shooting());
+        HitScan();
     }
 
     void Weapon_Reload()
@@ -104,13 +122,14 @@ public class Weapon_Gun : MonoBehaviour
     {
         isReadyToShoot = false;
 
-        if (weaponType < 2)
-        {
-            StartCoroutine(Co_CommonShot());
-        }
-        else
+        if (weaponType == 2)    // 샷건
         {
             StartCoroutine(Co_PelletShot());
+            
+        }
+        else    // 샷건말고 다른 총들(한번에 한발씩 나가는 총)
+        {
+            StartCoroutine(Co_NormalShot());
         }
 
         yield return new WaitForSeconds(nextShotDelay);
@@ -118,7 +137,7 @@ public class Weapon_Gun : MonoBehaviour
         isReadyToShoot = true;
     }
 
-    IEnumerator Co_CommonShot() // 슬라이드 후퇴 한 번에 한 발
+    IEnumerator Co_NormalShot() // 슬라이드 후퇴 한 번에 한 발
     {
         isburstShot = false;
         

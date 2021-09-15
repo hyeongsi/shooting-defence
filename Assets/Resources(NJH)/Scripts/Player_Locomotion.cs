@@ -1,38 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
 
 public class Player_Locomotion : MonoBehaviour
 {
-    public Camera camera;
+    Player_Manager playerManager;
+    Animator animator;
 
-    [SerializeField] CharacterController characterController;
-    [SerializeField] Animator animator;
+    CharacterController characterController;
     [SerializeField] Transform groundChecker;
     [SerializeField] Transform aimingTarget;
-    [SerializeField] Player_CameraFunction cameraFunction;
 
     [SerializeField] LayerMask groundLayer;
-
-    [SerializeField] Weapon_Gun weapon;
-
-    [Header("애니메이션 리깅")]
-    [SerializeField] Rig rigLayer_WeaponFire;
-    [SerializeField] Rig rigLayer_WeaponSprint;
-    [SerializeField] Rig rigLayer_WeaponAim;
-
-    public Cinemachine.AxisState xAxis;
-    public Cinemachine.AxisState yAxis;
-
-    [Header("플레이어 상태")]
-    public float horizontal;
-    public float vertical;
-    public bool sprintFlag;
-    public bool aimFlag;
-    public bool moveFlag;
-    public bool isGrounded;
-    public bool rotateLock;
 
     [Header("플레이어 값")]
     public float moveSpeed;
@@ -45,65 +24,32 @@ public class Player_Locomotion : MonoBehaviour
     public float waitForRefillStamina;
     public float smoothingSpeed = 15f;
 
-    Vector3 moveDirection;
     Vector3 velocity;
 
-    private void Start()
+    public void Initialize()
     {
-        cameraFunction.Initialize();
+        playerManager = GetComponent<Player_Manager>();
+        animator = playerManager.animator;
+        characterController = GetComponent<CharacterController>();
     }
 
-    private void FixedUpdate()
+    public void FixedUpdateFunction()
     {
         GroundCheck();
-        SetDirection();
-        cameraFunction.CameraUpdtate();
-
         Loco_Move();
-        Loco_Rotate();
-        RigUpdate();
     }
 
-    private void Update()
+    public void UpdateFunction()
     {
+        Loco_Rotate();
         Loco_Jump();
         Loco_UseWeapon();
-        SetAnimatorParameter();
-    }
-    
-    void SetDirection()
-    {
-        moveDirection = camera.transform.forward * vertical;
-        moveDirection += camera.transform.right * horizontal;
-        moveDirection.y = 0f;   // 먼저 0으로 만들고 정규화 함
-        moveDirection.Normalize();
-    }
-    
-    void SetAnimatorParameter()
-    {
-        animator.SetFloat("Input_Horizontal", horizontal, 0.1f, Time.deltaTime);
-        animator.SetFloat("Input_Vertical", vertical, 0.1f, Time.deltaTime);
-        animator.SetBool("SprintFlag", sprintFlag);
-        animator.SetBool("AimFlag", aimFlag);
-        animator.SetBool("MoveFlag", moveFlag);
-        animator.SetBool("isGrounded", isGrounded);
-    }
-
-    void Loco_Rotate()
-    {
-        xAxis.Update(Time.deltaTime);
-        yAxis.Update(Time.deltaTime);
-
-        aimingTarget.eulerAngles = new Vector3(yAxis.Value, xAxis.Value, 0f);
-
-        float cameraYaxis = camera.transform.rotation.eulerAngles.y;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, cameraYaxis, 0f), smoothingSpeed * Time.deltaTime);
     }
 
     void GroundCheck()
     {
-        isGrounded = Physics.CheckSphere(groundChecker.position, groundCheckDistance, groundLayer);
-        if (isGrounded && velocity.y < 0f)
+        playerManager.isGrounded = Physics.CheckSphere(groundChecker.position, groundCheckDistance, groundLayer);
+        if (playerManager.isGrounded && velocity.y < 0f)
         {
             velocity.y = -2f; // 땅으로 누름
         }
@@ -111,62 +57,52 @@ public class Player_Locomotion : MonoBehaviour
         characterController.Move(velocity * Time.deltaTime);
     }
 
-    #region 행동 관련
+    void Loco_Rotate()
+    {
+        float mouseX = playerManager.xAxis.Value;
+        float mouseY = playerManager.yAxis.Value;
+
+        aimingTarget.eulerAngles = new Vector3(mouseY, mouseX, 0f);
+
+        Quaternion mouseRotate = Quaternion.Euler(new Vector3(0f, mouseX, 0f));
+        transform.rotation = Quaternion.Slerp(transform.rotation, mouseRotate, smoothingSpeed * Time.fixedDeltaTime);
+    }
+
     void Loco_Move()
     {
+        playerManager.SetDirection();
+
         float speed = moveSpeed;
-        moveFlag = false;
+        playerManager.moveFlag = false;
 
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
-        sprintFlag = Input.GetButton("Sprint") && aimFlag == false && weapon.isShooting == false;
-        aimFlag = cameraFunction.aimCamFlag;
+        playerManager.horizontal = Input.GetAxisRaw("Horizontal");
+        playerManager.vertical = Input.GetAxisRaw("Vertical");
 
-        if (aimFlag == true)
+        if (playerManager.aimFlag == true)
         {
             speed = aimMoveSpeed;
-            horizontal *= 0.5f;
-            vertical *= 0.5f;
+            playerManager.horizontal *= 0.5f;
+            playerManager.vertical *= 0.5f;
         }
-        else if (sprintFlag == true && vertical > 0)
+        else if (playerManager.sprintFlag == true && playerManager.vertical > 0)
         {
             speed = sprintSpeed;
-            horizontal *= 2f;
-            vertical *= 2f;
-
+            playerManager.horizontal *= 2f;
+            playerManager.vertical *= 2f;
         }
 
-        if (moveDirection.magnitude > 0f)
+        if (playerManager.moveDirection.magnitude > 0f)
         {
-            moveFlag = true;
-            characterController.Move(moveDirection * speed * Time.deltaTime);
+            playerManager.moveFlag = true;
+            characterController.Move(playerManager.moveDirection * speed * Time.deltaTime);
         }
-
-        //if (moveDirection.magnitude > 0f)
-        //{
-        //    // 조준 상태 이동
-        //    if (aimFlag == true)
-        //    {
-        //        characterController.Move(moveDirection * aimMoveSpeed * Time.deltaTime);
-        //    }
-        //    //일반 이동
-        //    else
-        //    {
-        //        if (sprintFlag == true)
-        //        {
-        //            //스태미나 소모
-        //            characterController.Move(moveDirection * sprintSpeed * Time.deltaTime);
-        //        }
-        //        characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
-        //    }
-        //}
     }
 
     void Loco_Jump()
     {
         if (Input.GetButtonDown("Jump"))
         {
-            if (isGrounded == true)
+            if (playerManager.isGrounded == true)
             {
                 animator.CrossFade("Player_JumpLoop", 0.25f);
                 velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -196,47 +132,8 @@ public class Player_Locomotion : MonoBehaviour
     }
     #endregion
 
-
     void Loco_UseWeapon()
     {
-        weapon.WeaponKeyInput();
-        animator.SetBool("FireFlag", weapon.isShooting);
-
+        playerManager.weapon.WeaponKeyInput();
     }
-
-    void RigUpdate()
-    {
-        // 달리기
-        if(sprintFlag == true)
-        {
-            rigLayer_WeaponSprint.weight += Time.deltaTime * smoothingSpeed * 0.6f;
-        }
-        else
-        {
-            rigLayer_WeaponSprint.weight -= Time.deltaTime * smoothingSpeed * 0.6f;
-        }
-
-        // 사격
-        if (weapon.isShooting == true)
-        {
-            rigLayer_WeaponFire.weight += Time.deltaTime * smoothingSpeed * 0.7f;
-        }
-        else
-        {
-            rigLayer_WeaponFire.weight -= Time.deltaTime * smoothingSpeed * 0.7f;
-        }
-
-        // 조준
-        if(aimFlag == true)
-        {
-            rigLayer_WeaponAim.weight += Time.deltaTime * smoothingSpeed * 0.8f;
-        }
-        else
-        {
-            rigLayer_WeaponAim.weight -= Time.deltaTime * smoothingSpeed * 0.8f;
-        }
-    }
-
-    #endregion
-
 }
