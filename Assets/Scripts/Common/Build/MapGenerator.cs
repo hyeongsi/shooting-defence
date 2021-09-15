@@ -60,6 +60,12 @@ public class MapGenerator : MonoBehaviour
             selectPrefab = value;
         }
     }
+    public bool IsBuildMode
+    {
+        get { return isBuildMode; }
+        set { isBuildMode = value; }
+    }
+    
     public bool IsEditMode
     {
         get { return isEditMode; }
@@ -238,6 +244,15 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    public void ClearTransparentBlock()
+    {
+        if (transparentObject != null)
+        {
+            DestroyImmediate(transparentObject);
+            transparentObject = null;
+        }
+    }
+
     private void Start()
     {
         rayermask = 1 << LayerMask.NameToLayer("Block");
@@ -248,10 +263,15 @@ public class MapGenerator : MonoBehaviour
         {
             parentGameObject[i] = MapManager.Instance.mapObject.transform.GetChild(i).gameObject;
         }
+
+        GameManager.Instance.stopGameDelegate += ClearTransparentBlock;
     }
 
     private void Update()
     {
+        if (GameManager.Instance.IsStop)
+            return;
+
         if (!isBuildMode)
             return;
 
@@ -277,8 +297,7 @@ public class MapGenerator : MonoBehaviour
             }
         }else
         {
-            if (transparentObject != null)
-                DestroyImmediate(transparentObject);
+            ClearTransparentBlock();
         }
     }
 

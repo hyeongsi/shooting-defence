@@ -258,4 +258,5 @@ public enum MapType
     BLOCK = 0,
     TURRET = 1,
     BARRICADE = 2,
+    PREVIEW = 3,
 }
