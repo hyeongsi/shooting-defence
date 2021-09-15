@@ -43,6 +43,9 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.IsStop)
+            return;
+
         MoveCamera();
         RotationCameraAngle();
     }

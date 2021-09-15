@@ -4,17 +4,8 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject parentBlockGameObject = null;
-    [SerializeField]
-    private GameObject parentBarricadeGameObject = null;
-    [SerializeField]
-    private GameObject parentTurretGameObject = null;
-    [SerializeField]
-    private GameObject parentTransparentObject = null;
+    private GameObject[] parentGameObject = null;
     private GameObject transparentObject = null;
-
-    public Material[] blockMaterial;
 
     private Ray ray;
     private RaycastHit hit;
@@ -22,6 +13,7 @@ public class MapGenerator : MonoBehaviour
     private Vector3 scrennCenter;
     private Block block;
 
+    private int selectObjctType = 0;
     private int selectPrefab = 2;
     private float currentRotationAngle = 0;
     private const float rotationAngle = 90.0f;
@@ -29,23 +21,58 @@ public class MapGenerator : MonoBehaviour
     private bool isBuildMode = true;
     private bool isEditMode = true;
 
-    public Transform[] tilePrefab;
-
-    public int SelectPrefab
+    #region property
+    public int SelectObjctType
     {
-        set 
+        set
         {
-            if (tilePrefab.Length <= value)
+            if (MapManager.Instance.mapObject.transform.childCount-1 <= value && 0 > value)
                 return;
 
-            selectPrefab = value; 
+            selectObjctType = value;
         }
     }
+    public int SelectPrefab
+    {
+        set
+        {
+            int prefabSize;
+            switch (selectObjctType)
+            {
+                case (int)MapType.BLOCK:
+                    prefabSize = MapManager.Instance.tilePrefab.Length;
+                    break;
+                case (int)MapType.TURRET:
+                    prefabSize = MapManager.Instance.turretPrefab.Length;
+                    break;
+                case (int)MapType.BARRICADE:
+                    prefabSize = MapManager.Instance.barricadePrefab.Length;
+                    break;
+                default:
+                    return;
+            }
+            if (prefabSize == 0)
+                return;
+
+            if (prefabSize <= value && 0 > value)
+                return;
+
+            selectPrefab = value;
+        }
+    }
+    public bool IsBuildMode
+    {
+        get { return isBuildMode; }
+        set { isBuildMode = value; }
+    }
+    
     public bool IsEditMode
     {
         get { return isEditMode; }
         set { isEditMode = value; }
     }
+    #endregion
+
 
     private bool FindBlocks(Vector3 point, Vector3 newBlockSize)
     {
@@ -91,7 +118,7 @@ public class MapGenerator : MonoBehaviour
         {
             pointVector = Vector3.forward;
         }
-        else if (point.x >= -0.01f && point.x <= 0.01f) 
+        else if (point.x >= -0.01f && point.x <= 0.01f)
         {
             pointVector = Vector3.left;
         }
@@ -132,27 +159,27 @@ public class MapGenerator : MonoBehaviour
         if (transparentObject == null)
             return;
 
-        if (transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.name == blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
+        if (transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.name == MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
             return;
 
         switch (transparentObject.GetComponent<Block>().BlockType)     // 블록 유형에 따라 부모 오브젝트 설정, (정리)
         {
             case BlockType.BLOCK:
-                transparentObject.transform.parent = parentBlockGameObject.transform;
+                transparentObject.transform.parent = parentGameObject[(int)BlockType.BLOCK].transform;
                 break;
             case BlockType.BARRICADE:
-                transparentObject.transform.parent = parentTurretGameObject.transform;
+                transparentObject.transform.parent = parentGameObject[(int)BlockType.BARRICADE].transform;
                 break;
             case BlockType.TURRET:
-                transparentObject.transform.parent = parentBarricadeGameObject.transform;
+                transparentObject.transform.parent = parentGameObject[(int)BlockType.TURRET].transform;
                 break;
             default:
-                transparentObject.transform.parent = parentBlockGameObject.transform;
+                transparentObject.transform.parent = parentGameObject[(int)BlockType.BLOCK].transform;
                 break;
         }
 
         transparentObject.gameObject.layer = (int)LayerNumbering.BLOCK;
-        transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.YELLOW_GRID_COLOR_MATERIAL];
+        transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.YELLOW_GRID_COLOR_MATERIAL];
         transparentObject = null;
     }
     public void GenerateTransparentBlock(RaycastHit hit, Block block)         // 블럭 생성
@@ -161,28 +188,28 @@ public class MapGenerator : MonoBehaviour
         Vector3 createBlockPosition;
         Vector3 point;
 
-        if (selectPrefab >= 0 && selectPrefab < tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
+        if (selectPrefab >= 0 && selectPrefab < MapManager.Instance.tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
         {
             point = hit.point - hit.transform.position;
 
             createDirection = FindDirection(point, block.BlockSize);
-            Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
+            Vector3 newBlockSize = MapManager.Instance.tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
             createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
 
-            Transform newBlock = Instantiate(tilePrefab[selectPrefab], createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
+            Transform newBlock = Instantiate(MapManager.Instance.tilePrefab[selectPrefab], createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
             transparentObject = newBlock.gameObject;
-            transparentObject.transform.parent = parentTransparentObject.transform;
+            transparentObject.transform.parent = parentGameObject[selectObjctType].transform;
 
             newBlock.gameObject.layer = (int)LayerNumbering.DEFAULT;
             newBlock.GetChild(0).localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
             }
             else
             {
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
             }
         }
     }
@@ -193,21 +220,21 @@ public class MapGenerator : MonoBehaviour
         Vector3 createBlockPosition;
         Vector3 point;
 
-        if (selectPrefab >= 0 && selectPrefab < tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
+        if (selectPrefab >= 0 && selectPrefab < MapManager.Instance.tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
         {
             point = hit.point - hit.transform.position;
 
             createDirection = FindDirection(point, block.BlockSize);
-            Vector3 newBlockSize = tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
+            Vector3 newBlockSize = MapManager.Instance.tilePrefab[selectPrefab].GetComponent<Block>().BlockSize;
             createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
-                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
             }
             else
             {
-                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
             }
 
             if (transparentObject.transform.position != createBlockPosition)
@@ -217,14 +244,34 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    public void ClearTransparentBlock()
+    {
+        if (transparentObject != null)
+        {
+            DestroyImmediate(transparentObject);
+            transparentObject = null;
+        }
+    }
+
     private void Start()
     {
         rayermask = 1 << LayerMask.NameToLayer("Block");
         scrennCenter = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
+
+        parentGameObject = new GameObject[MapManager.Instance.mapObject.transform.childCount];
+        for (int i = 0; i < MapManager.Instance.mapObject.transform.childCount; i ++)
+        {
+            parentGameObject[i] = MapManager.Instance.mapObject.transform.GetChild(i).gameObject;
+        }
+
+        GameManager.Instance.stopGameDelegate += ClearTransparentBlock;
     }
 
     private void Update()
     {
+        if (GameManager.Instance.IsStop)
+            return;
+
         if (!isBuildMode)
             return;
 
@@ -250,16 +297,8 @@ public class MapGenerator : MonoBehaviour
             }
         }else
         {
-            if (transparentObject != null)
-                DestroyImmediate(transparentObject);
+            ClearTransparentBlock();
         }
-    }
-
-    private enum TransparentMaterialColor
-    {
-        GREEN_COLOR_MATERIAL = 0,
-        RED_COLOR_MATERIAL = 1,
-        YELLOW_GRID_COLOR_MATERIAL = 2,
     }
 
     private enum LayerNumbering
