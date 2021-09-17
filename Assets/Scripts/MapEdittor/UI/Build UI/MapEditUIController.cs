@@ -16,7 +16,20 @@ public class MapEditUIController : MonoBehaviour
         GameManager.Instance.IsStop = isActiveEditUi;
 
         if (isActiveEditUi)
-            transform.Find("Build Menu UI")?.GetChild(0).gameObject.SetActive(false);
+        {
+            Transform buildMenuUI = transform.Find("Build Menu UI");
+
+            if (buildMenuUI == null)
+                return;
+
+            Transform selectPanel = buildMenuUI.GetChild(0);
+            selectPanel.gameObject.SetActive(false);
+
+            for(int i = 0; i < selectPanel.childCount; i++)
+            {
+                selectPanel.GetChild(i).gameObject.SetActive(false);
+            }
+        }  
     }
 
     private void Start()

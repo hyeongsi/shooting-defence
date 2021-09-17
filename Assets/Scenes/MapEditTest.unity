@@ -2714,7 +2714,8 @@ MonoBehaviour:
   - {fileID: 7330357684788652981, guid: 943b1a1a0125977449e93cdd505a3122, type: 3}
   - {fileID: 2702763076007058230, guid: 8892e3e85f2c43243ac8b7a6aabe7194, type: 3}
   - {fileID: 3313348042875844792, guid: a79f983fd8c9d0f4caffd6ae817ce565, type: 3}
-  turretPrefab: []
+  turretPrefab:
+  - {fileID: 2251971676484381906, guid: 2c58418f9792eb940b74d3221f1d478f, type: 3}
   barricadePrefab: []
   mapObjectPrefab: {fileID: 1317265458003846665, guid: 35d20dd981b8ab74b98d2c4ce3f7fec6,
     type: 3}

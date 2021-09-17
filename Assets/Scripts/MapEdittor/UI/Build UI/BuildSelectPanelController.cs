@@ -53,7 +53,7 @@ public class BuildSelectPanelController : MonoBehaviour
             return;
         }
 
-        if (childRectTransform[buttonNumber].gameObject.activeSelf)
+        if (childRectTransform[buttonNumber].gameObject.activeSelf == true)
         {
             childRectTransform[buttonNumber].gameObject.SetActive(false);
             gameObject.SetActive(false);

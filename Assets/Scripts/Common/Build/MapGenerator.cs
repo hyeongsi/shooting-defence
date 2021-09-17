@@ -36,21 +36,8 @@ public class MapGenerator : MonoBehaviour
     {
         set
         {
-            int prefabSize;
-            switch (selectObjctType)
-            {
-                case (int)MapType.BLOCK:
-                    prefabSize = MapManager.Instance.tilePrefab.Length;
-                    break;
-                case (int)MapType.TURRET:
-                    prefabSize = MapManager.Instance.turretPrefab.Length;
-                    break;
-                case (int)MapType.BARRICADE:
-                    prefabSize = MapManager.Instance.barricadePrefab.Length;
-                    break;
-                default:
-                    return;
-            }
+            int prefabSize = FindPrefabLength();
+
             if (prefabSize == 0)
                 return;
 
@@ -188,7 +175,7 @@ public class MapGenerator : MonoBehaviour
         Vector3 createBlockPosition;
         Vector3 point;
 
-        if (selectPrefab >= 0 && selectPrefab < MapManager.Instance.tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
+        if (selectPrefab >= 0 && selectPrefab < FindPrefabLength())    // 없는 블럭은 생성하지 못하도록
         {
             point = hit.point - hit.transform.position;
 
@@ -220,7 +207,7 @@ public class MapGenerator : MonoBehaviour
         Vector3 createBlockPosition;
         Vector3 point;
 
-        if (selectPrefab >= 0 && selectPrefab < MapManager.Instance.tilePrefab.Length)    // 없는 블럭은 생성하지 못하도록
+        if (selectPrefab >= 0 && selectPrefab < FindPrefabLength())    // 없는 블럭은 생성하지 못하도록
         {
             point = hit.point - hit.transform.position;
 
@@ -241,6 +228,21 @@ public class MapGenerator : MonoBehaviour
                 transparentObject.transform.position = createBlockPosition;
 
             transparentObject.transform.GetChild(0).localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
+        }
+    }
+
+    public int FindPrefabLength()
+    {
+        switch (selectObjctType)
+        {
+            case (int)MapType.BLOCK:
+                return MapManager.Instance.tilePrefab.Length;
+            case (int)MapType.TURRET:
+                return MapManager.Instance.turretPrefab.Length;
+            case (int)MapType.BARRICADE:
+                return MapManager.Instance.barricadePrefab.Length;
+            default:
+                return 0;
         }
     }
 
