@@ -6,20 +6,12 @@ public class Barricade : Block
 {
     [SerializeField]
     protected float hp;
-    [SerializeField]
-    protected float mp;
 
     #region property
     public float HP
     {
         get { return hp; }
         set { hp = value; }
-    }
-
-    public float MP
-    {
-        get { return mp; }
-        set { mp = value; }
     }
     #endregion
 

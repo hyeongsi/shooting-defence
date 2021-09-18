@@ -22,6 +22,9 @@ public class MapEditUIController : MonoBehaviour
             if (buildMenuUI == null)
                 return;
 
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             Transform selectPanel = buildMenuUI.GetChild(0);
             selectPanel.gameObject.SetActive(false);
 
@@ -29,11 +32,31 @@ public class MapEditUIController : MonoBehaviour
             {
                 selectPanel.GetChild(i).gameObject.SetActive(false);
             }
-        }  
+        } 
+        else
+        {
+            SwitchLockCursor();
+        }
+    }
+
+    private void SwitchLockCursor()
+    {
+        if(Cursor.visible == false)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     private void Start()
     {
+        SwitchLockCursor();
+
         for (int i = 0; i < transform.childCount; i++)
         {
             transform.GetChild(i).gameObject.SetActive(false);

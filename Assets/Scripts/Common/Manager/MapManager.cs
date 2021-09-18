@@ -10,10 +10,10 @@ public class MapManager : MonoBehaviour
 {
     public Material[] blockMaterial;
 
-    private const int PREFAB_TRANSFORM_SIZE = 3;
     public Transform[] tilePrefab;
     public Transform[] turretPrefab;
     public Transform[] barricadePrefab;
+    public List<Transform[]> prefabList = new List<Transform[]>();
 
     public GameObject mapObjectPrefab;
     public GameObject mapObject;
@@ -164,6 +164,15 @@ public class MapManager : MonoBehaviour
     }
     #endregion
 
+    public void InitPrefabList()
+    {
+        // prefabList 초기화
+        prefabList.Clear();
+        prefabList.Add(tilePrefab);
+        prefabList.Add(turretPrefab);
+        prefabList.Add(barricadePrefab);
+    }
+
     private void Start()
     {
         bf = new BinaryFormatter();
@@ -174,30 +183,19 @@ public class MapManager : MonoBehaviour
             mapObject = Instantiate(mapObjectPrefab);
             if(mapObject.transform.childCount >= 1 && tilePrefab.Length >= 1)
             {
-                Instantiate(tilePrefab[0].transform).parent = mapObject.transform.GetChild(0);
+                Instantiate(tilePrefab[0].transform).parent = mapObject.transform.GetChild(0);  // 시작과 동시에 기본 블럭 생성함 그래야 다른 블럭을 생성할 수 있으니
             }
         }
+
+        InitPrefabList();
 
         mapTypeNameParser = new Dictionary<string, int>();
 
         // name parser 초기화
         Transform[] prefabTransform;
-        for (int i = 0; i < PREFAB_TRANSFORM_SIZE; i++)
+        for (int i = 0; i < prefabList.Count; i++)
         {
-            switch(i)
-            {
-                case (int)MapType.BLOCK:
-                    prefabTransform = tilePrefab;
-                    break;
-                case (int)MapType.TURRET:
-                    prefabTransform = turretPrefab;
-                    break;
-                case (int)MapType.BARRICADE:
-                    prefabTransform = barricadePrefab;
-                    break;
-                default:
-                    return;
-            }
+            prefabTransform = prefabList[i];
 
             for (int j = 0; j < prefabTransform.Length; j++)
             {
