@@ -25,6 +25,14 @@ public class MapGenerator : MonoBehaviour
     private const string layerName = "Block";
 
     #region property
+
+    public GameObject[] ParentGameObject
+    {
+        get
+        {
+            return parentGameObject;
+        }
+    }
     public int SelectObjctType
     {
         set

@@ -5,13 +5,16 @@ using UnityEngine.UI;
 
 public class BuildSelectEventAdder : MonoBehaviour
 {
-    MapGenerator mapGenerator;
+    public MapGenerator mapGenerator;
+    const string INPUT_GROUND_PANEL_NAME = "Input Ground Size Select Panel";
+
     void Start()
     {
-        mapGenerator = MapManager.Instance.GetComponent<MapGenerator>();
-
-        for(int i = 0; i <transform.childCount; i ++)
+        for(int i = 0; i < transform.childCount; i ++)
         {
+            if (transform.GetChild(i).name == INPUT_GROUND_PANEL_NAME)    // create ground button
+                return;
+            
             for (int j = 0; j < transform.GetChild(i).childCount; j++)
             {
                 int selectObjectType = new int();

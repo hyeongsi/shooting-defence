@@ -15,10 +15,10 @@ public class BuildSelectPanelController : MonoBehaviour
 
     private void SetRectTransform(int buttonCount)
     {
-        float y = buttonCount / HORIZONTAL_PANEL_COUNT + 1;
+        float y = (buttonCount-1) / HORIZONTAL_PANEL_COUNT + 1;
 
         setSizeVector.y = y * BUTTON_SIZE + PADDING_SIZE + (y-1) * PADDING_SIZE;
-        if (buttonCount >= HORIZONTAL_PANEL_COUNT)   // x 개수가 지정 가로 개수보다 많다면, 최대 가로 개수 크기 지정
+        if (buttonCount > HORIZONTAL_PANEL_COUNT)   // x 개수가 지정 가로 개수보다 많다면, 최대 가로 개수 크기 지정
         {
             setSizeVector.x = BUTTON_SIZE * HORIZONTAL_PANEL_COUNT + PADDING_SIZE + (HORIZONTAL_PANEL_COUNT-1) * PADDING_SIZE;
         }

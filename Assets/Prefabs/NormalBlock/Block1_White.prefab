@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2196316550564496455}
   - component: {fileID: 6069498682407018147}
   m_Layer: 8
-  m_Name: Block1
+  m_Name: Block1_White
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,7 +160,7 @@ PrefabInstance:
     - target: {fileID: 2300000, guid: caed417d0c17a134696ff2ef8b52a764, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 4930c6ffa5b9b9f4098249a43abf8506, type: 2}
+      objectReference: {fileID: 2100000, guid: 39080df7a334e4c49a50b4fb36a7d2e3, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: caed417d0c17a134696ff2ef8b52a764, type: 3}
 --- !u!4 &5586741421024682176 stripped
