@@ -249,7 +249,7 @@ public class MapGenerator : MonoBehaviour
     {
         if (transparentObject != null)
         {
-            DestroyImmediate(transparentObject);
+            Destroy(transparentObject);
             transparentObject = null;
         }
     }
@@ -265,12 +265,12 @@ public class MapGenerator : MonoBehaviour
             parentGameObject[i] = MapManager.Instance.mapObject.transform.GetChild(i).gameObject;
         }
 
-        GameManager.Instance.stopGameDelegate += ClearTransparentBlock;
+        GameManager.Instance.pauseGameDelegate += ClearTransparentBlock;
     }
 
     private void Update()
     {
-        if (GameManager.Instance.IsStop)
+        if (GameManager.Instance.IsPause)
             return;
 
         if (!isBuildMode)
@@ -288,7 +288,7 @@ public class MapGenerator : MonoBehaviour
             }
             else if (Input.GetMouseButtonUp(1))      // 우클릭, 블럭 삭제
             {
-                DestroyImmediate(hit.transform.gameObject);
+                Destroy(hit.transform.gameObject);
             }
             else
             {

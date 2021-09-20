@@ -4,27 +4,21 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public delegate void StopGameDelegate();
-    public StopGameDelegate stopGameDelegate;
+    public delegate void PauseGameDelegate();
+    public PauseGameDelegate pauseGameDelegate;
 
-    private bool isStop = false;
+    public bool IsPause { get; private set; } = false;
+    private PlayState playState = PlayState.MAIN_MENU;
 
-    public bool IsStop
+    #region EnumStorage
+    public enum PlayState
     {
-        get
-        {
-            return isStop;
-        }
-        set
-        {
-            isStop = value;
-
-            if (!isStop)
-                return;
-
-            stopGameDelegate?.Invoke();
-        }
+        MAIN_MENU = 0,
+        SINGLE_PLAY = 1,
+        MULTY_PLAY = 2,
+        MAP_EDIT = 3,
     }
+    #endregion
 
     #region Singleton
     private static GameManager instance = null;
@@ -35,6 +29,8 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
+
+            InitGame();
         }
         else
         {
@@ -55,4 +51,31 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    public void InitGame()
+    {
+        // 게임 시작 시, 게임에 필요한 데이터 모두 로딩 작업, (블럭, 타워, 몬스터, 플레이어, ui 등)
+        FileManager.Instance.LoadJsonFile<Object>("test", "test");
+    }
+
+    public void PauseGame()
+    {
+        IsPause = true;
+        pauseGameDelegate?.Invoke();
+
+        //pauseGameDelegate 에 esc 메뉴 관련해서 함수 등록하기
+    }
+
+    public void ContinueGame()
+    {
+        IsPause = false;
+
+        // esc 메뉴 치우는 함수 등록하기
+    }
+
+    public void ExitGame()
+    {
+        playState = PlayState.MAIN_MENU;
+
+        // 메인 메뉴로 씬 이동
+    }
 }

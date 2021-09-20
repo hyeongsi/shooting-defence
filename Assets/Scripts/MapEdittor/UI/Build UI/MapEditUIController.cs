@@ -13,7 +13,10 @@ public class MapEditUIController : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
             transform.GetChild(i).gameObject.SetActive(isActiveEditUi);
 
-        GameManager.Instance.IsStop = isActiveEditUi;
+        if (isActiveEditUi)
+            GameManager.Instance.PauseGame();
+        else
+            GameManager.Instance.ContinueGame();
 
         if (isActiveEditUi)
         {

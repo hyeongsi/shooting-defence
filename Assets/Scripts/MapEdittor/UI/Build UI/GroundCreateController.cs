@@ -36,7 +36,7 @@ public class GroundCreateController : MonoBehaviour
         {
             for(int j = mapGenerator.ParentGameObject[i].transform.childCount-1; j >= 0; j-- )
             {
-                DestroyImmediate(mapGenerator.ParentGameObject[i].transform.GetChild(j).gameObject);
+                Destroy(mapGenerator.ParentGameObject[i].transform.GetChild(j).gameObject);
             }
         }
     }

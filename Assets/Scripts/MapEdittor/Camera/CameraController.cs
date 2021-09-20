@@ -43,7 +43,7 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.IsStop)
+        if (GameManager.Instance.IsPause)
             return;
 
         MoveCamera();

@@ -96,7 +96,7 @@ public class MapManager : MonoBehaviour
 
         if (GameObject.Find("MapGameObject(Clone)") != null)
         {
-            DestroyImmediate(mapObject);
+            Destroy(mapObject);
         }
 
         mapObject = Instantiate(mapObjectPrefab);
