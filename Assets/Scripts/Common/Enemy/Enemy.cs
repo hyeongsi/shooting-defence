@@ -11,6 +11,11 @@ public class Enemy : MonoBehaviour
     private AttackType attackType = AttackType.MELEE;   
     private EnemyType enemyType = EnemyType.TEST_TYPE;   // 스크립트 마다 다르도록 할 예정, 이걸로 몬스터 종류 구분
     
+    public void Attack()
+    {
+        // 플레이어나 타워 공격하도록 하기, 
+    }
+
     public void TakeDamage(int damage)    // 피격
     {
         hp -= damage;

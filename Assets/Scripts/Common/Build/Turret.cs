@@ -101,6 +101,11 @@ public class Turret : Barricade
         return true;
     }
 
+    public void DestroyTurret()
+    {
+        Destroy(this);
+    }
+
     private void Awake()
     {
         const string enemyLayerMaskName = "Enemy";

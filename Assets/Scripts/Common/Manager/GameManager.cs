@@ -54,7 +54,23 @@ public class GameManager : MonoBehaviour
     public void InitGame()
     {
         // 게임 시작 시, 게임에 필요한 데이터 모두 로딩 작업, (블럭, 타워, 몬스터, 플레이어, ui 등)
-        FileManager.Instance.LoadJsonFile<Object>("test", "test");
+        MonsterManager.Instance.LoadMonsterData();
+        TurretManager.Instance.LoadTurretData();
+    }
+
+    public void LoadMapData() 
+    {
+        switch(playState)
+        {
+            case PlayState.SINGLE_PLAY:
+                // 캠페인 맵 모두 로딩하도록
+                break;
+            case PlayState.MULTY_PLAY:
+                // 들어갈 방 선택하면 해당 방 데이터 통신해서 받도록 구현
+                break;
+            default:
+                return;
+        }
     }
 
     public void PauseGame()

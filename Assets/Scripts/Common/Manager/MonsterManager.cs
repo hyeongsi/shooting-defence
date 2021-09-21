@@ -5,6 +5,7 @@ using UnityEngine;
 public class MonsterManager
 {
     private List<Enemy> monsterList = new List<Enemy>();
+    private List<Enemy> spawnMonsterList = new List<Enemy>();
 
     static MonsterManager instance = null;
 
@@ -23,26 +24,29 @@ public class MonsterManager
 
     public void ClearEnemy()
     {
-        for(int i = monsterList.Count-1; i >= 0; i --)
+        for(int i = spawnMonsterList.Count-1; i >= 0; i --)
         {
-            monsterList[i].DestroyEnemy();
+            spawnMonsterList[i].DestroyEnemy();
         }
 
-        monsterList.Clear();
+        spawnMonsterList.Clear();
     }
 
     public void AddEnemy(Enemy enemy)
     {
-        monsterList.Add(enemy);
+        spawnMonsterList.Add(enemy);
     }
 
     public void DeleteEnemy(Enemy enemy)
     {
-        monsterList.Remove(enemy);
+        spawnMonsterList.Remove(enemy);
     }
 
     public void LoadMonsterData()
     {
-        FileManager.Instance.LoadJsonFile<Enemy>();
+        // 해당 경로에 몹 데이터들 저장해 둬야함. 그러면 그거 불러와서 사용하도록 하기
+        // Enemy로는 모든 Enemy 데이터를 받을 수 없기 떄문에, 처리할 수 있는 방안으로 처리하기....
+        // monsterList에 집어넣기.
+        FileManager.Instance.LoadJsonFile<Enemy>(Application.dataPath+"/Data", "/monsterData.json");
     }
 }
