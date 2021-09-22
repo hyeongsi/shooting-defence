@@ -176,7 +176,7 @@ public class MapManager : MonoBehaviour
     private void Start()
     {
         bf = new BinaryFormatter();
-        path = Application.dataPath + "/Data" +"/mapData";
+        path = Application.persistentDataPath + "/Data" +"/mapData";
 
         if (GameObject.Find("MapGameObject(Clone)") == null)
         {

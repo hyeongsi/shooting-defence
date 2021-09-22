@@ -62,4 +62,12 @@ public class FileManager
             return default;     // null
         }
     }
+
+    public List<T> LoadCsvFile<T>(string loadPath, string fileName)
+    {
+        List<T> listData = new List<T>();
+
+
+        return listData;
+    }
 }
