@@ -48,6 +48,9 @@ public class Player_Manager : MonoBehaviour
 
     private void Update()
     {
+        xAxis.Update(Time.fixedDeltaTime);
+        yAxis.Update(Time.fixedDeltaTime);
+
         sprintFlag = Input.GetButton("Sprint") && aimFlag == false && weapon.isShooting == false;
         aimFlag = cameraFunction.aimCamFlag;
 
@@ -58,12 +61,8 @@ public class Player_Manager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        xAxis.Update(Time.fixedDeltaTime);
-        yAxis.Update(Time.fixedDeltaTime);
-
         playerLocomotion.FixedUpdateFunction();
     }
-
     public void SetDirection()
     {
         moveDirection = camera.transform.forward * vertical;

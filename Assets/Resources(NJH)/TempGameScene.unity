@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43965626, g: 0.48004222, b: 0.52496874, a: 1}
+  m_IndirectSpecularColor: {r: 0.4396563, g: 0.48004222, b: 0.52496916, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1415,7 +1415,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &617174650
 Transform:
   m_ObjectHideFlags: 0
@@ -2007,6 +2007,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8648667314074233398, guid: 80b70a07ae5b6f8489f601f012d257b5,
+        type: 3}
+      propertyPath: hitEffect
+      value: 
+      objectReference: {fileID: 5434133978062749643, guid: b88542ba983bfa14ea3c6597696a6e2d,
+        type: 3}
     - target: {fileID: 8648667314074233398, guid: 80b70a07ae5b6f8489f601f012d257b5,
         type: 3}
       propertyPath: bulletText

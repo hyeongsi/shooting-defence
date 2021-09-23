@@ -8,7 +8,7 @@ public class Weapon_Gun : MonoBehaviour
     Player_Manager playerManager;
 
     Camera camera;
-    Transform shootPoint;
+    Transform hitPoint;
 
     Cinemachine.CinemachineImpulseSource impulseSource;
 
@@ -16,6 +16,8 @@ public class Weapon_Gun : MonoBehaviour
 
     [SerializeField] Text bulletText;
     [SerializeField] Text reloadText;
+
+    [SerializeField] ParticleSystem hitEffect;
 
     [Header("Weapon Info")]
     public int weaponType;  // 0: 기본, 1: 점사, 2: 산탄
@@ -98,6 +100,9 @@ public class Weapon_Gun : MonoBehaviour
             if (hit.collider.gameObject != null)
             {
                 Debug.Log(hit.collider.gameObject);
+                Debug.Log(hit.point);
+                hitPoint = hit.transform;
+                Instantiate(hitEffect, hitPoint.position, Quaternion.identity);
             }
         }
     }

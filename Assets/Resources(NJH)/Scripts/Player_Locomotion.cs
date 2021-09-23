@@ -64,7 +64,7 @@ public class Player_Locomotion : MonoBehaviour
 
         aimingTarget.eulerAngles = new Vector3(mouseY, mouseX, 0f);
 
-        Quaternion mouseRotate = Quaternion.Euler(new Vector3(0f, mouseX, 0f));
+        Quaternion mouseRotate = Quaternion.Euler(0f, mouseX, 0f);
         transform.rotation = Quaternion.Slerp(transform.rotation, mouseRotate, smoothingSpeed * Time.fixedDeltaTime);
     }
 
