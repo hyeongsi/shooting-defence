@@ -8,14 +8,6 @@ using UnityEditor;
 // 맵 불러오기, 저장, 현재 맵 정보
 public class MapManager : MonoBehaviour
 {
-    public Material[] blockMaterial;
-
-    public Transform[] tilePrefab;
-    public Transform[] turretPrefab;
-    public Transform[] barricadePrefab;
-    public List<Transform[]> prefabList = new List<Transform[]>();
-
-    public GameObject mapObjectPrefab;
     public GameObject mapObject;
    
     private BinaryFormatter bf;
@@ -99,7 +91,7 @@ public class MapManager : MonoBehaviour
             Destroy(mapObject);
         }
 
-        mapObject = Instantiate(mapObjectPrefab);
+        mapObject = Instantiate(PrefabManager.Instance.MapObjectPrefab);
 
         // 저장되어 있는 데이터로 블럭들 생성
         for (int i = 0; i < editMapDataCollection.editmapData.Count; i ++)
@@ -107,13 +99,13 @@ public class MapManager : MonoBehaviour
             switch(editMapDataCollection.editmapData[i].objectType)
             {
                 case (int)MapType.BLOCK:
-                    instantiateGameObjectTransform = Instantiate(tilePrefab[editMapDataCollection.editmapData[i].mapNumber].transform);
+                    instantiateGameObjectTransform = Instantiate(PrefabManager.Instance.BlockPrefabArray[editMapDataCollection.editmapData[i].mapNumber].transform);
                     break;
                 case (int)MapType.TURRET:
-                    instantiateGameObjectTransform = Instantiate(turretPrefab[editMapDataCollection.editmapData[i].mapNumber].transform);
+                    instantiateGameObjectTransform = Instantiate(PrefabManager.Instance.TurretPrefabArray[editMapDataCollection.editmapData[i].mapNumber].transform);
                     break;
                 case (int)MapType.BARRICADE:
-                    instantiateGameObjectTransform = Instantiate(barricadePrefab[editMapDataCollection.editmapData[i].mapNumber].transform);
+                    instantiateGameObjectTransform = Instantiate(PrefabManager.Instance.BarricadePrefabArray[editMapDataCollection.editmapData[i].mapNumber].transform);
                     break;
                 default:
                     return;
@@ -164,44 +156,29 @@ public class MapManager : MonoBehaviour
     }
     #endregion
 
-    public void InitPrefabList()
-    {
-        // prefabList 초기화
-        prefabList.Clear();
-        prefabList.Add(tilePrefab);
-        prefabList.Add(turretPrefab);
-        prefabList.Add(barricadePrefab);
-    }
-
     private void Start()
     {
         bf = new BinaryFormatter();
-        path = Application.persistentDataPath + "/Data" +"/mapData";
+        path = Application.persistentDataPath + "/Data" +"/mapData";    // 이거 경로 다른곳으로 설정하기
 
         if (GameObject.Find("MapGameObject(Clone)") == null)
         {
-            mapObject = Instantiate(mapObjectPrefab);
-            if(mapObject.transform.childCount >= 1 && tilePrefab.Length >= 1)
+            mapObject = Instantiate(PrefabManager.Instance.MapObjectPrefab);
+            if(mapObject.transform.childCount >= 1 && PrefabManager.Instance.BlockPrefabArray.Length >= 1)
             {
-                Instantiate(tilePrefab[0].transform).parent = mapObject.transform.GetChild(0);  // 시작과 동시에 기본 블럭 생성함 그래야 다른 블럭을 생성할 수 있으니
+                Instantiate(PrefabManager.Instance.BlockPrefabArray[0].transform).parent = mapObject.transform.GetChild(0);  // 시작과 동시에 기본 블럭 생성함 그래야 다른 블럭을 생성할 수 있으니
             }
         }
-
-        InitPrefabList();
 
         mapTypeNameParser = new Dictionary<string, int>();
 
         // name parser 초기화
-        Transform[] prefabTransform;
-        for (int i = 0; i < prefabList.Count; i++)
-        {
-            prefabTransform = prefabList[i];
-
-            for (int j = 0; j < prefabTransform.Length; j++)
-            {
-                mapTypeNameParser.Add(prefabTransform[j].name+"(Clone)", j);
-            }
-        }
+        for (int i = 0; i < PrefabManager.Instance.BlockPrefabArray.Length; i++)
+            mapTypeNameParser.Add(PrefabManager.Instance.BlockPrefabArray[i].name + "(Clone)", i);
+        for (int i = 0; i < PrefabManager.Instance.BarricadePrefabArray.Length; i++)
+            mapTypeNameParser.Add(PrefabManager.Instance.BarricadePrefabArray[i].name + "(Clone)", i);
+        for (int i = 0; i < PrefabManager.Instance.TurretPrefabArray.Length; i++)
+            mapTypeNameParser.Add(PrefabManager.Instance.TurretPrefabArray[i].name + "(Clone)", i);
     }
 }
 

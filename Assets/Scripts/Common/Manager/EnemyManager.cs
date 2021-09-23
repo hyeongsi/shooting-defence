@@ -54,7 +54,10 @@ public class EnemyManager
 
     public void LoadEnemyData()
     {
-        
+        string enemyCsvString = FileManager.Instance.LoadCsvFile(Application.persistentDataPath, "Enemy");
+
+        if (enemyCsvString == default)     // 로딩 데이터 없으면 종료
+            return;
     }
 
     public void UpdateSpawnEnemyList()

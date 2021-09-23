@@ -2068,6 +2068,65 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 736862410}
   m_CullTransparentMesh: 0
+--- !u!1 &753872378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 753872380}
+  - component: {fileID: 753872379}
+  m_Layer: 0
+  m_Name: PrefabManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &753872379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753872378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60223669eca73e84b8571db849442f98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapObjectPrefab: {fileID: 1317265458003846665, guid: 35d20dd981b8ab74b98d2c4ce3f7fec6,
+    type: 3}
+  blockMaterialArray:
+  - {fileID: 2100000, guid: 6c46651dbc49d854e94f99f944331799, type: 2}
+  - {fileID: 2100000, guid: cfe5b7951375ff246b2639ad5e6f2890, type: 2}
+  blockPrefabArray:
+  - {fileID: 8287372045822694922, guid: 3187b1340106b0543a280ab51830f653, type: 3}
+  - {fileID: 8287372045822694922, guid: 2d8a21c314ccac440a0baf3d7b0ac542, type: 3}
+  - {fileID: 8287372045822694922, guid: 8cba69100776f204ebcfdb91777fa7e2, type: 3}
+  - {fileID: 8287372045822694922, guid: a79f983fd8c9d0f4caffd6ae817ce565, type: 3}
+  - {fileID: 7330357684788652982, guid: 943b1a1a0125977449e93cdd505a3122, type: 3}
+  barricadePrefabArray:
+  - {fileID: 5742413438668672470, guid: 7fd8ba84aa6aff94586c9b365904d8d5, type: 3}
+  turretPrefabArray:
+  - {fileID: 7073498492847597698, guid: 2c58418f9792eb940b74d3221f1d478f, type: 3}
+  enemyPrefabArray: []
+--- !u!4 &753872380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753872378}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &780181104
 GameObject:
   m_ObjectHideFlags: 0
@@ -3184,22 +3243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a50642c96ae5d4780f19648feac33f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockMaterial:
-  - {fileID: 2100000, guid: 6c46651dbc49d854e94f99f944331799, type: 2}
-  - {fileID: 2100000, guid: cfe5b7951375ff246b2639ad5e6f2890, type: 2}
-  - {fileID: 2100000, guid: 2c375036718c29f4aab3b1c34790cdc1, type: 2}
-  tilePrefab:
-  - {fileID: 3313348042875844792, guid: 3187b1340106b0543a280ab51830f653, type: 3}
-  - {fileID: 3313348042875844792, guid: 8cba69100776f204ebcfdb91777fa7e2, type: 3}
-  - {fileID: 3313348042875844792, guid: 2d8a21c314ccac440a0baf3d7b0ac542, type: 3}
-  - {fileID: 3313348042875844792, guid: a79f983fd8c9d0f4caffd6ae817ce565, type: 3}
-  - {fileID: 7330357684788652981, guid: 943b1a1a0125977449e93cdd505a3122, type: 3}
-  turretPrefab:
-  - {fileID: 2251971676484381906, guid: 2c58418f9792eb940b74d3221f1d478f, type: 3}
-  barricadePrefab:
-  - {fileID: 7406950885354477424, guid: 7fd8ba84aa6aff94586c9b365904d8d5, type: 3}
-  mapObjectPrefab: {fileID: 1317265458003846665, guid: 35d20dd981b8ab74b98d2c4ce3f7fec6,
-    type: 3}
   mapObject: {fileID: 0}
 --- !u!4 &1129988330
 Transform:

@@ -71,6 +71,35 @@ public class MapGenerator : MonoBehaviour
     }
     #endregion
 
+    private Block GetBlockObject()
+    {
+        switch (selectObjctType)
+        {
+            case (int)MapType.BLOCK:
+                return  PrefabManager.Instance.BlockPrefabArray[selectPrefab].GetComponent<Block>();
+            case (int)MapType.TURRET:
+                return PrefabManager.Instance.TurretPrefabArray[selectPrefab].GetComponent<Block>();
+            case (int)MapType.BARRICADE:
+                return PrefabManager.Instance.BarricadePrefabArray[selectPrefab].GetComponent<Block>();
+        }
+
+        return default;
+    }
+
+    private GameObject GetMapTypeObject()
+    {
+        switch (selectObjctType)
+        {
+            case (int)MapType.BLOCK:
+                return PrefabManager.Instance.BlockPrefabArray[selectPrefab];
+            case (int)MapType.TURRET:
+                return PrefabManager.Instance.TurretPrefabArray[selectPrefab];
+            case (int)MapType.BARRICADE:
+                return PrefabManager.Instance.BarricadePrefabArray[selectPrefab];
+        }
+
+        return default;
+    }
 
     private bool FindBlocks(Vector3 point, Vector3 newBlockSize)
     {
@@ -157,7 +186,7 @@ public class MapGenerator : MonoBehaviour
         if (transparentObject == null)
             return;
 
-        if (transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.name == MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
+        if (transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.name == PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
             return;
 
         transparentObject.transform.parent = parentGameObject[(int)transparentObject.GetComponent<Block>().BlockType].transform;
@@ -179,13 +208,22 @@ public class MapGenerator : MonoBehaviour
             point = hit.point - hit.transform.position;
 
             createDirection = FindDirection(point, block.BlockSize);
-            Vector3 newBlockSize = MapManager.Instance.prefabList[selectObjctType][selectPrefab].GetComponent<Block>().BlockSize;
+
+            Vector3 newBlockSize;
+            Block getBlockObject = GetBlockObject();
+            if (getBlockObject == default)
+                return;
+
+            newBlockSize = getBlockObject.BlockSize;
             createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
 
             Transform newBlock;
-            Transform createPrefab = MapManager.Instance.prefabList[selectObjctType][selectPrefab];
+            GameObject getMapTypeObject = GetMapTypeObject();
 
-            newBlock = Instantiate(createPrefab, createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
+            if (getMapTypeObject == default)
+                return;
+
+            newBlock = Instantiate(getMapTypeObject.transform, createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
             transparentObject = newBlock.gameObject;
             transparentObject.transform.parent = parentGameObject[(int)MapType.PREVIEW].transform;
 
@@ -195,12 +233,12 @@ public class MapGenerator : MonoBehaviour
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
                 originMaterial = newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material;
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
             }
             else
             {
                 originMaterial = newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material;
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
             }
         }
     }
@@ -216,16 +254,21 @@ public class MapGenerator : MonoBehaviour
             point = hit.point - hit.transform.position;
 
             createDirection = FindDirection(point, block.BlockSize);
-            Vector3 newBlockSize = MapManager.Instance.prefabList[selectObjctType][selectPrefab].GetComponent<Block>().BlockSize;
+
+            Block getBlockObject = GetBlockObject();
+            if (getBlockObject == default)
+                return;
+            Vector3 newBlockSize = getBlockObject.BlockSize;
+
             createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
-                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
             }
             else
             {
-                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = MapManager.Instance.blockMaterial[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
             }
 
             if (transparentObject.transform.position != createBlockPosition)
@@ -237,9 +280,14 @@ public class MapGenerator : MonoBehaviour
 
     public int FindPrefabLength()
     {
-        if(selectObjctType >= 0 && selectObjctType < MapManager.Instance.prefabList.Count)
+        switch(selectObjctType)
         {
-            return MapManager.Instance.prefabList[selectObjctType].Length;
+            case (int)MapType.BLOCK:
+                return PrefabManager.Instance.BlockPrefabArray.Length;
+            case (int)MapType.TURRET:
+                return PrefabManager.Instance.TurretPrefabArray.Length;
+            case (int)MapType.BARRICADE:
+                return PrefabManager.Instance.BarricadePrefabArray.Length;
         }
 
         return 0;

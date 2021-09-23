@@ -10,7 +10,8 @@ public class Enemy : MonoBehaviour
     protected float attackDelay;
     protected AttackType attackType;
     protected float speed;
-    protected GameObject prefab;
+
+    public float HP { get { return hp; }  set { hp = value; } }
 
     public virtual void Init(Enemy enemy)
     {
@@ -55,10 +56,12 @@ public class Enemy : MonoBehaviour
 
     public virtual GameObject Spawn()
     {
-        GameObject newEnemyGameObject = Instantiate(prefab);
-        newEnemyGameObject.GetComponent<Enemy>().Init(this);
+        //GameObject newEnemyGameObject = Instantiate(prefab);
+        //newEnemyGameObject.GetComponent<Enemy>().Init(this);
 
-        return newEnemyGameObject;
+        //return newEnemyGameObject;
+
+        return default;
     }
 
     public bool FindAttackObject()
@@ -100,6 +103,12 @@ public class Enemy : MonoBehaviour
 
     public virtual void UpdateEnemy()
     {
+        if(hp <= 0.0f)
+        {
+            EnemyManager.Instance.DeleteEnemy(this);
+            DestroyEnemy();
+        }
+
         // if(!Attack(FindAttackObject()));     // 공격 못했따면 이동하도록 처리
         //  FindAWay()?Move();   // FindAWay()로 길 찾아서 Move로 이동하기   
     }

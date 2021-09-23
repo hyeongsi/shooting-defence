@@ -22,6 +22,10 @@ public class TurretManager
         }
     }
 
+    public List<Turret> SpawnTurretList
+    {
+        get { return spawnTurretList; }
+    }
     public void ClearTurret()
     {
         for (int i = spawnTurretList.Count - 1; i >= 0; i--)
@@ -32,9 +36,13 @@ public class TurretManager
         spawnTurretList.Clear();
     }
 
-    public void AddTurret(Turret turret)
+    public void SpawnTurret(int turretIndex, Vector3 position)
     {
-        spawnTurretList.Add(turret);
+        if (turretIndex < 0 && turretIndex >= turretList.Count)
+            return;
+
+        spawnTurretList.Add(turretList[turretIndex]);
+        turretList[turretIndex].Spawn().transform.position = position;
     }
 
     public void DeleteTurret(Turret turret)
@@ -44,9 +52,20 @@ public class TurretManager
 
     public void LoadTurretData()
     {
-        // 해당 경로에 터렛 데이터들 저장해 둬야함. 그러면 그거 불러와서 사용하도록 하기
-        // Turret로는 모든 Turret 데이터를 받을 수 없기 떄문에, 처리할 수 있는 방안으로 처리하기....
-        // turretList 에 넣기
-        FileManager.Instance.LoadJsonFile<Turret>(Application.dataPath + "/Data", "/turretData.json");
+        string turretCsvString = FileManager.Instance.LoadCsvFile(Application.persistentDataPath, "Turret");
+
+        if (turretCsvString == default)     // 로딩 데이터 없으면 종료
+            return;
+
+        //가공해서
+        // 집어넣고
+    }
+
+    public void UpdateSpawnTurretList()
+    {
+        for (int i = 0; i < spawnTurretList.Count; i++)
+        {
+            spawnTurretList[i].UpdateTurret();
+        }
     }
 }

@@ -23,8 +23,12 @@ public class GroundCreateController : MonoBehaviour
         const int INIT_BLOCK_INDEX = 0;
 
         DestroyAllBlocks();
-        Instantiate(MapManager.Instance.prefabList[(int)MapType.BLOCK][INIT_BLOCK_INDEX], Vector3.zero, Quaternion.Euler(Vector3.zero)).parent =
-            mapGenerator.ParentGameObject[(int)MapType.BLOCK].transform;
+        GameObject[] blockPrefabArray = PrefabManager.Instance.BlockPrefabArray;
+        if (blockPrefabArray.Length >= 1)
+        {
+            Instantiate(blockPrefabArray[INIT_BLOCK_INDEX].transform, Vector3.zero, Quaternion.Euler(Vector3.zero)).parent =
+           mapGenerator.ParentGameObject[(int)MapType.BLOCK].transform;
+        }
     }
 
     public void DestroyAllBlocks()
@@ -60,22 +64,29 @@ public class GroundCreateController : MonoBehaviour
         const int LOOP_COUNT = 2;
         bool isWhiteBlock = false;
 
-        for (int y = 0; y < getY; y++)      // 지형 생성
+        try 
         {
-            for (int x = 0; x < getX; x++)
+            for (int y = 0; y < getY; y++)      // 지형 생성
             {
-                createPosition.z = y;
-                createPosition.x = x;
+                for (int x = 0; x < getX; x++)
+                {
+                    createPosition.z = y;
+                    createPosition.x = x;
 
-                Instantiate(MapManager.Instance.prefabList[(int)MapType.BLOCK][1 + (isWhiteBlock ? 1 : 0)], createPosition, Quaternion.Euler(Vector3.zero)).parent =
+                    Instantiate(PrefabManager.Instance.BlockPrefabArray[1 + (isWhiteBlock ? 1 : 0)].transform, createPosition, Quaternion.Euler(Vector3.zero)).parent =
                     mapGenerator.ParentGameObject[(int)MapType.BLOCK].transform;
 
-                if ((x + 1) % LOOP_COUNT == 0)
+                    if ((x + 1) % LOOP_COUNT == 0)
+                        isWhiteBlock = !isWhiteBlock;
+                }
+
+                if ((y + 1) % LOOP_COUNT == 0)
                     isWhiteBlock = !isWhiteBlock;
             }
-
-            if ((y + 1) % LOOP_COUNT == 0)
-                isWhiteBlock = !isWhiteBlock;
+        }
+        catch
+        {
+            Debug.Log("GroundCreateController, CreateGound(), 76, PefabManager BlockPrefabArray out of range error");
         }
 
         xInputField.text = string.Empty;

@@ -63,11 +63,16 @@ public class FileManager
         }
     }
 
-    public List<T> LoadCsvFile<T>(string loadPath, string fileName)
+    public string LoadCsvFile(string loadPath, string fileName)
     {
-        List<T> listData = new List<T>();
+        if (!Directory.Exists(loadPath))
+            return default;
+
+        if (!File.Exists(string.Format("{0}/{1}.csv", loadPath, fileName)))
+            return default;
 
 
-        return listData;
+
+        return default;
     }
 }

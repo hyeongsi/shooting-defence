@@ -53,14 +53,14 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
+        TurretManager.Instance.UpdateSpawnTurretList();
         EnemyManager.Instance.UpdateSpawnEnemyList();
     }
-
     public void InitGame()
     {
         // 게임 시작 시, 게임에 필요한 데이터 모두 로딩 작업, (블럭, 타워, 몬스터, 플레이어, ui 등)
-        EnemyManager.Instance.LoadEnemyData();
         TurretManager.Instance.LoadTurretData();
+        EnemyManager.Instance.LoadEnemyData();
     }
 
     public void LoadMapData() 

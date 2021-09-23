@@ -4,20 +4,17 @@ using UnityEngine;
 
 public class Turret : Barricade
 {
-    [SerializeField]
+    protected float attackDamage;
+    protected float attackRange;
     protected float attackDelay;
-    [SerializeField]
-    protected float attackRange;        // 공격 범위를 수치로 표현하기가 애매해서 문제. 추후에 프리팹같은걸로 정하도록 할 예정
-    [SerializeField]
-    protected float attackDamge;
 
     public Transform rotationGunBody;
-    private float spinSpeed = 270.0f;
-    private float fireRate = 0.0f;
+    protected float spinSpeed;
+    protected float fireRate = 0.0f;
 
-    private Quaternion lookRotation;
-    private LayerMask enemyLayerMask;
-    private Transform target = null;
+    protected Quaternion lookRotation;
+    protected LayerMask enemyLayerMask;
+    protected Transform target = null;
 
     #region property
     public float AttackDelay
@@ -34,10 +31,28 @@ public class Turret : Barricade
 
     public float AttackDamge
     {
-        get { return attackDamge; }
-        set { attackDamge = value; }
+        get { return attackDamage; }
+        set { attackDamage = value; }
     }
     #endregion
+    public virtual void Init(Turret turret)
+    {
+        hp = turret.hp;
+        attackDamage = turret.attackDamage;
+        attackRange = turret.attackRange;
+        attackDelay = turret.attackDelay;
+        spinSpeed = turret.spinSpeed;
+    }
+
+    public virtual GameObject Spawn()
+    {
+        //GameObject newTurretGameObject = Instantiate(prefab);
+        //newTurretGameObject.GetComponent<Turret>().Init(this);
+
+        //return newTurretGameObject;
+
+        return default;
+    }
 
     private void SearchEnemy()
     {
@@ -58,25 +73,14 @@ public class Turret : Barricade
         }
     }
 
-    private void RotationGunBody()
-    {
-        if (rotationGunBody == null)
-            return;
-
-        rotationGunBody.Rotate(new Vector3(0, 45, 0) * Time.deltaTime);
-    }
-
     private void RotationGunToEnemy()
     {
-        if (lookRotation != null)
-        {
-            lookRotation = Quaternion.LookRotation(target.transform.position);
-            Vector3 rotationAngle = Quaternion.RotateTowards(
-                    rotationGunBody.rotation,
-                    lookRotation,
-                    spinSpeed * Time.deltaTime).eulerAngles;
-            rotationGunBody.rotation = Quaternion.Euler(0, rotationAngle.y, 0);
-        }
+        lookRotation = Quaternion.LookRotation(target.transform.position);
+        Vector3 rotationAngle = Quaternion.RotateTowards(
+                rotationGunBody.rotation,
+                lookRotation,
+                spinSpeed * Time.deltaTime).eulerAngles;
+        rotationGunBody.rotation = Quaternion.Euler(0, rotationAngle.y, 0);
     }
 
     private void AttackEnemy()
@@ -114,19 +118,16 @@ public class Turret : Barricade
         enemyLayerMask = 1 << LayerMask.NameToLayer(enemyLayerMaskName);
     }
 
-    private void Update()
+    public virtual void UpdateTurret()
     {
         // 게임 시작(스테이지 시작) 유무를 게임 매니저 통해서 받아서 시작 전엔 업데이트 하지 않도록 하기,
 
-        if(target == null)
+        if (target == null)
         {
-            RotationGunBody();
             SearchEnemy();  // 가장 가까운 적을 찾음
         }
         else
         {
-            // 조건문 추가, if(target.hp <= 0) {destroy(target); target = null }
-
             RotationGunToEnemy();
             AttackEnemy();  // 적 존재하면 공격
             if (!TargetDisatanceCheck()) // 사거리 벗어나면
