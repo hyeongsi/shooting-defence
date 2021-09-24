@@ -19,6 +19,7 @@ public class Weapon_Gun : MonoBehaviour
     [Header("Particle System")]
     [SerializeField] ParticleSystem hitEffect;
     [SerializeField] ParticleSystem muzzleFlash;
+    [SerializeField] TrailRenderer bulletTrail;
 
     [SerializeField] Transform muzzleFlashPosition;
 
@@ -88,13 +89,17 @@ public class Weapon_Gun : MonoBehaviour
     }
 
     void HitScan()
-    {
-        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
-
+    {        
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+        var trail = Instantiate(bulletTrail, muzzleFlashPosition.position, Quaternion.identity);
+
+        trail.AddPosition(muzzleFlashPosition.position);
+
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Weapon_HitEffect();
+            Weapon_HitEffect(trail);
             if(hit.collider.gameObject.layer == 28)
             {
                 Enemy_Locomotion enemy = hit.collider.gameObject.GetComponent<Enemy_Locomotion>();
@@ -103,7 +108,7 @@ public class Weapon_Gun : MonoBehaviour
         }
     }
 
-    void Weapon_HitEffect()
+    void Weapon_HitEffect(TrailRenderer trail)
     {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit))
@@ -111,6 +116,7 @@ public class Weapon_Gun : MonoBehaviour
             if (hit.collider.gameObject != null)
             {
                 Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                trail.transform.position = hit.point;
             }
         }
     }
@@ -134,7 +140,7 @@ public class Weapon_Gun : MonoBehaviour
     {
         isReadyToShoot = false;
 
-        if (weaponInfo.weaponType == 2)    // 샷건
+        if (weaponInfo.weaponType == WeaponType.weaponTypeID.shotgun)    // 샷건
         {
             StartCoroutine(Co_PelletShot());
             

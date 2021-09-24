@@ -6,7 +6,7 @@ using UnityEngine;
 public class WeaponInfo : ScriptableObject
 {
     public bool isAutomatic;
-    public int weaponType;  // 0: 기본, 1: 점사, 2: 산탄
+    public WeaponType.weaponTypeID weaponType;  // 0: 단발, 1: 연발, 2: 점사, 3: 점사연발, 4: 산탄
     public int damage;
     public int magazineSize;
     public int bulletsLeft;
@@ -19,7 +19,7 @@ public class WeaponInfo : ScriptableObject
 
 public class WeaponType
 {
-    enum weaponType
+    public enum weaponTypeID
     {
         singleTab = 0,
         fullAuto = 1,

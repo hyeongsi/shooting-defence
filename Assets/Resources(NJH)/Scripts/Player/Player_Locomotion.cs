@@ -19,7 +19,7 @@ public class Player_Locomotion : MonoBehaviour
     public float aimMoveSpeed;
     public float jumpHeight;
     public float gravity = -9.81f;
-    public float groundCheckDistance = 0.4f;
+    public float groundCheckDistance = 0.2f;
     public float stamina;
     public float waitForRefillStamina;
     public float smoothingSpeed = 15f;
@@ -52,6 +52,11 @@ public class Player_Locomotion : MonoBehaviour
         if (playerManager.isGrounded && velocity.y < 0f)
         {
             velocity.y = -2f; // 땅으로 누름
+            characterController.stepOffset = 0.35f;
+        }
+        else
+        {
+            characterController.stepOffset = 0;
         }
         velocity.y += gravity * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);

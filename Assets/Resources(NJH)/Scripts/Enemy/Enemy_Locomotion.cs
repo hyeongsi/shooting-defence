@@ -1,18 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy_Locomotion : MonoBehaviour
 {
     [SerializeField] Animator animator;
+
+    [SerializeField] Transform destinationTransform;
+    [SerializeField] NavMeshAgent agent;
 
     [Header("Enemy Stats")]
     public int hp;
     public int moveSpeed;
     public int attackDamage;
 
-    private void FixedUpdate()
+    private void Start()
     {
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    private void Update()
+    {
+        agent.SetDestination(destinationTransform.position);
         Enemy_Die();
     }
 
@@ -22,6 +32,10 @@ public class Enemy_Locomotion : MonoBehaviour
         {
             hp -= damage;
 
+            if(animator == null)
+            {
+                return;
+            }
             // 피격 애니메이션, 사운드 재생
             animator.CrossFade("Hit Reaction", 0.1f);
         }
@@ -31,7 +45,7 @@ public class Enemy_Locomotion : MonoBehaviour
     {
         if(hp <= 0)
         {
-            Destroy(gameObject, 1f);
+            Destroy(gameObject);
         }
     }
 }
