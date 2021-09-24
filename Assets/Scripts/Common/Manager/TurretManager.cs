@@ -52,13 +52,27 @@ public class TurretManager
 
     public void LoadTurretData()
     {
-        string turretCsvString = FileManager.Instance.LoadCsvFile(Application.persistentDataPath, "Turret");
+        TextAsset textAsset = Resources.Load("Turret") as TextAsset;
+        string turretCsvString = textAsset.text;
 
         if (turretCsvString == default)     // 로딩 데이터 없으면 종료
             return;
 
-        //가공해서
-        // 집어넣고
+        string[] stringList = turretCsvString.Split('\n');
+
+        Turret newTurret;
+        TurretData turretData;
+        for (int i = 1; i < stringList.Length; i ++)
+        {
+            string[] splitString = turretCsvString.Split(',');
+            turretData = new TurretData();
+
+            turretData.attackDamage = new splitString[(int)TurretDataEnum.AttackDamage];
+
+
+            newTurret = new Turret(splitString[(int)TurretDataEnum.HP], );
+            turretList.Add(newTurret);
+        }
     }
 
     public void UpdateSpawnTurretList()
@@ -67,5 +81,28 @@ public class TurretManager
         {
             spawnTurretList[i].UpdateTurret();
         }
+    }
+
+    private enum TurretDataEnum
+    {
+        HP = 2,
+        AttackDamage = 3,
+        AttackRange = 4,
+        AttackDelay = 5,
+        SpinSpeed = 6,
+        Prefab = 7,
+        BlockSizeX = 8,
+        BlockSizeY = 9,
+    }
+
+    private struct TurretData
+    {
+        public float attackDamage;
+        public float attackRange;
+        public float attackDelay;
+        public float spinSpeed;
+        public int prefab;
+        public float blockSizeX;
+        public float blockSizeY;
     }
 }

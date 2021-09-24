@@ -3,19 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 // 맵 불러오기, 저장, 현재 맵 정보
 public class MapManager : MonoBehaviour
 {
-    public GameObject mapObject;
-   
+    [SerializeField]
+    private GameObject mapGameObject;
+    private GameObject[] parentGameObject = null;
+
     private BinaryFormatter bf;
     private FileStream file;
     private string path;
     private EditMapDataCollection editMapDataCollection = new EditMapDataCollection();
 
     private Dictionary<string, int> mapTypeNameParser;    // 프리팹 이름을 int 형으로 바꿔주기 위해 사용
+
+    #region Property
+    public GameObject MapGameObject { get { return mapGameObject; } }
+    public GameObject[] ParentGameObject { get { return parentGameObject; } }
+    #endregion
 
     #region Singleton
     private static MapManager instance = null;
@@ -25,15 +35,10 @@ public class MapManager : MonoBehaviour
         if( null == instance )
         {
             instance = this;
-
-            // 씬 전환 시 이 오브젝트가 파괴되지 않도록 함, (싱글톤을 유지하도록)
             DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            // 씬 전환 시 동일한 오브젝트가 존재할 수 있다.
-            // 그럴 경우 이전 씬에서 사용하던 오브젝트를 그대로 사용하기 때문에
-            // 전환된 씬의 오브젝트 삭제 처리
             Destroy(this.gameObject);
         }
     }
@@ -60,11 +65,11 @@ public class MapManager : MonoBehaviour
         Transform childGameObjectTransform;
 
         // 설치된 맵 데이터 개수 계산
-        for(int i = 0; i < mapObject.transform.childCount - 1; i ++)  // preview 데이터는 빼고 계산 (-1 처리)
+        for(int i = 0; i < mapGameObject.transform.childCount - 1; i ++)  // preview 데이터는 빼고 계산 (-1 처리)
         {
-            for(int j = 0;  j < mapObject.transform.GetChild(i).childCount; j++)   // 각 맵 데이터의 정보 저장
+            for(int j = 0;  j < mapGameObject.transform.GetChild(i).childCount; j++)   // 각 맵 데이터의 정보 저장
             {
-                childGameObjectTransform = mapObject.transform.GetChild(i).GetChild(j);
+                childGameObjectTransform = mapGameObject.transform.GetChild(i).GetChild(j);
 
                 editMapData = new EditMapData(
                     childGameObjectTransform.position.x, childGameObjectTransform.position.y, childGameObjectTransform.position.z,
@@ -88,10 +93,10 @@ public class MapManager : MonoBehaviour
 
         if (GameObject.Find("MapGameObject(Clone)") != null)
         {
-            Destroy(mapObject);
+            Destroy(mapGameObject);
         }
 
-        mapObject = Instantiate(PrefabManager.Instance.MapObjectPrefab);
+        mapGameObject = Instantiate(PrefabManager.Instance.MapObjectPrefab);
 
         // 저장되어 있는 데이터로 블럭들 생성
         for (int i = 0; i < editMapDataCollection.editmapData.Count; i ++)
@@ -112,7 +117,7 @@ public class MapManager : MonoBehaviour
             }
 
             instantiateGameObjectTransform.position = new Vector3(editMapDataCollection.editmapData[i].positionX, editMapDataCollection.editmapData[i].positionY, editMapDataCollection.editmapData[i].positionZ);  // 위치 설정
-            instantiateGameObjectTransform.parent = mapObject.transform.GetChild(editMapDataCollection.editmapData[i].objectType);     // 부모 객체 설정
+            instantiateGameObjectTransform.parent = mapGameObject.transform.GetChild(editMapDataCollection.editmapData[i].objectType);     // 부모 객체 설정
             instantiateGameObjectTransform.GetChild(0).localRotation = Quaternion.Euler(editMapDataCollection.editmapData[i].rotationX, editMapDataCollection.editmapData[i].rotationY, editMapDataCollection.editmapData[i].rotationZ);
         }
     }
@@ -125,7 +130,10 @@ public class MapManager : MonoBehaviour
             Directory.CreateDirectory(path);    // 해당 경로의 폴더 생성
         }
 
-        string selectPath = EditorUtility.SaveFilePanel("create dat file", path, "", "dat");    // 저장 파일 이름 선택
+        string selectPath = default;
+#if UNITY_EDITOR
+        selectPath = EditorUtility.SaveFilePanel("create dat file", path, "", "dat");    // 저장 파일 이름 선택
+#endif
         if (string.IsNullOrEmpty(selectPath))   // 선택 취소 시 종료
             return;
 
@@ -144,7 +152,10 @@ public class MapManager : MonoBehaviour
             Directory.CreateDirectory(path);    // 해당 경로의 폴더 생성
         }
 
-        string selectPath = EditorUtility.OpenFilePanel("select dat file", path, "dat");    // 불러오기 경로 선택
+        string selectPath = default;
+#if UNITY_EDITOR
+        selectPath = EditorUtility.OpenFilePanel("select dat file", path, "dat");    // 불러오기 경로 선택
+#endif
         if (string.IsNullOrEmpty(selectPath))   // 선택 취소 시 종료
             return;
 
@@ -163,10 +174,10 @@ public class MapManager : MonoBehaviour
 
         if (GameObject.Find("MapGameObject(Clone)") == null)
         {
-            mapObject = Instantiate(PrefabManager.Instance.MapObjectPrefab);
-            if(mapObject.transform.childCount >= 1 && PrefabManager.Instance.BlockPrefabArray.Length >= 1)
+            mapGameObject = Instantiate(PrefabManager.Instance.MapObjectPrefab);
+            if(mapGameObject.transform.childCount >= 1 && PrefabManager.Instance.BlockPrefabArray.Length >= 1)
             {
-                Instantiate(PrefabManager.Instance.BlockPrefabArray[0].transform).parent = mapObject.transform.GetChild(0);  // 시작과 동시에 기본 블럭 생성함 그래야 다른 블럭을 생성할 수 있으니
+                Instantiate(PrefabManager.Instance.BlockPrefabArray[0].transform).parent = mapGameObject.transform.GetChild(0);  // 시작과 동시에 기본 블럭 생성함 그래야 다른 블럭을 생성할 수 있으니
             }
         }
 
@@ -179,6 +190,13 @@ public class MapManager : MonoBehaviour
             mapTypeNameParser.Add(PrefabManager.Instance.BarricadePrefabArray[i].name + "(Clone)", i);
         for (int i = 0; i < PrefabManager.Instance.TurretPrefabArray.Length; i++)
             mapTypeNameParser.Add(PrefabManager.Instance.TurretPrefabArray[i].name + "(Clone)", i);
+
+        // 맵 생성 부모 초기화
+        parentGameObject = new GameObject[mapGameObject.transform.childCount];
+        for (int i = 0; i < mapGameObject.transform.childCount; i++)
+        {
+            parentGameObject[i] = mapGameObject.transform.GetChild(i).gameObject;
+        }
     }
 }
 

@@ -10,8 +10,6 @@ public class GroundCreateController : MonoBehaviour
     private InputField xInputField;
     [SerializeField]
     private InputField yInputField;
-    [SerializeField]
-    private MapGenerator mapGenerator;
 
     private int getX;
     private int getY;
@@ -27,20 +25,19 @@ public class GroundCreateController : MonoBehaviour
         if (blockPrefabArray.Length >= 1)
         {
             Instantiate(blockPrefabArray[INIT_BLOCK_INDEX].transform, Vector3.zero, Quaternion.Euler(Vector3.zero)).parent =
-           mapGenerator.ParentGameObject[(int)MapType.BLOCK].transform;
+            MapManager.Instance.ParentGameObject[(int)MapType.BLOCK].transform;
         }
     }
 
     public void DestroyAllBlocks()
     {
-        if (mapGenerator == null)
-            return;
+        GameObject[] parentGameObject = MapManager.Instance.ParentGameObject;
 
-        for (int i = 0; i < mapGenerator.ParentGameObject.Length; i ++)
+        for (int i = 0; i < parentGameObject.Length; i ++)
         {
-            for(int j = mapGenerator.ParentGameObject[i].transform.childCount-1; j >= 0; j-- )
+            for(int j = parentGameObject[i].transform.childCount-1; j >= 0; j-- )
             {
-                Destroy(mapGenerator.ParentGameObject[i].transform.GetChild(j).gameObject);
+                Destroy(parentGameObject[i].transform.GetChild(j).gameObject);
             }
         }
     }
@@ -74,7 +71,7 @@ public class GroundCreateController : MonoBehaviour
                     createPosition.x = x;
 
                     Instantiate(PrefabManager.Instance.BlockPrefabArray[1 + (isWhiteBlock ? 1 : 0)].transform, createPosition, Quaternion.Euler(Vector3.zero)).parent =
-                    mapGenerator.ParentGameObject[(int)MapType.BLOCK].transform;
+                    MapManager.Instance.ParentGameObject[(int)MapType.BLOCK].transform;
 
                     if ((x + 1) % LOOP_COUNT == 0)
                         isWhiteBlock = !isWhiteBlock;

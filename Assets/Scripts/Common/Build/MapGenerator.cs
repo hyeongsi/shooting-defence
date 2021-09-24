@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    private GameObject[] parentGameObject = null;
     private GameObject transparentObject = null;
 
     private Ray ray;
@@ -15,7 +14,7 @@ public class MapGenerator : MonoBehaviour
     private Material originMaterial;
 
     private int selectObjctType = 0;
-    private int selectPrefab = 2;
+    private int selectPrefab = 0;
     private float currentRotationAngle = 0;
     private const float rotationAngle = 90.0f;
 
@@ -25,19 +24,11 @@ public class MapGenerator : MonoBehaviour
     private const string layerName = "Block";
 
     #region property
-
-    public GameObject[] ParentGameObject
-    {
-        get
-        {
-            return parentGameObject;
-        }
-    }
     public int SelectObjctType
     {
         set
         {
-            if (MapManager.Instance.mapObject.transform.childCount-1 <= value && 0 > value)
+            if (MapManager.Instance.MapGameObject.transform.childCount-1 <= value && 0 > value)
                 return;
 
             selectObjctType = value;
@@ -189,7 +180,7 @@ public class MapGenerator : MonoBehaviour
         if (transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.name == PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
             return;
 
-        transparentObject.transform.parent = parentGameObject[(int)transparentObject.GetComponent<Block>().BlockType].transform;
+        transparentObject.transform.parent = MapManager.Instance.ParentGameObject[(int)transparentObject.GetComponent<Block>().BlockType].transform;
 
         transparentObject.gameObject.layer = (int)LayerNumbering.BLOCK;
 
@@ -225,7 +216,7 @@ public class MapGenerator : MonoBehaviour
 
             newBlock = Instantiate(getMapTypeObject.transform, createBlockPosition, Quaternion.Euler(Vector3.zero)) as Transform;
             transparentObject = newBlock.gameObject;
-            transparentObject.transform.parent = parentGameObject[(int)MapType.PREVIEW].transform;
+            transparentObject.transform.parent = MapManager.Instance.ParentGameObject[(int)MapType.PREVIEW].transform;
 
             newBlock.gameObject.layer = (int)LayerNumbering.DEFAULT;
             newBlock.GetChild(0).localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
@@ -306,13 +297,6 @@ public class MapGenerator : MonoBehaviour
     {
         rayermask = 1 << LayerMask.NameToLayer(layerName);
         scrennCenter = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
-
-        parentGameObject = new GameObject[MapManager.Instance.mapObject.transform.childCount];
-        for (int i = 0; i < MapManager.Instance.mapObject.transform.childCount; i ++)
-        {
-            parentGameObject[i] = MapManager.Instance.mapObject.transform.GetChild(i).gameObject;
-        }
-
         GameManager.Instance.pauseGameDelegate += ClearTransparentBlock;
     }
 

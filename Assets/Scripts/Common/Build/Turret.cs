@@ -7,9 +7,9 @@ public class Turret : Barricade
     protected float attackDamage;
     protected float attackRange;
     protected float attackDelay;
+    protected float spinSpeed;
 
     public Transform rotationGunBody;
-    protected float spinSpeed;
     protected float fireRate = 0.0f;
 
     protected Quaternion lookRotation;
@@ -17,31 +17,32 @@ public class Turret : Barricade
     protected Transform target = null;
 
     #region property
-    public float AttackDelay
+    public float AttackDamage
     {
-        get { return attackDelay; }
-        set { attackDelay = value; }
+        get { return attackDamage; }
     }
-
     public float AttackRange
     {
         get { return attackRange; }
-        set { attackRange = value; }
     }
-
-    public float AttackDamge
+    public float AttackDelay
     {
-        get { return attackDamage; }
-        set { attackDamage = value; }
+        get { return AttackDelay; }
+    }
+    public float SpinSpeed
+    {
+        get { return SpinSpeed; }
     }
     #endregion
-    public virtual void Init(Turret turret)
+
+    public Turret(float hp, ref float attackDamage, ref float attackRange, ref float attackDelay, ref float spinSpeed, ref Vector3 blockSize)
     {
-        hp = turret.hp;
-        attackDamage = turret.attackDamage;
-        attackRange = turret.attackRange;
-        attackDelay = turret.attackDelay;
-        spinSpeed = turret.spinSpeed;
+        this.hp = hp;
+        this.attackDamage = attackDamage;
+        this.attackRange = attackRange;
+        this.attackDelay = attackDelay;
+        this.spinSpeed = spinSpeed;
+        this.blockSize = blockSize;
     }
 
     public virtual GameObject Spawn()
@@ -56,7 +57,7 @@ public class Turret : Barricade
 
     private void SearchEnemy()
     {
-        Collider[] findEnemyCollider = Physics.OverlapSphere(transform.position, attackRange, enemyLayerMask);
+        Collider[] findEnemyCollider = Physics.OverlapSphere(transform.position, AttackRange, enemyLayerMask);
 
         if(findEnemyCollider.Length > 0)
         {

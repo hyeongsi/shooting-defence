@@ -54,10 +54,13 @@ public class EnemyManager
 
     public void LoadEnemyData()
     {
-        string enemyCsvString = FileManager.Instance.LoadCsvFile(Application.persistentDataPath, "Enemy");
+        TextAsset textAsset = Resources.Load("Turret") as TextAsset;
+        string enemyCsvString = textAsset.text;
 
         if (enemyCsvString == default)     // 로딩 데이터 없으면 종료
             return;
+
+
     }
 
     public void UpdateSpawnEnemyList()
