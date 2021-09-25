@@ -12,6 +12,8 @@ using UnityEditor;
 public class MapManager : MonoBehaviour
 {
     [SerializeField]
+    private GameObject mapObjectPrefab;
+    [SerializeField]
     private GameObject mapGameObject;
     private GameObject[] parentGameObject = null;
 
@@ -96,7 +98,7 @@ public class MapManager : MonoBehaviour
             Destroy(mapGameObject);
         }
 
-        mapGameObject = Instantiate(PrefabManager.Instance.MapObjectPrefab);
+        mapGameObject = Instantiate(mapObjectPrefab);
 
         // 저장되어 있는 데이터로 블럭들 생성
         for (int i = 0; i < editMapDataCollection.editmapData.Count; i ++)
@@ -104,13 +106,13 @@ public class MapManager : MonoBehaviour
             switch(editMapDataCollection.editmapData[i].objectType)
             {
                 case (int)MapType.BLOCK:
-                    instantiateGameObjectTransform = Instantiate(PrefabManager.Instance.BlockPrefabArray[editMapDataCollection.editmapData[i].mapNumber].transform);
+                    instantiateGameObjectTransform = Instantiate(BlockManager.Instance.BlockPrefabArray[editMapDataCollection.editmapData[i].mapNumber].transform);
                     break;
                 case (int)MapType.TURRET:
-                    instantiateGameObjectTransform = Instantiate(PrefabManager.Instance.TurretPrefabArray[editMapDataCollection.editmapData[i].mapNumber].transform);
+                    instantiateGameObjectTransform = Instantiate(TurretManager.Instance.TurretPrefabArray[editMapDataCollection.editmapData[i].mapNumber].transform);
                     break;
                 case (int)MapType.BARRICADE:
-                    instantiateGameObjectTransform = Instantiate(PrefabManager.Instance.BarricadePrefabArray[editMapDataCollection.editmapData[i].mapNumber].transform);
+                    instantiateGameObjectTransform = Instantiate(BarricadeManager.Instance.BarricadePrefabArray[editMapDataCollection.editmapData[i].mapNumber].transform);
                     break;
                 default:
                     return;
@@ -174,22 +176,22 @@ public class MapManager : MonoBehaviour
 
         if (GameObject.Find("MapGameObject(Clone)") == null)
         {
-            mapGameObject = Instantiate(PrefabManager.Instance.MapObjectPrefab);
-            if(mapGameObject.transform.childCount >= 1 && PrefabManager.Instance.BlockPrefabArray.Length >= 1)
+            mapGameObject = Instantiate(mapObjectPrefab);
+            if(mapGameObject.transform.childCount >= 1 && BlockManager.Instance.BlockPrefabArray.Length >= 1)
             {
-                Instantiate(PrefabManager.Instance.BlockPrefabArray[0].transform).parent = mapGameObject.transform.GetChild(0);  // 시작과 동시에 기본 블럭 생성함 그래야 다른 블럭을 생성할 수 있으니
+                Instantiate(BlockManager.Instance.BlockPrefabArray[0].transform).parent = mapGameObject.transform.GetChild(0);  // 시작과 동시에 기본 블럭 생성함 그래야 다른 블럭을 생성할 수 있으니
             }
         }
 
         mapTypeNameParser = new Dictionary<string, int>();
 
         // name parser 초기화
-        for (int i = 0; i < PrefabManager.Instance.BlockPrefabArray.Length; i++)
-            mapTypeNameParser.Add(PrefabManager.Instance.BlockPrefabArray[i].name + "(Clone)", i);
-        for (int i = 0; i < PrefabManager.Instance.BarricadePrefabArray.Length; i++)
-            mapTypeNameParser.Add(PrefabManager.Instance.BarricadePrefabArray[i].name + "(Clone)", i);
-        for (int i = 0; i < PrefabManager.Instance.TurretPrefabArray.Length; i++)
-            mapTypeNameParser.Add(PrefabManager.Instance.TurretPrefabArray[i].name + "(Clone)", i);
+        for (int i = 0; i < BlockManager.Instance.BlockPrefabArray.Length; i++)
+            mapTypeNameParser.Add(BlockManager.Instance.BlockPrefabArray[i].name + "(Clone)", i);
+        for (int i = 0; i < BarricadeManager.Instance.BarricadePrefabArray.Length; i++)
+            mapTypeNameParser.Add(BarricadeManager.Instance.BarricadePrefabArray[i].name + "(Clone)", i);
+        for (int i = 0; i < TurretManager.Instance.TurretPrefabArray.Length; i++)
+            mapTypeNameParser.Add(TurretManager.Instance.TurretPrefabArray[i].name + "(Clone)", i);
 
         // 맵 생성 부모 초기화
         parentGameObject = new GameObject[mapGameObject.transform.childCount];
@@ -236,14 +238,6 @@ public class EditMapData
 public class EditMapDataCollection
 {
     public List<EditMapData> editmapData = new List<EditMapData>();
-}
-
-public enum TransparentMaterialColor
-{
-    NONE = -1,
-    GREEN_COLOR_MATERIAL = 0,
-    RED_COLOR_MATERIAL = 1,
-    YELLOW_GRID_COLOR_MATERIAL = 2,
 }
 
 public enum MapType

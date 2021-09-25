@@ -1,13 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class TurretManager
+public class TurretManager : MonoBehaviour
 {
-    private List<Turret> turretList = new List<Turret>();
-    private List<Turret> spawnTurretList = new List<Turret>();
+    [SerializeField]
+    private GameObject[] turretPrefabArray;
+    private readonly List<Turret> turretList = new List<Turret>();
 
+    #region Property
+    public GameObject[] TurretPrefabArray { get { return turretPrefabArray; } }
+    #endregion
+    #region Singleton
     static TurretManager instance = null;
+    private void Awake()
+    {
+        if (null == instance)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     public static TurretManager Instance
     {
@@ -22,32 +40,14 @@ public class TurretManager
         }
     }
 
-    public List<Turret> SpawnTurretList
+    #endregion
+    
+    public void SettingTurretData(ref GameObject turretObject, int turretIndex)
     {
-        get { return spawnTurretList; }
-    }
-    public void ClearTurret()
-    {
-        for (int i = spawnTurretList.Count - 1; i >= 0; i--)
-        {
-            spawnTurretList[i].DestroyTurret();
-        }
-
-        spawnTurretList.Clear();
-    }
-
-    public void SpawnTurret(int turretIndex, Vector3 position)
-    {
-        if (turretIndex < 0 && turretIndex >= turretList.Count)
+        if (turretIndex < 0 || turretList.Count <= turretIndex)
             return;
 
-        spawnTurretList.Add(turretList[turretIndex]);
-        turretList[turretIndex].Spawn().transform.position = position;
-    }
-
-    public void DeleteTurret(Turret turret)
-    {
-        spawnTurretList.Remove(turret);
+        turretObject.GetComponent<Turret>().Init(turretList[turretIndex]);
     }
 
     public void LoadTurretData()
@@ -58,51 +58,47 @@ public class TurretManager
         if (turretCsvString == default)     // 로딩 데이터 없으면 종료
             return;
 
-        string[] stringList = turretCsvString.Split('\n');
-
+        List<string[]> csvString = FileManager.Instance.ConvertCsvToString(turretCsvString);
         Turret newTurret;
-        TurretData turretData;
-        for (int i = 1; i < stringList.Length; i ++)
+
+        const float CORRECTION_VALUE = 0.1f;
+        try
         {
-            string[] splitString = turretCsvString.Split(',');
-            turretData = new TurretData();
-
-            turretData.attackDamage = new splitString[(int)TurretDataEnum.AttackDamage];
-
-
-            newTurret = new Turret(splitString[(int)TurretDataEnum.HP], );
-            turretList.Add(newTurret);
+            for (int i = 0; i < csvString.Count; i++)
+            {
+                newTurret = new Turret(
+                    int.Parse(csvString[i][(int)TurretCsvColumn.HP]) * CORRECTION_VALUE,
+                    int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_DAMAGE]) * CORRECTION_VALUE,
+                    int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_RANGE]) * CORRECTION_VALUE,
+                    int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_DELAY]) * CORRECTION_VALUE,
+                    int.Parse(csvString[i][(int)TurretCsvColumn.SPIN_SPEED]) * CORRECTION_VALUE,
+                    new Vector3(
+                        int.Parse(csvString[i][(int)TurretCsvColumn.BLOCK_SIZE_X]) * CORRECTION_VALUE,
+                        int.Parse(csvString[i][(int)TurretCsvColumn.BLOCK_SIZE_Y]) * CORRECTION_VALUE, 
+                        0));
+            }
+        }
+        catch
+        {
+            return;
         }
     }
 
-    public void UpdateSpawnTurretList()
+    private enum TurretCsvColumn
     {
-        for (int i = 0; i < spawnTurretList.Count; i++)
-        {
-            spawnTurretList[i].UpdateTurret();
-        }
+        HP = 0,
+        ATTACK_DAMAGE = 1,
+        ATTACK_RANGE = 2,
+        ATTACK_DELAY = 3,
+        SPIN_SPEED = 4,
+        BLOCK_SIZE_X = 5,
+        BLOCK_SIZE_Y = 6,
     }
-
-    private enum TurretDataEnum
-    {
-        HP = 2,
-        AttackDamage = 3,
-        AttackRange = 4,
-        AttackDelay = 5,
-        SpinSpeed = 6,
-        Prefab = 7,
-        BlockSizeX = 8,
-        BlockSizeY = 9,
-    }
-
-    private struct TurretData
-    {
-        public float attackDamage;
-        public float attackRange;
-        public float attackDelay;
-        public float spinSpeed;
-        public int prefab;
-        public float blockSizeX;
-        public float blockSizeY;
-    }
+}
+public class TurretStaticData
+{
+    public float attackDamage = 0.0f;
+    public float attackRange = 0.0f;
+    public float attackDelay = 0.0f;
+    public float spinSpeed = 0.0f;
 }

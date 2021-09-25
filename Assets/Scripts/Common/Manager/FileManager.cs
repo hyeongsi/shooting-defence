@@ -63,16 +63,16 @@ public class FileManager
         }
     }
 
-    public string LoadCsvFile(string loadPath, string fileName)
+    public List<string[]> ConvertCsvToString(string text)
     {
-        if (!Directory.Exists(loadPath))
-            return default;
+        List<string[]> csvString = new List<string[]>();
+        string[] stringList = text.Split('\n');
 
-        if (!File.Exists(string.Format("{0}/{1}.csv", loadPath, fileName)))
-            return default;
+        for (int i = 1; i < stringList.Length-1; i++)   // csv는 마지막에 \n까지 저장되기 때문에 없앰
+        {
+            csvString.Add(stringList[i].Split(','));
+        }
 
-
-
-        return default;
+        return csvString;
     }
 }

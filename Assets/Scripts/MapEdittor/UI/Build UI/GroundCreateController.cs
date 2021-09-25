@@ -21,7 +21,7 @@ public class GroundCreateController : MonoBehaviour
         const int INIT_BLOCK_INDEX = 0;
 
         DestroyAllBlocks();
-        GameObject[] blockPrefabArray = PrefabManager.Instance.BlockPrefabArray;
+        GameObject[] blockPrefabArray = BlockManager.Instance.BlockPrefabArray;
         if (blockPrefabArray.Length >= 1)
         {
             Instantiate(blockPrefabArray[INIT_BLOCK_INDEX].transform, Vector3.zero, Quaternion.Euler(Vector3.zero)).parent =
@@ -70,7 +70,7 @@ public class GroundCreateController : MonoBehaviour
                     createPosition.z = y;
                     createPosition.x = x;
 
-                    Instantiate(PrefabManager.Instance.BlockPrefabArray[1 + (isWhiteBlock ? 1 : 0)].transform, createPosition, Quaternion.Euler(Vector3.zero)).parent =
+                    Instantiate(BlockManager.Instance.BlockPrefabArray[1 + (isWhiteBlock ? 1 : 0)].transform, createPosition, Quaternion.Euler(Vector3.zero)).parent =
                     MapManager.Instance.ParentGameObject[(int)MapType.BLOCK].transform;
 
                     if ((x + 1) % LOOP_COUNT == 0)

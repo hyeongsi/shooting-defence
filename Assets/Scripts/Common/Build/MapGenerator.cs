@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
+    [SerializeField]
+    private Material[] blockMaterialArray;
+
     private GameObject transparentObject = null;
 
     private Ray ray;
@@ -67,11 +70,11 @@ public class MapGenerator : MonoBehaviour
         switch (selectObjctType)
         {
             case (int)MapType.BLOCK:
-                return  PrefabManager.Instance.BlockPrefabArray[selectPrefab].GetComponent<Block>();
+                return BlockManager.Instance.BlockPrefabArray[selectPrefab].GetComponent<Block>();
             case (int)MapType.TURRET:
-                return PrefabManager.Instance.TurretPrefabArray[selectPrefab].GetComponent<Block>();
+                return TurretManager.Instance.TurretPrefabArray[selectPrefab].GetComponent<Block>();
             case (int)MapType.BARRICADE:
-                return PrefabManager.Instance.BarricadePrefabArray[selectPrefab].GetComponent<Block>();
+                return BarricadeManager.Instance.BarricadePrefabArray[selectPrefab].GetComponent<Block>();
         }
 
         return default;
@@ -82,11 +85,11 @@ public class MapGenerator : MonoBehaviour
         switch (selectObjctType)
         {
             case (int)MapType.BLOCK:
-                return PrefabManager.Instance.BlockPrefabArray[selectPrefab];
+                return BlockManager.Instance.BlockPrefabArray[selectPrefab];
             case (int)MapType.TURRET:
-                return PrefabManager.Instance.TurretPrefabArray[selectPrefab];
+                return TurretManager.Instance.TurretPrefabArray[selectPrefab];
             case (int)MapType.BARRICADE:
-                return PrefabManager.Instance.BarricadePrefabArray[selectPrefab];
+                return BarricadeManager.Instance.BarricadePrefabArray[selectPrefab];
         }
 
         return default;
@@ -177,15 +180,20 @@ public class MapGenerator : MonoBehaviour
         if (transparentObject == null)
             return;
 
-        if (transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.name == PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
+        Renderer renderer = transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>();
+        if (renderer.material.name == blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
             return;
 
         transparentObject.transform.parent = MapManager.Instance.ParentGameObject[(int)transparentObject.GetComponent<Block>().BlockType].transform;
 
+        if(originMaterial != null)
+            renderer.material = originMaterial;
+
+        if(selectObjctType == (int)MapType.TURRET)
+            TurretManager.Instance.SettingTurretData(ref transparentObject, selectPrefab);
+
         transparentObject.gameObject.layer = (int)LayerNumbering.BLOCK;
 
-        if(originMaterial != null)
-            transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = originMaterial;
         transparentObject = null;
     }
     public void GenerateTransparentBlock(RaycastHit hit, Block block)         // 블럭 생성
@@ -224,12 +232,12 @@ public class MapGenerator : MonoBehaviour
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
                 originMaterial = newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material;
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
             }
             else
             {
                 originMaterial = newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material;
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
             }
         }
     }
@@ -255,11 +263,11 @@ public class MapGenerator : MonoBehaviour
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
-                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
             }
             else
             {
-                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = PrefabManager.Instance.BlockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
             }
 
             if (transparentObject.transform.position != createBlockPosition)
@@ -274,11 +282,11 @@ public class MapGenerator : MonoBehaviour
         switch(selectObjctType)
         {
             case (int)MapType.BLOCK:
-                return PrefabManager.Instance.BlockPrefabArray.Length;
+                return BlockManager.Instance.BlockPrefabArray.Length;
             case (int)MapType.TURRET:
-                return PrefabManager.Instance.TurretPrefabArray.Length;
+                return TurretManager.Instance.TurretPrefabArray.Length;
             case (int)MapType.BARRICADE:
-                return PrefabManager.Instance.BarricadePrefabArray.Length;
+                return BarricadeManager.Instance.BarricadePrefabArray.Length;
         }
 
         return 0;
@@ -337,9 +345,16 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private enum LayerNumbering
+    private enum TransparentMaterialColor
     {
-        DEFAULT = 0,
-        BLOCK = 8,
+        NONE = -1,
+        GREEN_COLOR_MATERIAL = 0,
+        RED_COLOR_MATERIAL = 1,
     }
+}
+
+public enum LayerNumbering
+{
+    DEFAULT = 0,
+    BLOCK = 8,
 }

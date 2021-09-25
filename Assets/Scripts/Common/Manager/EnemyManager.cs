@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyManager
 {
+    [SerializeField]
+    private GameObject[] enemyPrefabArray;
     private List<Enemy> EnemyList = new List<Enemy>();
     private List<Enemy> spawnEnemyList = new List<Enemy>();
 

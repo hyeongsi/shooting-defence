@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class Turret : Barricade
 {
-    protected float attackDamage;
-    protected float attackRange;
-    protected float attackDelay;
-    protected float spinSpeed;
+    protected TurretStaticData turretStaticData = new TurretStaticData();
 
     public Transform rotationGunBody;
     protected float fireRate = 0.0f;
@@ -19,40 +16,44 @@ public class Turret : Barricade
     #region property
     public float AttackDamage
     {
-        get { return attackDamage; }
+        get { return turretStaticData.attackDamage; }
     }
     public float AttackRange
     {
-        get { return attackRange; }
+        get { return turretStaticData.attackRange; }
     }
     public float AttackDelay
     {
-        get { return AttackDelay; }
+        get { return turretStaticData.attackDelay; }
     }
     public float SpinSpeed
     {
-        get { return SpinSpeed; }
+        get { return turretStaticData.spinSpeed; }
     }
     #endregion
 
-    public Turret(float hp, ref float attackDamage, ref float attackRange, ref float attackDelay, ref float spinSpeed, ref Vector3 blockSize)
+    public Turret(float hp, float attackDamage, float attackRange, float attackDelay, float spinSpeed, Vector3 blockSize)
     {
         this.hp = hp;
-        this.attackDamage = attackDamage;
-        this.attackRange = attackRange;
-        this.attackDelay = attackDelay;
-        this.spinSpeed = spinSpeed;
+        TurretStaticData staticData = new TurretStaticData
+        {
+            attackDamage = attackDamage,
+            attackRange = attackRange,
+            attackDelay = attackDelay,
+            spinSpeed = spinSpeed
+        };
+
+        turretStaticData = staticData;
+
         this.blockSize = blockSize;
     }
 
-    public virtual GameObject Spawn()
+    public void Init(Turret turret)
     {
-        //GameObject newTurretGameObject = Instantiate(prefab);
-        //newTurretGameObject.GetComponent<Turret>().Init(this);
+        hp = turret.hp;
+        blockSize = turret.blockSize;
 
-        //return newTurretGameObject;
-
-        return default;
+        turretStaticData = turret.turretStaticData;
     }
 
     private void SearchEnemy()
@@ -80,7 +81,7 @@ public class Turret : Barricade
         Vector3 rotationAngle = Quaternion.RotateTowards(
                 rotationGunBody.rotation,
                 lookRotation,
-                spinSpeed * Time.deltaTime).eulerAngles;
+                SpinSpeed * Time.deltaTime).eulerAngles;
         rotationGunBody.rotation = Quaternion.Euler(0, rotationAngle.y, 0);
     }
 
@@ -92,7 +93,7 @@ public class Turret : Barricade
             fireRate -= Time.deltaTime;
             if(fireRate <= 0)
             {
-                fireRate = attackDelay;
+                fireRate = AttackDelay;
                 Debug.Log("공격!!");
             }
         }
@@ -100,7 +101,7 @@ public class Turret : Barricade
 
     private bool TargetDisatanceCheck()
     {
-        if (Vector3.Distance(transform.position, target.position) > attackRange)
+        if (Vector3.Distance(transform.position, target.position) > AttackRange)
             return false;
 
         return true;
@@ -119,9 +120,12 @@ public class Turret : Barricade
         enemyLayerMask = 1 << LayerMask.NameToLayer(enemyLayerMaskName);
     }
 
-    public virtual void UpdateTurret()
+    private void Update()
     {
-        // 게임 시작(스테이지 시작) 유무를 게임 매니저 통해서 받아서 시작 전엔 업데이트 하지 않도록 하기,
+        // 대기시간이나, 게임 시작하기 전엔 return 하도록 구현하기
+
+        if (gameObject.layer != (int)LayerNumbering.BLOCK)  // 타워 생성 전 상태 -> 종료
+            return;
 
         if (target == null)
         {
