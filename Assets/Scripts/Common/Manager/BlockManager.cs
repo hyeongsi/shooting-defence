@@ -16,24 +16,13 @@ public class BlockManager : MonoBehaviour
         if (null == instance)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
-    public static BlockManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new BlockManager();
-            }
-
-            return instance;
-        }
-    }
+    public static BlockManager Instance { get { return instance; } }
     #endregion
 }

@@ -37,26 +37,16 @@ public class MapManager : MonoBehaviour
         if( null == instance )
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
 
     // 맵 매니저 접근 프로퍼티
-    public static MapManager Instance
-    {
-        get
-        {
-            if( null == instance )
-            {
-                return null;
-            }
-            return instance;
-        }
-    }
+    public static MapManager Instance { get { return instance; } }
     #endregion
 
     #region MapLoader

@@ -16,24 +16,13 @@ public class BarricadeManager : MonoBehaviour
         if (null == instance)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
-    public static BarricadeManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new BarricadeManager();
-            }
-
-            return instance;
-        }
-    }
+    public static BarricadeManager Instance { get { return instance; } }
     #endregion
 }

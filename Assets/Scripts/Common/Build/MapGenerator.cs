@@ -184,7 +184,7 @@ public class MapGenerator : MonoBehaviour
         if (renderer.material.name == blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
             return;
 
-        transparentObject.transform.parent = MapManager.Instance.ParentGameObject[(int)transparentObject.GetComponent<Block>().BlockType].transform;
+        transparentObject.transform.parent = MapManager.Instance.ParentGameObject[(int)transparentObject.GetComponent<Block>().BlockTypeVar].transform;
 
         if(originMaterial != null)
             renderer.material = originMaterial;

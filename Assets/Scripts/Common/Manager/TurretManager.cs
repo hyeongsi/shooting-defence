@@ -7,7 +7,7 @@ public class TurretManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] turretPrefabArray;
-    private readonly List<Turret> turretList = new List<Turret>();
+    private readonly List<TurretStaticData> turretStaticDataList = new List<TurretStaticData>();
 
     #region Property
     public GameObject[] TurretPrefabArray { get { return turretPrefabArray; } }
@@ -19,35 +19,24 @@ public class TurretManager : MonoBehaviour
         if (null == instance)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
 
-    public static TurretManager Instance
-    {
-        get
-        {
-            if(instance == null)
-            {
-                instance = new TurretManager();
-            }
-
-            return instance;
-        }
-    }
+    public static TurretManager Instance { get { return instance; } }
 
     #endregion
     
-    public void SettingTurretData(ref GameObject turretObject, int turretIndex)
+    public void SettingTurretData(ref GameObject turretObject, int turretIndex) // 터렛 생성 후 데이터 초기화
     {
-        if (turretIndex < 0 || turretList.Count <= turretIndex)
+        if (turretIndex < 0 || turretStaticDataList.Count <= turretIndex)
             return;
 
-        turretObject.GetComponent<Turret>().Init(turretList[turretIndex]);
+        turretObject.GetComponent<Turret>().Init(turretStaticDataList[turretIndex]);
     }
 
     public void LoadTurretData()
@@ -59,46 +48,55 @@ public class TurretManager : MonoBehaviour
             return;
 
         List<string[]> csvString = FileManager.Instance.ConvertCsvToString(turretCsvString);
-        Turret newTurret;
+        TurretStaticData newTurretStaticData;
 
         const float CORRECTION_VALUE = 0.1f;
+        turretStaticDataList.Clear();
+
         try
         {
             for (int i = 0; i < csvString.Count; i++)
             {
-                newTurret = new Turret(
+                newTurretStaticData = new TurretStaticData(
                     int.Parse(csvString[i][(int)TurretCsvColumn.HP]) * CORRECTION_VALUE,
                     int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_DAMAGE]) * CORRECTION_VALUE,
                     int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_RANGE]) * CORRECTION_VALUE,
                     int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_DELAY]) * CORRECTION_VALUE,
-                    int.Parse(csvString[i][(int)TurretCsvColumn.SPIN_SPEED]) * CORRECTION_VALUE,
-                    new Vector3(
-                        int.Parse(csvString[i][(int)TurretCsvColumn.BLOCK_SIZE_X]) * CORRECTION_VALUE,
-                        int.Parse(csvString[i][(int)TurretCsvColumn.BLOCK_SIZE_Y]) * CORRECTION_VALUE, 
-                        0));
+                    int.Parse(csvString[i][(int)TurretCsvColumn.SPIN_SPEED]) * CORRECTION_VALUE);
+
+                turretStaticDataList.Add(newTurretStaticData);
             }
         }
         catch
         {
+            turretStaticDataList.Clear();
             return;
         }
     }
 
     private enum TurretCsvColumn
     {
-        HP = 0,
-        ATTACK_DAMAGE = 1,
-        ATTACK_RANGE = 2,
-        ATTACK_DELAY = 3,
-        SPIN_SPEED = 4,
-        BLOCK_SIZE_X = 5,
-        BLOCK_SIZE_Y = 6,
+        HP = 2,
+        ATTACK_DAMAGE = 3,
+        ATTACK_RANGE = 4,
+        ATTACK_DELAY = 5,
+        SPIN_SPEED = 6,
     }
 }
 public class TurretStaticData
 {
+    public float maxHp = 0.0f;
     public float attackDamage = 0.0f;
     public float attackRange = 0.0f;
     public float attackDelay = 0.0f;
     public float spinSpeed = 0.0f;
+
+    public TurretStaticData(float maxHp, float attackDamage, float attackRange, float attackDelay, float spinSpeed) 
+    {
+        this.maxHp = maxHp;
+        this.attackDamage = attackDamage;
+        this.attackRange = attackRange;
+        this.attackDelay = attackDelay;
+        this.spinSpeed = spinSpeed;
+    }
 }

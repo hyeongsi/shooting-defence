@@ -5,21 +5,14 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     protected float hp;
-    protected float attackDamage;
-    protected float attackRange;
-    protected float attackDelay;
-    protected AttackType attackType;
-    protected float speed;
+    EnemyStaticData enemyStaticData;
 
     public float HP { get { return hp; }  set { hp = value; } }
 
-    public virtual void Init(Enemy enemy)
+    public virtual void Init(EnemyStaticData enemyStaticData)
     {
-        hp = enemy.hp;
-        attackDamage = enemy.attackDamage;
-        attackRange = enemy.attackRange;
-        attackDelay = enemy.attackDelay;
-        attackType = enemy.attackType;
+        this.enemyStaticData = enemyStaticData;
+        hp = enemyStaticData.maxHp;
     }
 
     public virtual bool Attack(int findObject, int turretIndex = -1) 
@@ -49,32 +42,24 @@ public class Enemy : MonoBehaviour
 
         if (hp <= 0)
         {
-            EnemyManager.Instance.DeleteEnemy(this);
-            DestroyEnemy();
+            // DestroyEnemy();
+            // 삭제 말고, 캐싱해서 메모리 아끼자,
+            // 비활성화 시켜놓고 돌려쓰자, 오브젝트풀링
         } 
-    }
-
-    public virtual GameObject Spawn()
-    {
-        //GameObject newEnemyGameObject = Instantiate(prefab);
-        //newEnemyGameObject.GetComponent<Enemy>().Init(this);
-
-        //return newEnemyGameObject;
-
-        return default;
     }
 
     public bool FindAttackObject()
     {
-        switch(attackType)
+        switch(enemyStaticData.attackType)
         {
-            case AttackType.PLAYER:
+            case (int)AttackType.PLAYER:
                 // 공격 범위에 플레이어 있는지 검사하고 return true
                 break;
-            case AttackType.TURRET:
+            case (int)AttackType.TURRET:
                 // 공격 범위에 터렛 있는지 검사하고 return true
                 break;
             default:
+                // 모두다 때려버려
                 return false;
         }
 
@@ -96,18 +81,10 @@ public class Enemy : MonoBehaviour
         // 이속, deltatime으로 이동 처리
     }
 
-    public void DestroyEnemy()
+    private void Update()
     {
-        Destroy(this);
-    }
-
-    public virtual void UpdateEnemy()
-    {
-        if(hp <= 0.0f)
-        {
-            EnemyManager.Instance.DeleteEnemy(this);
-            DestroyEnemy();
-        }
+        if (GameManager.Instance.IsPause)
+            return;
 
         // if(!Attack(FindAttackObject()));     // 공격 못했따면 이동하도록 처리
         //  FindAWay()?Move();   // FindAWay()로 길 찾아서 Move로 이동하기   
@@ -115,8 +92,8 @@ public class Enemy : MonoBehaviour
 
     public enum AttackType
     {
-        PLAYER = 0,     // 플레이어 만 공격
-        TURRET = 1,     // 터렛만 공격
-        NONE = 2,       // 공격 안하고 무시
+        NONE = 0,       // 공격 안하고 무시
+        PLAYER = 1,     // 플레이어 만 공격
+        TURRET = 2      // 터렛만 공격
     }
 }

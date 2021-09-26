@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Barricade : Block
+public class Barricade : MonoBehaviour
 {
-    [SerializeField]
-    protected float hp;
+    protected float hp = 1;
 
     #region property
     public float HP
@@ -14,9 +13,4 @@ public class Barricade : Block
         set { hp = value; }
     }
     #endregion
-
-    private void Awake()
-    {
-        blockType = BlockType.BARRICADE;
-    }
 }

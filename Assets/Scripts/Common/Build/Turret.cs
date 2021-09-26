@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Turret : Barricade
 {
-    protected TurretStaticData turretStaticData = new TurretStaticData();
+    protected TurretStaticData turretStaticData;
 
     public Transform rotationGunBody;
     protected float fireRate = 0.0f;
@@ -32,33 +32,16 @@ public class Turret : Barricade
     }
     #endregion
 
-    public Turret(float hp, float attackDamage, float attackRange, float attackDelay, float spinSpeed, Vector3 blockSize)
+    public void Init(TurretStaticData turretStaticData)
     {
-        this.hp = hp;
-        TurretStaticData staticData = new TurretStaticData
-        {
-            attackDamage = attackDamage,
-            attackRange = attackRange,
-            attackDelay = attackDelay,
-            spinSpeed = spinSpeed
-        };
+        this.turretStaticData = turretStaticData;
 
-        turretStaticData = staticData;
-
-        this.blockSize = blockSize;
-    }
-
-    public void Init(Turret turret)
-    {
-        hp = turret.hp;
-        blockSize = turret.blockSize;
-
-        turretStaticData = turret.turretStaticData;
+        hp = turretStaticData.maxHp;
     }
 
     private void SearchEnemy()
     {
-        Collider[] findEnemyCollider = Physics.OverlapSphere(transform.position, AttackRange, enemyLayerMask);
+        Collider[] findEnemyCollider = Physics.OverlapSphere(transform.position, turretStaticData.attackRange, enemyLayerMask);
 
         if(findEnemyCollider.Length > 0)
         {
@@ -81,7 +64,7 @@ public class Turret : Barricade
         Vector3 rotationAngle = Quaternion.RotateTowards(
                 rotationGunBody.rotation,
                 lookRotation,
-                SpinSpeed * Time.deltaTime).eulerAngles;
+                turretStaticData.spinSpeed * Time.deltaTime).eulerAngles;
         rotationGunBody.rotation = Quaternion.Euler(0, rotationAngle.y, 0);
     }
 
@@ -101,7 +84,7 @@ public class Turret : Barricade
 
     private bool TargetDisatanceCheck()
     {
-        if (Vector3.Distance(transform.position, target.position) > AttackRange)
+        if (Vector3.Distance(transform.position, target.position) > turretStaticData.attackRange)
             return false;
 
         return true;
@@ -115,16 +98,20 @@ public class Turret : Barricade
     private void Awake()
     {
         const string enemyLayerMaskName = "Enemy";
-
-        blockType = BlockType.TURRET;
+       
         enemyLayerMask = 1 << LayerMask.NameToLayer(enemyLayerMaskName);
     }
 
     private void Update()
     {
         // 대기시간이나, 게임 시작하기 전엔 return 하도록 구현하기
+        if (GameManager.Instance.IsPause)
+            return;
 
         if (gameObject.layer != (int)LayerNumbering.BLOCK)  // 타워 생성 전 상태 -> 종료
+            return;
+
+        if (turretStaticData == null)
             return;
 
         if (target == null)

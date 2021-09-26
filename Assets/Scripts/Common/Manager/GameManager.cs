@@ -28,27 +28,17 @@ public class GameManager : MonoBehaviour
         if (null == instance)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
 
             InitGame();
         }
         else
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
 
-    public static GameManager Instance
-    {
-        get
-        {
-            if (null == instance)
-            {
-                return null;
-            }
-            return instance;
-        }
-    }
+    public static GameManager Instance { get { return instance; } }
     #endregion
 
     public void InitGame()
@@ -94,4 +84,5 @@ public class GameManager : MonoBehaviour
 
         // 메인 메뉴로 씬 이동
     }
+
 }
