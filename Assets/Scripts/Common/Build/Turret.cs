@@ -11,7 +11,7 @@ public class Turret : Barricade
 
     protected Quaternion lookRotation;
     protected LayerMask enemyLayerMask;
-    protected Transform target = null;
+    protected Enemy target = null;
 
     #region property
     public float AttackDamage
@@ -52,7 +52,7 @@ public class Turret : Barricade
                 if(shortestDistance > distance)
                 {
                     shortestDistance = distance;
-                    target = enemyCollider.transform;
+                    target = enemyCollider.GetComponent<Enemy>();
                 }
             }
         }
@@ -70,21 +70,22 @@ public class Turret : Barricade
 
     private void AttackEnemy()
     {
-        Quaternion fireRotation = Quaternion.Euler(0, Quaternion.LookRotation(target.position).eulerAngles.y, 0);
+        Quaternion fireRotation = Quaternion.Euler(0, Quaternion.LookRotation(target.transform.position).eulerAngles.y, 0);
+ 
         if (Quaternion.Angle(rotationGunBody.rotation, fireRotation) < 5.0f)
         {
             fireRate -= Time.deltaTime;
             if(fireRate <= 0)
             {
                 fireRate = AttackDelay;
-                Debug.Log("공격!!");
+                target.TakeDamage(AttackDamage);
             }
         }
     }
 
     private bool TargetDisatanceCheck()
     {
-        if (Vector3.Distance(transform.position, target.position) > turretStaticData.attackRange)
+        if (Vector3.Distance(transform.position, target.transform.position) > turretStaticData.attackRange)
             return false;
 
         return true;
@@ -92,7 +93,7 @@ public class Turret : Barricade
 
     public void DestroyTurret()
     {
-        Destroy(this);
+        Destroy(gameObject);    // this로 destory() 해버리면, 스크립트만 없어짐,
     }
 
     private void Awake()
@@ -105,7 +106,7 @@ public class Turret : Barricade
     private void Update()
     {
         // 대기시간이나, 게임 시작하기 전엔 return 하도록 구현하기
-        if (GameManager.Instance.IsPause)
+        if (GameManager.Instance != null && GameManager.Instance.IsPause)
             return;
 
         if (gameObject.layer != (int)LayerNumbering.BLOCK)  // 타워 생성 전 상태 -> 종료

@@ -310,7 +310,7 @@ public class MapGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.IsPause)
+        if (GameManager.Instance != null && GameManager.Instance.IsPause)
             return;
 
         if (!isBuildMode)

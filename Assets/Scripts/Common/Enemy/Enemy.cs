@@ -31,10 +31,6 @@ public class Enemy : MonoBehaviour
 
         return true;
     }
-    public void SetPosition(Vector3 position)
-    {
-        transform.position = position;
-    }
 
     public virtual void TakeDamage(float damage)    // 피격
     {
@@ -42,7 +38,7 @@ public class Enemy : MonoBehaviour
 
         if (hp <= 0)
         {
-            // DestroyEnemy();
+            Destroy(gameObject);
             // 삭제 말고, 캐싱해서 메모리 아끼자,
             // 비활성화 시켜놓고 돌려쓰자, 오브젝트풀링
         } 
