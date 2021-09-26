@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockSize: {x: 1, y: 1, z: 1}
-  blockType: 2
+  blockType: 1
   buildBlockType: 1
 --- !u!1 &7711245645043459133
 GameObject:

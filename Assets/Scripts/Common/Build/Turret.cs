@@ -106,7 +106,7 @@ public class Turret : Barricade
     private void Update()
     {
         // 대기시간이나, 게임 시작하기 전엔 return 하도록 구현하기
-        if (GameManager.Instance != null && GameManager.Instance.IsPause)
+        if (GameManager.Instance == null || GameManager.Instance.IsPause)
             return;
 
         if (gameObject.layer != (int)LayerNumbering.BLOCK)  // 타워 생성 전 상태 -> 종료

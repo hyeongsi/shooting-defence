@@ -35,8 +35,8 @@ public class Block : MonoBehaviour
 public enum BlockType
 {
     BLOCK = 0,
-    BARRICADE = 1,
-    TURRET = 2,
+    TURRET = 1,
+    BARRICADE = 2,
 }
 
 public enum BuildBlockType

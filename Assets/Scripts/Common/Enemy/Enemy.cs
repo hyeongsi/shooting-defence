@@ -79,7 +79,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.IsPause)
+        if (GameManager.Instance == null && GameManager.Instance.IsPause)
             return;
 
         // if(!Attack(FindAttackObject()));     // 공격 못했따면 이동하도록 처리

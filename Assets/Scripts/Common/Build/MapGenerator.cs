@@ -175,6 +175,14 @@ public class MapGenerator : MonoBehaviour
         return pointVector;
     }
 
+    public void DestroyBlock(Block block)
+    {
+        if((int)block.BlockTypeVar == selectObjctType)
+        {
+            Destroy(block.gameObject);
+        }
+    }
+
     public void GenerateBlock()         // 블럭 생성
     {
         if (transparentObject == null)
@@ -237,7 +245,7 @@ public class MapGenerator : MonoBehaviour
             else
             {
                 originMaterial = newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material;
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material= blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
             }
         }
     }
@@ -310,7 +318,7 @@ public class MapGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance != null && GameManager.Instance.IsPause)
+        if (GameManager.Instance == null && GameManager.Instance.IsPause)
             return;
 
         if (!isBuildMode)
@@ -328,7 +336,7 @@ public class MapGenerator : MonoBehaviour
             }
             else if (Input.GetMouseButtonUp(1))      // 우클릭, 블럭 삭제
             {
-                Destroy(hit.transform.gameObject);
+                DestroyBlock(hit.transform.GetComponent<Block>());
             }
             else
             {
