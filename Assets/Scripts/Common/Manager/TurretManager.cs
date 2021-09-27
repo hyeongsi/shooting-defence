@@ -7,10 +7,12 @@ public class TurretManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] turretPrefabArray;
+    private List<Block> turretBlockArray = new List<Block>();
     private readonly List<TurretStaticData> turretStaticDataList = new List<TurretStaticData>();
 
     #region Property
     public GameObject[] TurretPrefabArray { get { return turretPrefabArray; } }
+    public List<Block> TurretBlockArray { get { return turretBlockArray; } }
     #endregion
     #region Singleton
     static TurretManager instance = null;
@@ -20,6 +22,7 @@ public class TurretManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            Init();
         }
         else
         {
@@ -30,7 +33,14 @@ public class TurretManager : MonoBehaviour
     public static TurretManager Instance { get { return instance; } }
 
     #endregion
-    
+
+    private void Init()
+    {
+        for(int i = 0; i < turretPrefabArray.Length; i ++)
+        {
+            turretBlockArray.Add(turretPrefabArray[i].GetComponent<Block>());
+        }
+    }
     public void SettingTurretData(ref GameObject turretObject, int turretIndex) // 터렛 생성 후 데이터 초기화
     {
         if (turretIndex < 0 || turretStaticDataList.Count <= turretIndex)

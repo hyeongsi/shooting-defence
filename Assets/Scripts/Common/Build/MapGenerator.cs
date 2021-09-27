@@ -7,14 +7,16 @@ public class MapGenerator : MonoBehaviour
     [SerializeField]
     private Material[] blockMaterialArray;
 
+    private bool isCreateAble = true;
+
     private GameObject transparentObject = null;
+    private SwitchMaterial switchMaterial = new SwitchMaterial();
 
     private Ray ray;
     private RaycastHit hit;
     private int rayermask;
     private Vector3 scrennCenter;
     private Block block;
-    private Material originMaterial;
 
     private int selectObjctType = 0;
     private int selectPrefab = 0;
@@ -25,8 +27,8 @@ public class MapGenerator : MonoBehaviour
     private bool isEditMode = true;
 
     private const string layerName = "Block";
-
-    #region property
+    private const float ERROR_RANGE = 0.02f;
+    #region Property
     public int SelectObjctType
     {
         set
@@ -34,6 +36,7 @@ public class MapGenerator : MonoBehaviour
             if (MapManager.Instance.MapGameObject.transform.childCount-1 <= value && 0 > value)
                 return;
 
+            switchMaterial.Init();
             selectObjctType = value;
         }
     }
@@ -49,6 +52,7 @@ public class MapGenerator : MonoBehaviour
             if (prefabSize <= value && 0 > value)
                 return;
 
+            switchMaterial.Init();
             selectPrefab = value;
         }
     }
@@ -70,9 +74,9 @@ public class MapGenerator : MonoBehaviour
         switch (selectObjctType)
         {
             case (int)MapType.BLOCK:
-                return BlockManager.Instance.BlockPrefabArray[selectPrefab].GetComponent<Block>();
+                return BlockManager.Instance.BlockArray[selectPrefab];
             case (int)MapType.TURRET:
-                return TurretManager.Instance.TurretPrefabArray[selectPrefab].GetComponent<Block>();
+                return TurretManager.Instance.TurretBlockArray[selectPrefab];
             case (int)MapType.BARRICADE:
                 return BarricadeManager.Instance.BarricadePrefabArray[selectPrefab].GetComponent<Block>();
         }
@@ -127,27 +131,27 @@ public class MapGenerator : MonoBehaviour
         Vector3 pointVector = Vector3.zero;
 
         // float 계산 시 오차가 발생 하기 때문에, 0.01을 오차 범위로 두고 계산
-        if (point.x >= (blockSize.x - 0.01f) && point.x <= (blockSize.x + 0.01f))
+        if (point.x >= (blockSize.x - ERROR_RANGE) && point.x <= (blockSize.x + ERROR_RANGE))
         {
             pointVector = Vector3.right;
         }
-        else if (point.y >= (blockSize.y - 0.01f) && point.y <= (blockSize.y + 0.01f))
+        else if (point.y >= (blockSize.y - ERROR_RANGE) && point.y <= (blockSize.y + ERROR_RANGE))
         {
             pointVector = Vector3.up;
         }
-        else if (point.z >= (blockSize.z - 0.01f) && point.z <= (blockSize.z + 0.01f))
+        else if (point.z >= (blockSize.z - ERROR_RANGE) && point.z <= (blockSize.z + ERROR_RANGE))
         {
             pointVector = Vector3.forward;
         }
-        else if (point.x >= -0.01f && point.x <= 0.01f)
+        else if (point.x >= -ERROR_RANGE && point.x <= ERROR_RANGE)
         {
             pointVector = Vector3.left;
         }
-        else if (point.y >= -0.01f && point.y <= 0.01f)
+        else if (point.y >= -ERROR_RANGE && point.y <= ERROR_RANGE)
         {
             pointVector = Vector3.down;
         }
-        else if (point.z >= -0.01f && point.z <= 0.01f)
+        else if (point.z >= -ERROR_RANGE && point.z <= ERROR_RANGE)
         {
             pointVector = Vector3.back;
         }
@@ -159,17 +163,59 @@ public class MapGenerator : MonoBehaviour
     {
         Vector3 pointVector = Vector3.zero;
 
-        if (direction == Vector3.right || direction == Vector3.forward || direction == Vector3.up)
+        if(direction == Vector3.right)
         {
-            pointVector.x = position.x + Mathf.Floor(point.x);
-            pointVector.y = position.y + Mathf.Floor(point.y);
-            pointVector.z = position.z + Mathf.Floor(point.z);
+            pointVector.x = Mathf.Approximately(point.x, Mathf.Round(point.x)) ?
+                position.x + Mathf.Round(point.x) * direction.x :
+                position.x + Mathf.Floor(point.x) * direction.x;
+
+            pointVector.y = position.y;
+            pointVector.z = position.z;
         }
-        else
+        else if(direction == Vector3.forward)
         {
-            pointVector.x = position.x + (direction.x * newBlockSize.x) + Mathf.Floor(point.x);
-            pointVector.y = position.y + (direction.y * newBlockSize.y) + Mathf.Floor(point.y);
-            pointVector.z = position.z + (direction.z * newBlockSize.z) + Mathf.Floor(point.z);
+            pointVector.z = Mathf.Approximately(point.z, Mathf.Round(point.z)) ?
+                position.z + Mathf.Round(point.z) * direction.z :
+                position.z + Mathf.Floor(point.z) * direction.z;
+
+            pointVector.x = position.x;
+            pointVector.y = position.y;
+        }
+        else if (direction == Vector3.up)
+        {
+            pointVector.y = Mathf.Approximately(point.y, Mathf.Round(point.y)) ?
+                position.y + Mathf.Round(point.y) * direction.y :
+                position.y + Mathf.Floor(point.y) * direction.y;
+
+            pointVector.x = position.x;
+            pointVector.z = position.z;
+        }
+        else if (direction == Vector3.left)
+        {
+            pointVector.x = Mathf.Approximately(point.x, Mathf.Round(point.x)) ?
+                position.x + (direction.x * newBlockSize.x) + Mathf.Round(point.x) :
+                position.x + (direction.x * newBlockSize.x) + Mathf.Floor(point.x);
+
+            pointVector.y = position.y;
+            pointVector.z = position.z;
+        }
+        else if (direction == Vector3.back)
+        {
+            pointVector.z = Mathf.Approximately(point.z, Mathf.Round(point.z)) ?
+                position.z + (direction.z * newBlockSize.z) + Mathf.Round(point.z) :
+                position.z + (direction.z * newBlockSize.z) + Mathf.Floor(point.z);
+
+            pointVector.x = position.x;
+            pointVector.y = position.y;
+        }
+        else if (direction == Vector3.down)
+        {
+            pointVector.y = Mathf.Approximately(point.y, Mathf.Round(point.y)) ?
+               position.y + (direction.y * newBlockSize.y) + Mathf.Round(point.y) :
+               position.y + (direction.y * newBlockSize.y) + Mathf.Floor(point.y);
+
+            pointVector.x = position.x;
+            pointVector.z = position.z;
         }
 
         return pointVector;
@@ -182,22 +228,20 @@ public class MapGenerator : MonoBehaviour
             Destroy(block.gameObject);
         }
     }
-
+    
     public void GenerateBlock()         // 블럭 생성
     {
         if (transparentObject == null)
             return;
 
-        Renderer renderer = transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>();
-        if (renderer.material.name == blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL].name + " (Instance)")   // 설치 불가 라면 생성 X
+        if (!isCreateAble)
             return;
 
         transparentObject.transform.parent = MapManager.Instance.ParentGameObject[(int)transparentObject.GetComponent<Block>().BlockTypeVar].transform;
 
-        if(originMaterial != null)
-            renderer.material = originMaterial;
+        switchMaterial.SwitchSaveMaterial(transparentObject);   // 원래의 색상 복구
 
-        if(selectObjctType == (int)MapType.TURRET)
+        if (selectObjctType == (int)MapType.TURRET)
             TurretManager.Instance.SettingTurretData(ref transparentObject, selectPrefab);
 
         transparentObject.gameObject.layer = (int)LayerNumbering.BLOCK;
@@ -236,16 +280,19 @@ public class MapGenerator : MonoBehaviour
 
             newBlock.gameObject.layer = (int)LayerNumbering.DEFAULT;
             newBlock.GetChild(0).localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
+            
+            if (switchMaterial.IsEmptySaveRenderer())
+                switchMaterial.SaveMaterial(transparentObject);
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
-                originMaterial = newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material;
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
+                isCreateAble = false;
+                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL]);
             }
             else
             {
-                originMaterial = newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material;
-                newBlock.GetChild(0).GetChild(0).GetComponent<Renderer>().material= blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
+                isCreateAble = true;
+                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
             }
         }
     }
@@ -256,38 +303,41 @@ public class MapGenerator : MonoBehaviour
         Vector3 createBlockPosition;
         Vector3 point;
 
-        if (selectPrefab >= 0 && selectPrefab < FindPrefabLength())    // 없는 블럭은 생성하지 못하도록
+        point = hit.point - hit.transform.position;
+        Debug.Log("point : " + point);
+
+        createDirection = FindDirection(point, block.BlockSize);
+        Debug.Log("createDirection : " + createDirection);
+
+        Block getBlockObject = GetBlockObject();
+        if (getBlockObject == default)
+            return;
+
+        Vector3 newBlockSize = getBlockObject.BlockSize;
+
+        createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
+        Debug.Log("createblockposition : " + createBlockPosition);
+
+        if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
         {
-            point = hit.point - hit.transform.position;
-
-            createDirection = FindDirection(point, block.BlockSize);
-
-            Block getBlockObject = GetBlockObject();
-            if (getBlockObject == default)
-                return;
-            Vector3 newBlockSize = getBlockObject.BlockSize;
-
-            createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
-
-            if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
-            {
-                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL];
-            }
-            else
-            {
-                transparentObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material = blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL];
-            }
-
-            if (transparentObject.transform.position != createBlockPosition)
-                transparentObject.transform.position = createBlockPosition;
-
-            transparentObject.transform.GetChild(0).localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
+            if (isCreateAble == true)
+                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL]);
         }
+        else
+        {
+            if (isCreateAble == false)
+                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
+        }
+
+        if (transparentObject.transform.position != createBlockPosition)
+            transparentObject.transform.position = createBlockPosition;
+
+        transparentObject.transform.GetChild(0).localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
     }
 
     public int FindPrefabLength()
     {
-        switch(selectObjctType)
+        switch (selectObjctType)
         {
             case (int)MapType.BLOCK:
                 return BlockManager.Instance.BlockPrefabArray.Length;
@@ -295,6 +345,8 @@ public class MapGenerator : MonoBehaviour
                 return TurretManager.Instance.TurretPrefabArray.Length;
             case (int)MapType.BARRICADE:
                 return BarricadeManager.Instance.BarricadePrefabArray.Length;
+            default:
+                break;
         }
 
         return 0;
@@ -318,7 +370,7 @@ public class MapGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance == null && GameManager.Instance.IsPause)
+        if (GameManager.Instance == null || GameManager.Instance.IsPause)
             return;
 
         if (!isBuildMode)
@@ -358,6 +410,78 @@ public class MapGenerator : MonoBehaviour
         NONE = -1,
         GREEN_COLOR_MATERIAL = 0,
         RED_COLOR_MATERIAL = 1,
+    }
+
+    private class SwitchMaterial
+    {
+        private List<Renderer> saveRenderer = new List<Renderer>();
+        private List<Material> saveMaterial = new List<Material>();
+
+        public bool IsEmptySaveRenderer()
+        {
+            if (saveRenderer.Count == 0)
+                return true;
+            else
+                return false;
+        }
+
+        public void Init()
+        {
+            saveRenderer.Clear();
+            saveMaterial.Clear();
+        }
+
+        public void SwitchSaveMaterial(GameObject gameobject, int index = 0)
+        {
+            if (saveRenderer[index] != null)
+            {
+                saveRenderer[index].material = saveMaterial[index];
+            }
+
+            for (int i = 0; i < gameobject.transform.childCount; i++)
+            {
+                index++;
+                SwitchSaveMaterial(gameobject.transform.GetChild(i).gameObject, index);
+            }
+
+            if(saveRenderer.Count != 0)
+            {
+                Init();
+            }
+        }
+
+        public void SaveMaterial(GameObject gameobject) // 게임 오브젝트의 material 저장
+        {
+            Renderer renderer = gameobject.GetComponent<Renderer>();
+            if(renderer == null)
+            {
+                saveRenderer.Add(null);
+                saveMaterial.Add(null);
+            }
+            else
+            {
+                saveRenderer.Add(renderer);
+                saveMaterial.Add(renderer.material);
+            }
+
+            for (int i = 0; i < gameobject.transform.childCount; i++)
+            {
+                SaveMaterial(gameobject.transform.GetChild(i).gameObject);
+            }
+        }
+
+        public void SwitchOtherMaterial(GameObject gameobject, Material material)
+        {
+            Renderer renderer = gameobject.GetComponent<Renderer>();
+
+            if(renderer != null)
+                renderer.material = material;
+
+            for (int i = 0; i < gameobject.transform.childCount; i++)
+            {
+                SwitchOtherMaterial(gameobject.transform.GetChild(i).gameObject, material);
+            }
+        }
     }
 }
 

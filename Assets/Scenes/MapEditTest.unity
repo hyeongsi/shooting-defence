@@ -1139,7 +1139,7 @@ RectTransform:
   m_Children:
   - {fileID: 1669779659}
   m_Father: {fileID: 659244114}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1733,8 +1733,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 312828210}
-  - {fileID: 522511327}
   - {fileID: 1118653062}
+  - {fileID: 522511327}
   - {fileID: 942332194}
   - {fileID: 736862411}
   - {fileID: 1458192952}
@@ -3047,7 +3047,7 @@ RectTransform:
   m_Children:
   - {fileID: 1821948855}
   m_Father: {fileID: 659244114}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3792,7 +3792,7 @@ RectTransform:
   m_Children:
   - {fileID: 619545725}
   m_Father: {fileID: 1736362275}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4842,7 +4842,7 @@ RectTransform:
   m_Children:
   - {fileID: 1015978969}
   m_Father: {fileID: 1736362275}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4906,8 +4906,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 412978344}
-  - {fileID: 1383546818}
   - {fileID: 1703075482}
+  - {fileID: 1383546818}
   - {fileID: 574033431}
   m_Father: {fileID: 1885793896}
   m_RootOrder: 0
@@ -5327,7 +5327,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uD0C0\uC6CC"
+  m_Text: "\uD130\uB81B"
 --- !u!222 &1821948857
 CanvasRenderer:
   m_ObjectHideFlags: 0
