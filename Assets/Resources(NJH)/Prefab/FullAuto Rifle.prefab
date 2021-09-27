@@ -3017,6 +3017,36 @@ Transform:
   m_Father: {fileID: 8648667314074233393}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7148503112109520991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 441283302366312763}
+  m_Layer: 0
+  m_Name: HandguardGuide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &441283302366312763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7148503112109520991}
+  m_LocalRotation: {x: 0.696868, y: 0.69686776, z: 0.1198969, w: 0.11989616}
+  m_LocalPosition: {x: -0.232, y: 0, z: 0.601}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8648667314074233393}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 180, y: -19.523987, z: -90}
 --- !u!1 &7229726267511788730
 GameObject:
   m_ObjectHideFlags: 0
@@ -3328,6 +3358,36 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7815294535728958240
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7623363638973438739}
+  m_Layer: 0
+  m_Name: MuzzleFlashGuide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7623363638973438739
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7815294535728958240}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.13799998, z: 1.3480003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8648667314074233393}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7903315797891208726
 GameObject:
   m_ObjectHideFlags: 0
@@ -3608,6 +3668,36 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!1 &8239142234189063071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6689470600557788440}
+  m_Layer: 0
+  m_Name: GripGuide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6689470600557788440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8239142234189063071}
+  m_LocalRotation: {x: 0.7051477, y: -0.006448612, z: 0.052599598, w: 0.70707744}
+  m_LocalPosition: {x: 0.071, y: -0.111, z: -0.272}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8648667314074233393}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 86.257, y: 85.211006, z: 90.00001}
 --- !u!1 &8339723243309614318
 GameObject:
   m_ObjectHideFlags: 0
@@ -4293,6 +4383,9 @@ Transform:
   m_Children:
   - {fileID: 5973342218261327796}
   - {fileID: 8774689381261407998}
+  - {fileID: 6689470600557788440}
+  - {fileID: 441283302366312763}
+  - {fileID: 7623363638973438739}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4310,15 +4403,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletText: {fileID: 0}
   reloadText: {fileID: 0}
-  weaponType: 0
-  isAutomatic: 1
-  magazineSize: 30
-  bulletsLeft: 30
-  bulletsPerShot: 1
-  burstBulletCount: 0
-  reloadTime: 2.5
-  nextShotDelay: 0.075
-  burstFireDelay: 0
+  hitEffect: {fileID: 0}
+  muzzleFlash: {fileID: 0}
+  bulletTrail: {fileID: 0}
+  muzzleFlashPosition: {fileID: 0}
+  weaponInfo: {fileID: 0}
   isShooting: 0
   isReadyToShoot: 1
   isburstShot: 0

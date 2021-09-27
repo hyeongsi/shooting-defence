@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4df803720e9e344409c09fa50dba0200, type: 3}
   m_Name: Shotgun_Info
   m_EditorClassIdentifier: 
-  isAutomatic: 0
+  isAutomatic: 1
   weaponType: 4
   damage: 8
   magazineSize: 7
-  bulletsLeft: 3
+  bulletsLeft: 7
   bulletsPerShot: 12
   burstBulletCount: 0
   reloadTime: 2.2

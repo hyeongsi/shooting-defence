@@ -21,8 +21,11 @@ public class Player_Locomotion : MonoBehaviour
     public float gravity = -9.81f;
     public float groundCheckDistance = 0.2f;
     public float stamina;
-    public float waitForRefillStamina;
+    public float waitForChargeStamina;
     public float smoothingSpeed = 15f;
+
+    public bool chargeStaminaFlag;
+    public bool useStaminaFlag;
 
     Vector3 velocity;
 
@@ -89,18 +92,30 @@ public class Player_Locomotion : MonoBehaviour
             playerManager.horizontal *= 0.5f;
             playerManager.vertical *= 0.5f;
         }
-        else if (playerManager.sprintFlag == true && playerManager.vertical > 0)
+        else if (playerManager.sprintFlag == true && playerManager.vertical > 0 && stamina > 0)
         {
             speed = sprintSpeed;
             playerManager.horizontal *= 2f;
             playerManager.vertical *= 2f;
         }
 
+        useStaminaFlag = playerManager.sprintFlag 
+                         && playerManager.moveDirection.magnitude > 0f
+                         && playerManager.vertical > 0
+                         ? true : false;
+
+        // 이동
         if (playerManager.moveDirection.magnitude > 0f)
         {
+            if(playerManager.sprintFlag == true && playerManager.vertical > 0)
+            {
+                UseStamina();
+            }
+
             playerManager.moveFlag = true;
             characterController.Move(playerManager.moveDirection * speed * Time.deltaTime);
         }
+        ChargeStamina();
     }
 
     void Loco_Jump()
@@ -120,20 +135,48 @@ public class Player_Locomotion : MonoBehaviour
         }
     }
 
-    #region 스태미나 사용(작성 필요)
-    void Loco_UseStamina()
+    #region 스태미나 사용
+    void UseStamina()
     {
+        if(stamina > 0 && useStaminaFlag == true)
+        {
+            stamina -= 15f * Time.deltaTime;
+            if(stamina < 0)
+            {
+                stamina = 0;
+            }
+        }
 
+        if (stamina <= 0 && chargeStaminaFlag == true)
+        {
+            StopCoroutine(Co_ChargeStaminaDelay());
+            StartCoroutine(Co_ChargeStaminaDelay());
+        }
     }
 
-    IEnumerator Co_UseStamina()
+    void ChargeStamina()
     {
-        yield return null;
+        if (stamina < 100 && useStaminaFlag == false)
+        {
+            stamina += 10f * Time.deltaTime;
+            if(stamina > 100)
+            {
+                stamina = 100;
+            }
+        }
     }
 
-    IEnumerator Co_ReFillStamina()
+    IEnumerator Co_ChargeStaminaDelay()
     {
-        yield return new WaitForSeconds(waitForRefillStamina);
+        Debug.Log("Delay Start");
+        chargeStaminaFlag = false;
+        float delay = waitForChargeStamina;
+        while(delay > 0)
+        {
+            delay -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        chargeStaminaFlag = true;
     }
     #endregion
 

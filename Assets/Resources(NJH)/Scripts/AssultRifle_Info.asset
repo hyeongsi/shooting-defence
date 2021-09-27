@@ -15,8 +15,8 @@ MonoBehaviour:
   isAutomatic: 1
   weaponType: 1
   damage: 19
-  magazineSize: 30
-  bulletsLeft: 11
+  magazineSize: 1000
+  bulletsLeft: 635
   bulletsPerShot: 1
   burstBulletCount: 0
   reloadTime: 2.2

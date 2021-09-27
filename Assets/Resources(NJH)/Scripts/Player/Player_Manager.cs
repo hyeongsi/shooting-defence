@@ -30,6 +30,7 @@ public class Player_Manager : MonoBehaviour
 
     public Text bulletText;
     public Text reloadText;
+    public Text staminaText;
 
     public Vector3 moveDirection;
 
@@ -48,6 +49,8 @@ public class Player_Manager : MonoBehaviour
 
     private void Update()
     {
+        staminaText.text = playerLocomotion.stamina.ToString();
+
         xAxis.Update(Time.fixedDeltaTime);
         yAxis.Update(Time.fixedDeltaTime);
 

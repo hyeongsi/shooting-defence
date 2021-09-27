@@ -88,18 +88,37 @@ public class Weapon_Gun : MonoBehaviour
         }
     }
 
+
+    
+
     void HitScan()
-    {        
+    {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
-        var trail = Instantiate(bulletTrail, muzzleFlashPosition.position, Quaternion.identity);
+        Debug.DrawRay(ray.origin, ray.direction, Color.green, 1f);
 
+        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));   // 총구화염 생성
+        var trail = Instantiate(bulletTrail, muzzleFlashPosition.position, Quaternion.identity);    // 탄환궤적
         trail.AddPosition(muzzleFlashPosition.position);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Weapon_HitEffect(trail);
+            // 총구를 기준으로 레이캐스트 맞은 위치를 로컬좌표로 변환
+            Vector3 inverseTransform = muzzleFlashPosition.transform.InverseTransformPoint(hit.point);
+            if (inverseTransform.z > 0) // 0보다 크면 앞에 있음
+            {
+                Debug.Log("Front");
+            }
+            else // 0보다 작으면 뒤에 있음
+            {
+                ray.origin = muzzleFlashPosition.position;
+                ray.direction = muzzleFlashPosition.forward;
+                Debug.Log("Behind");
+            }
+
+            Weapon_HitEffect(trail, ray, hit);
+
+            // 적일 때
             if(hit.collider.gameObject.layer == 28)
             {
                 Enemy_Locomotion enemy = hit.collider.gameObject.GetComponent<Enemy_Locomotion>();
@@ -108,10 +127,9 @@ public class Weapon_Gun : MonoBehaviour
         }
     }
 
-    void Weapon_HitEffect(TrailRenderer trail)
+    void Weapon_HitEffect(TrailRenderer trail, Ray ray, RaycastHit hit)
     {
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray, out RaycastHit hit))
+        if(Physics.Raycast(ray, out hit))
         {
             if (hit.collider.gameObject != null)
             {
@@ -165,6 +183,7 @@ public class Weapon_Gun : MonoBehaviour
             impulseSource.GenerateImpulse(transform.forward);
 
             animator.SetTrigger("Shoot");
+            playerManager.animator.CrossFade("Firing Rifle", 0f);
 
             weaponInfo.bulletsLeft--;
             weaponInfo.burstBulletCount--;
@@ -182,11 +201,12 @@ public class Weapon_Gun : MonoBehaviour
         weaponInfo.bulletsLeft--;
 
         animator.SetTrigger("Shoot");
+        playerManager.animator.CrossFade("Firing Rifle", 0f);
 
         while (weaponInfo.burstBulletCount > 0)
         {
             HitScan();
-            impulseSource.GenerateImpulse(transform.forward);
+            impulseSource.GenerateImpulse();
 
             weaponInfo.burstBulletCount--;
             Debug.Log("산탄" + weaponInfo.burstBulletCount);
@@ -203,4 +223,11 @@ public class Weapon_Gun : MonoBehaviour
         weaponInfo.bulletsLeft = weaponInfo.magazineSize;
         isReloading = false;
     }
+
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), GetOppositeTransform());
+    //    Gizmos.DrawSphere(GetOppositeTransform(), 0.3f);
+    //}
 }
