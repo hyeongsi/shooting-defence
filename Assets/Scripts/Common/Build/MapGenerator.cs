@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -67,6 +68,36 @@ public class MapGenerator : MonoBehaviour
         set { isEditMode = value; }
     }
     #endregion
+
+    private void JudgeChangeMaterial(Vector3 createBlockPosition, Vector3 newBlockSize, Vector3 direction, Block block)
+    {
+        if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
+        {
+            isCreateAble = false;
+            switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL]);
+        }
+        else  // 아니면 초록 오브젝트 출력
+        {
+            if (selectObjctType != (int)MapType.BLOCK)
+            {
+                if(direction == Vector3.up && block.BlockTypeVar == BlockType.BLOCK)
+                {
+                    isCreateAble = true;
+                    switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
+                }
+                else
+                {
+                    isCreateAble = false;
+                    switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL]);
+                }
+            }
+            else
+            {
+                isCreateAble = true;
+                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
+            } 
+        }
+    }
 
     private Block GetBlockObject()
     {
@@ -258,16 +289,7 @@ public class MapGenerator : MonoBehaviour
                 switchMaterial.SaveMaterial(transparentObject);
             }
 
-            if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
-            {
-                isCreateAble = false;
-                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL]);
-            }
-            else
-            {
-                isCreateAble = true;
-                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
-            }
+            JudgeChangeMaterial(createBlockPosition, newBlockSize, createDirection, block);
         }
     }
 
@@ -292,22 +314,7 @@ public class MapGenerator : MonoBehaviour
         if (createBlockPosition == hitGameObjectPosition)
             return;
 
-        if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
-        {
-            if (isCreateAble == true)
-            {
-                isCreateAble = false;
-                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL]);
-            }  
-        }
-        else
-        {
-            if (isCreateAble == false)
-            {
-                isCreateAble = true;
-                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
-            }
-        }
+        JudgeChangeMaterial(createBlockPosition, newBlockSize, createDirection, block);
 
         if (transparentObject.transform.position != createBlockPosition)
             transparentObject.transform.position = createBlockPosition;
