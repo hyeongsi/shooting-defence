@@ -78,24 +78,26 @@ public class MapGenerator : MonoBehaviour
         }
         else  // 아니면 초록 오브젝트 출력
         {
-            if (selectObjctType != (int)MapType.BLOCK)
-            {
-                if(direction == Vector3.up && block.BlockTypeVar == BlockType.BLOCK)
-                {
-                    isCreateAble = true;
-                    switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
-                }
-                else
-                {
-                    isCreateAble = false;
-                    switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL]);
-                }
-            }
-            else
+            if(selectObjctType == (int)MapType.BLOCK)
             {
                 isCreateAble = true;
                 switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
-            } 
+                return;
+            }
+
+            // 설치하는 게 블럭이 아닐 때
+            if (direction == Vector3.up && block.BlockTypeVar == BlockType.BLOCK)
+            {
+                isCreateAble = true;
+                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
+                return;
+            }
+            else
+            {
+                isCreateAble = false;
+                switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL]);
+                return;
+            }
         }
     }
 
