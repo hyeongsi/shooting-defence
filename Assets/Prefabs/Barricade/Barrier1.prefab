@@ -73,7 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockSize: {x: 1, y: 1, z: 1}
   blockType: 2
-  buildBlockType: 0
+  buildBlockType: 1
 --- !u!1 &6958897935094636852
 GameObject:
   m_ObjectHideFlags: 0

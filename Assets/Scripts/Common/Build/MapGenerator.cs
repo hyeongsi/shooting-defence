@@ -86,7 +86,24 @@ public class MapGenerator : MonoBehaviour
             }
 
             // 설치하는 게 블럭이 아닐 때
-            if (direction == Vector3.up && block.BlockTypeVar == BlockType.BLOCK)
+            bool isSame;
+            switch(GetBlockObject().BuildBlockTypeVar)
+            {
+                case BuildBlockType.UP:
+                    isSame = (direction == Vector3.up);
+                    break;
+                case BuildBlockType.DOWN:
+                    isSame = (direction == Vector3.down);
+                    break;
+                case BuildBlockType.SIDE:
+                    isSame = (direction == Vector3.right || direction == Vector3.left || direction == Vector3.forward || direction == Vector3.back);
+                    break;
+                default:
+                    isSame = true;
+                    break;
+            }
+
+            if (isSame && block.BlockTypeVar == BlockType.BLOCK)
             {
                 isCreateAble = true;
                 switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
@@ -110,7 +127,7 @@ public class MapGenerator : MonoBehaviour
             case (int)MapType.TURRET:
                 return TurretManager.Instance.TurretBlockArray[selectPrefab];
             case (int)MapType.BARRICADE:
-                return BarricadeManager.Instance.BarricadePrefabArray[selectPrefab].GetComponent<Block>();
+                return BarricadeManager.Instance.BarricadeBlockArray[selectPrefab];
         }
 
         return default;
