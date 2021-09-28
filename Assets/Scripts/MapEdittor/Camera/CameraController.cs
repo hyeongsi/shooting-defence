@@ -32,7 +32,7 @@ public class CameraController : MonoBehaviour
         yRotate = transform.eulerAngles.y + yRotationSize;
 
         xRotationSize = Input.GetAxisRaw("Mouse Y") * turnSpeed * Time.deltaTime;
-        xRotate = Mathf.Clamp(xRotate - xRotationSize, -45, 80);
+        xRotate = Mathf.Clamp(xRotate - xRotationSize, -45, 90);
 
         rotationAngle.x = xRotate;
         rotationAngle.y = yRotate;

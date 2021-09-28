@@ -27,7 +27,6 @@ public class MapGenerator : MonoBehaviour
     private bool isEditMode = true;
 
     private const string layerName = "Block";
-    private const float ERROR_RANGE = 0.02f;
     #region Property
     public int SelectObjctType
     {
@@ -129,29 +128,30 @@ public class MapGenerator : MonoBehaviour
     private Vector3 FindDirection(Vector3 point, Vector3 blockSize)
     {
         Vector3 pointVector = Vector3.zero;
+        const float ZERO = 0.0f;
 
         // float 계산 시 오차가 발생 하기 때문에, 0.01을 오차 범위로 두고 계산
-        if (point.x >= (blockSize.x - ERROR_RANGE) && point.x <= (blockSize.x + ERROR_RANGE))
+        if ((point.x > blockSize.x && point.x < blockSize.x) || Mathf.Approximately(point.x ,blockSize.x))
         {
             pointVector = Vector3.right;
         }
-        else if (point.y >= (blockSize.y - ERROR_RANGE) && point.y <= (blockSize.y + ERROR_RANGE))
+        else if ((point.y > blockSize.y && point.y < blockSize.y) || Mathf.Approximately(point.y, blockSize.y))
         {
             pointVector = Vector3.up;
         }
-        else if (point.z >= (blockSize.z - ERROR_RANGE) && point.z <= (blockSize.z + ERROR_RANGE))
+        else if ((point.z > blockSize.z && point.z < blockSize.z) || Mathf.Approximately(point.z, blockSize.z))
         {
             pointVector = Vector3.forward;
         }
-        else if (point.x >= -ERROR_RANGE && point.x <= ERROR_RANGE)
+        else if ((point.x > ZERO && point.x < ZERO) || Mathf.Approximately(point.x, ZERO))
         {
             pointVector = Vector3.left;
         }
-        else if (point.y >= -ERROR_RANGE && point.y <= ERROR_RANGE)
+        else if ((point.y > ZERO && point.y < ZERO) || Mathf.Approximately(point.y, ZERO))
         {
             pointVector = Vector3.down;
         }
-        else if (point.z >= -ERROR_RANGE && point.z <= ERROR_RANGE)
+        else if ((point.z > ZERO && point.z < ZERO) || Mathf.Approximately(point.z, ZERO))
         {
             pointVector = Vector3.back;
         }
@@ -159,64 +159,30 @@ public class MapGenerator : MonoBehaviour
         return pointVector;
     }
 
-    private Vector3 FindSpawnPosition(Vector3 position, Vector3 point, Vector3 direction, Vector3 newBlockSize)
+    private Vector3 FindSpawnPosition(Block block, Vector3 point, Vector3 direction, Vector3 newBlockSize)
     {
         Vector3 pointVector = Vector3.zero;
+        Vector3 position = block.transform.position;
+        Vector3 notDirection = new Vector3();
 
-        if(direction == Vector3.right)
+        notDirection.x = Mathf.Approximately(direction.x, 1.0f) ? 0.0f : 1.0f;
+        notDirection.y = Mathf.Approximately(direction.y, 1.0f) ? 0.0f : 1.0f;
+        notDirection.z = Mathf.Approximately(direction.z, 1.0f) ? 0.0f : 1.0f;
+
+        if (direction == Vector3.right || direction == Vector3.forward || direction == Vector3.up)
         {
-            pointVector.x = Mathf.Approximately(point.x, Mathf.Round(point.x)) ?
-                position.x + Mathf.Round(point.x) * direction.x :
-                position.x + Mathf.Floor(point.x) * direction.x;
-
-            pointVector.y = position.y;
-            pointVector.z = position.z;
+            pointVector.x = position.x + (direction.x * block.BlockSize.x) + (notDirection.x * Mathf.Floor(point.x));
+            pointVector.y = position.y + (direction.y * block.BlockSize.y) + (notDirection.y * Mathf.Floor(point.y));
+            pointVector.z = position.z + (direction.z * block.BlockSize.z) + (notDirection.z * Mathf.Floor(point.z));
         }
-        else if(direction == Vector3.forward)
+        else if (direction == Vector3.left || direction == Vector3.back || direction == Vector3.down)
         {
-            pointVector.z = Mathf.Approximately(point.z, Mathf.Round(point.z)) ?
-                position.z + Mathf.Round(point.z) * direction.z :
-                position.z + Mathf.Floor(point.z) * direction.z;
-
-            pointVector.x = position.x;
-            pointVector.y = position.y;
+            pointVector.x = position.x + (direction.x * newBlockSize.x) + (notDirection.x * Mathf.Floor(point.x));
+            pointVector.y = position.y + (direction.y * newBlockSize.y) + (notDirection.x * Mathf.Floor(point.y));
+            pointVector.z = position.z + (direction.z * newBlockSize.z) + (notDirection.x * Mathf.Floor(point.z));
         }
-        else if (direction == Vector3.up)
-        {
-            pointVector.y = Mathf.Approximately(point.y, Mathf.Round(point.y)) ?
-                position.y + Mathf.Round(point.y) * direction.y :
-                position.y + Mathf.Floor(point.y) * direction.y;
-
-            pointVector.x = position.x;
-            pointVector.z = position.z;
-        }
-        else if (direction == Vector3.left)
-        {
-            pointVector.x = Mathf.Approximately(point.x, Mathf.Round(point.x)) ?
-                position.x + (direction.x * newBlockSize.x) + Mathf.Round(point.x) :
-                position.x + (direction.x * newBlockSize.x) + Mathf.Floor(point.x);
-
-            pointVector.y = position.y;
-            pointVector.z = position.z;
-        }
-        else if (direction == Vector3.back)
-        {
-            pointVector.z = Mathf.Approximately(point.z, Mathf.Round(point.z)) ?
-                position.z + (direction.z * newBlockSize.z) + Mathf.Round(point.z) :
-                position.z + (direction.z * newBlockSize.z) + Mathf.Floor(point.z);
-
-            pointVector.x = position.x;
-            pointVector.y = position.y;
-        }
-        else if (direction == Vector3.down)
-        {
-            pointVector.y = Mathf.Approximately(point.y, Mathf.Round(point.y)) ?
-               position.y + (direction.y * newBlockSize.y) + Mathf.Round(point.y) :
-               position.y + (direction.y * newBlockSize.y) + Mathf.Floor(point.y);
-
-            pointVector.x = position.x;
-            pointVector.z = position.z;
-        }
+        else
+            return default;
 
         return pointVector;
     }
@@ -240,6 +206,7 @@ public class MapGenerator : MonoBehaviour
         transparentObject.transform.parent = MapManager.Instance.ParentGameObject[(int)transparentObject.GetComponent<Block>().BlockTypeVar].transform;
 
         switchMaterial.SwitchSaveMaterial(transparentObject);   // 원래의 색상 복구
+        switchMaterial.Init();
 
         if (selectObjctType == (int)MapType.TURRET)
             TurretManager.Instance.SettingTurretData(ref transparentObject, selectPrefab);
@@ -256,7 +223,8 @@ public class MapGenerator : MonoBehaviour
 
         if (selectPrefab >= 0 && selectPrefab < FindPrefabLength())    // 없는 블럭은 생성하지 못하도록
         {
-            point = hit.point - hit.transform.position;
+            Vector3 hitGameObjectPosition = hit.transform.position;
+            point = hit.point - hitGameObjectPosition;
 
             createDirection = FindDirection(point, block.BlockSize);
 
@@ -266,7 +234,10 @@ public class MapGenerator : MonoBehaviour
                 return;
 
             newBlockSize = getBlockObject.BlockSize;
-            createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
+
+            createBlockPosition = FindSpawnPosition(block, point, createDirection, newBlockSize);
+            if (createBlockPosition == hitGameObjectPosition)
+                return;
 
             Transform newBlock;
             GameObject getMapTypeObject = GetMapTypeObject();
@@ -282,7 +253,10 @@ public class MapGenerator : MonoBehaviour
             newBlock.GetChild(0).localRotation = Quaternion.Euler(0, currentRotationAngle, 0);
             
             if (switchMaterial.IsEmptySaveRenderer())
+            {
+                switchMaterial.Init();
                 switchMaterial.SaveMaterial(transparentObject);
+            }
 
             if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
             {
@@ -303,11 +277,10 @@ public class MapGenerator : MonoBehaviour
         Vector3 createBlockPosition;
         Vector3 point;
 
-        point = hit.point - hit.transform.position;
-        Debug.Log("point : " + point);
+        Vector3 hitGameObjectPosition = hit.transform.position;
+        point = hit.point - hitGameObjectPosition;
 
         createDirection = FindDirection(point, block.BlockSize);
-        Debug.Log("createDirection : " + createDirection);
 
         Block getBlockObject = GetBlockObject();
         if (getBlockObject == default)
@@ -315,18 +288,25 @@ public class MapGenerator : MonoBehaviour
 
         Vector3 newBlockSize = getBlockObject.BlockSize;
 
-        createBlockPosition = FindSpawnPosition(hit.transform.position, point, createDirection, newBlockSize);
-        Debug.Log("createblockposition : " + createBlockPosition);
+        createBlockPosition = FindSpawnPosition(block, point, createDirection, newBlockSize);
+        if (createBlockPosition == hitGameObjectPosition)
+            return;
 
         if (FindBlocks(createBlockPosition, newBlockSize)) // 설치 위치에 블럭이 이미 존재하면 붉은 오브젝트 출력
         {
             if (isCreateAble == true)
+            {
+                isCreateAble = false;
                 switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.RED_COLOR_MATERIAL]);
+            }  
         }
         else
         {
             if (isCreateAble == false)
+            {
+                isCreateAble = true;
                 switchMaterial.SwitchOtherMaterial(transparentObject, blockMaterialArray[(int)TransparentMaterialColor.GREEN_COLOR_MATERIAL]);
+            }
         }
 
         if (transparentObject.transform.position != createBlockPosition)
@@ -356,6 +336,12 @@ public class MapGenerator : MonoBehaviour
     {
         if (transparentObject != null)
         {
+            if(!switchMaterial.IsEmptySaveRenderer())
+            {
+                switchMaterial.SwitchSaveMaterial(transparentObject);
+                switchMaterial.Init();
+            }
+
             Destroy(transparentObject);
             transparentObject = null;
         }
@@ -416,13 +402,11 @@ public class MapGenerator : MonoBehaviour
     {
         private List<Renderer> saveRenderer = new List<Renderer>();
         private List<Material> saveMaterial = new List<Material>();
+        private int index = 0;
 
         public bool IsEmptySaveRenderer()
         {
-            if (saveRenderer.Count == 0)
-                return true;
-            else
-                return false;
+            return (saveRenderer.Count == 0);
         }
 
         public void Init()
@@ -431,37 +415,38 @@ public class MapGenerator : MonoBehaviour
             saveMaterial.Clear();
         }
 
-        public void SwitchSaveMaterial(GameObject gameobject, int index = 0)
+        public void SwitchSaveMaterial(GameObject gameobject, bool isFirst = true)
         {
-            if (saveRenderer[index] != null)
+            if (isFirst)
+                index = 0;
+            else
+                index += 1;
+
+            if (saveRenderer[index] != default)
             {
                 saveRenderer[index].material = saveMaterial[index];
             }
 
             for (int i = 0; i < gameobject.transform.childCount; i++)
             {
-                index++;
-                SwitchSaveMaterial(gameobject.transform.GetChild(i).gameObject, index);
-            }
-
-            if(saveRenderer.Count != 0)
-            {
-                Init();
+                SwitchSaveMaterial(gameobject.transform.GetChild(i).gameObject, false);
             }
         }
 
         public void SaveMaterial(GameObject gameobject) // 게임 오브젝트의 material 저장
         {
             Renderer renderer = gameobject.GetComponent<Renderer>();
-            if(renderer == null)
+            Material newMaterial;
+            if (renderer == null)
             {
-                saveRenderer.Add(null);
-                saveMaterial.Add(null);
+                saveRenderer.Add(default);
+                saveMaterial.Add(default);
             }
             else
             {
+                newMaterial = new Material(renderer.material);
                 saveRenderer.Add(renderer);
-                saveMaterial.Add(renderer.material);
+                saveMaterial.Add(newMaterial);
             }
 
             for (int i = 0; i < gameobject.transform.childCount; i++)
@@ -470,16 +455,21 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        public void SwitchOtherMaterial(GameObject gameobject, Material material)
+        public void SwitchOtherMaterial(GameObject gameobject, Material material, bool isFirst = true)
         {
-            Renderer renderer = gameobject.GetComponent<Renderer>();
+            if (isFirst)
+                index = 0;
+            else
+                index += 1;
 
-            if(renderer != null)
-                renderer.material = material;
+            if (saveRenderer[index] != default)
+            {
+                saveRenderer[index].material = material;
+            }
 
             for (int i = 0; i < gameobject.transform.childCount; i++)
             {
-                SwitchOtherMaterial(gameobject.transform.GetChild(i).gameObject, material);
+                SwitchOtherMaterial(gameobject.transform.GetChild(i).gameObject, material, false);
             }
         }
     }
