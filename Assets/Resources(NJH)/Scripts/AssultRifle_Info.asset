@@ -15,10 +15,10 @@ MonoBehaviour:
   isAutomatic: 1
   weaponType: 1
   damage: 19
-  magazineSize: 1000
-  bulletsLeft: 635
+  magazineSize: 30
+  bulletsLeft: 30
   bulletsPerShot: 1
   burstBulletCount: 0
   reloadTime: 2.2
-  nextShotDelay: 0.078
+  nextShotDelay: 0.08
   burstFireDelay: 0

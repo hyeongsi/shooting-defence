@@ -15,19 +15,18 @@ public class Enemy : MonoBehaviour
         hp = enemyStaticData.maxHp;
     }
 
-    public virtual bool Attack(int findObject, int turretIndex = -1) 
+    public virtual bool Attack(GameObject findObject)
     {
-        if (findObject == 0)        // <- 나중에 enum 값으로 바꿔주고, 0이면 찾지 못한거라 종료 처리
+        if (findObject == null)
             return false;
 
-        if(turretIndex == -1)
+        // 플레이어를 공격
+        if (findObject.gameObject.layer == 29)
         {
-            // player.takeDamage(attackDamage); , 아직 플레이어에 관한 스크립트 없어서 주석처리
+            findObject.GetComponent<Player_Manager>().takeDamage();
         }
-        else
-        {
-            // 위의 인덱스를 이용해서 터렛 매니저에서 해당 인덱스의 터렛 가져와서 공격 처리
-        }
+
+        // 포탑을 공격(포탑레이어를 추가하든 태그를 달든 해서 구별)
 
         return true;
     }
@@ -44,22 +43,25 @@ public class Enemy : MonoBehaviour
         } 
     }
 
-    public bool FindAttackObject()
+    public GameObject FindAttackObject()
     {
+        // 여기에 목표물 탐지 코드 작성
+
+
         switch(enemyStaticData.attackType)
         {
             case (int)AttackType.PLAYER:
-                // 공격 범위에 플레이어 있는지 검사하고 return true
+                // 공격 범위에 플레이어 있는지 검사하고 탐지된 플레이어 오브젝트 리턴
                 break;
             case (int)AttackType.TURRET:
-                // 공격 범위에 터렛 있는지 검사하고 return true
+                // 공격 범위에 터렛 있는지 검사하고 탐지된 터렛 오브젝트 리턴
                 break;
             default:
-                // 모두다 때려버려
-                return false;
+                // 공격 범위에 플레이어든 터렛이든 탐지된 오브젝트 리턴
+                return null;
         }
 
-        return false;
+        return null;
     }
 
     public virtual Vector3 FindAWay()

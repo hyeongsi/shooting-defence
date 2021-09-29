@@ -88,41 +88,26 @@ public class Weapon_Gun : MonoBehaviour
         }
     }
 
-
-    
-
     void HitScan()
     {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-        Debug.DrawRay(ray.origin, ray.direction, Color.green, 1f);
+        // 총구화염 생성
+        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
 
-        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));   // 총구화염 생성
-        var trail = Instantiate(bulletTrail, muzzleFlashPosition.position, Quaternion.identity);    // 탄환궤적
+        // 탄환궤적
+        var trail = Instantiate(bulletTrail, muzzleFlashPosition.position, Quaternion.identity);
         trail.AddPosition(muzzleFlashPosition.position);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            // 총구를 기준으로 레이캐스트 맞은 위치를 로컬좌표로 변환
-            Vector3 inverseTransform = muzzleFlashPosition.transform.InverseTransformPoint(hit.point);
-            if (inverseTransform.z > 0) // 0보다 크면 앞에 있음
-            {
-                Debug.Log("Front");
-            }
-            else // 0보다 작으면 뒤에 있음
-            {
-                ray.origin = muzzleFlashPosition.position;
-                ray.direction = muzzleFlashPosition.forward;
-                Debug.Log("Behind");
-            }
-
             Weapon_HitEffect(trail, ray, hit);
 
             // 적일 때
-            if(hit.collider.gameObject.layer == 28)
+            if (hit.collider.gameObject.layer == 28)
             {
-                Enemy_Locomotion enemy = hit.collider.gameObject.GetComponent<Enemy_Locomotion>();
-                enemy.Enemy_Hit(weaponInfo.damage);
+                Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
+                enemy.TakeDamage(weaponInfo.damage);
             }
         }
     }
@@ -180,7 +165,7 @@ public class Weapon_Gun : MonoBehaviour
         while (weaponInfo.burstBulletCount > 0 && weaponInfo.bulletsLeft > 0)
         {
             HitScan();
-            impulseSource.GenerateImpulse(transform.forward);
+            impulseSource.GenerateImpulse();
 
             animator.SetTrigger("Shoot");
             playerManager.animator.CrossFade("Firing Rifle", 0f);
@@ -206,7 +191,6 @@ public class Weapon_Gun : MonoBehaviour
         while (weaponInfo.burstBulletCount > 0)
         {
             HitScan();
-            impulseSource.GenerateImpulse();
 
             weaponInfo.burstBulletCount--;
             Debug.Log("산탄" + weaponInfo.burstBulletCount);

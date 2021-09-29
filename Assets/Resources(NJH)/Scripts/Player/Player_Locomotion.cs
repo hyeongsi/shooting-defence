@@ -9,8 +9,9 @@ public class Player_Locomotion : MonoBehaviour
 
     CharacterController characterController;
     [SerializeField] Transform groundChecker;
+    [SerializeField] Transform behindChecker;
     [SerializeField] Transform aimingTarget;
-
+    
     [SerializeField] LayerMask groundLayer;
 
     [Header("플레이어 값")]
@@ -22,10 +23,12 @@ public class Player_Locomotion : MonoBehaviour
     public float groundCheckDistance = 0.2f;
     public float stamina;
     public float waitForChargeStamina;
+    public float waitForChargeEmptyStamina;
     public float smoothingSpeed = 15f;
 
     public bool chargeStaminaFlag;
     public bool useStaminaFlag;
+    public bool chargeStaminaDelayFlag;
 
     Vector3 velocity;
 
@@ -38,7 +41,8 @@ public class Player_Locomotion : MonoBehaviour
 
     public void FixedUpdateFunction()
     {
-        GroundCheck();
+        CheckBehind();
+        CheckGround();
         Loco_Move();
     }
 
@@ -47,9 +51,11 @@ public class Player_Locomotion : MonoBehaviour
         Loco_Rotate();
         Loco_Jump();
         Loco_UseWeapon();
+        Loco_Stamina();
     }
 
-    void GroundCheck()
+    
+    void CheckGround()
     {
         playerManager.isGrounded = Physics.CheckSphere(groundChecker.position, groundCheckDistance, groundLayer);
         if (playerManager.isGrounded && velocity.y < 0f)
@@ -63,6 +69,30 @@ public class Player_Locomotion : MonoBehaviour
         }
         velocity.y += gravity * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
+    }
+
+    void CheckBehind()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            // 캐릭터를 기준으로 레이캐스트 맞은 위치를 로컬좌표로 변환
+            Vector3 inverseTransform = behindChecker.InverseTransformPoint(hit.point);
+            if (inverseTransform.z > 0) // 0보다 크면 앞에 있음
+            {
+                playerManager.isBehind = false;
+                playerManager.disableAimPointImage.gameObject.SetActive(false);
+                playerManager.aimPointImage.gameObject.SetActive(true);
+
+            }
+            else // 0보다 작으면 뒤에 있음
+            {
+                playerManager.isBehind = true;
+                playerManager.disableAimPointImage.gameObject.SetActive(true);
+                playerManager.aimPointImage.gameObject.SetActive(false);
+            }
+        }
     }
 
     void Loco_Rotate()
@@ -107,15 +137,9 @@ public class Player_Locomotion : MonoBehaviour
         // 이동
         if (playerManager.moveDirection.magnitude > 0f)
         {
-            if(playerManager.sprintFlag == true && playerManager.vertical > 0)
-            {
-                UseStamina();
-            }
-
             playerManager.moveFlag = true;
             characterController.Move(playerManager.moveDirection * speed * Time.deltaTime);
         }
-        ChargeStamina();
     }
 
     void Loco_Jump()
@@ -127,12 +151,13 @@ public class Player_Locomotion : MonoBehaviour
                 animator.CrossFade("Player_JumpLoop", 0.25f);
                 velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             }
-            else
-            {
-                // 쿨타임 돌았을 때 스태미나 소모해서 비행
-
-            }
         }
+    }
+
+    void Loco_Stamina()
+    {
+        UseStamina();
+        ChargeStamina();
     }
 
     #region 스태미나 사용
@@ -146,17 +171,23 @@ public class Player_Locomotion : MonoBehaviour
                 stamina = 0;
             }
         }
-
-        if (stamina <= 0 && chargeStaminaFlag == true)
-        {
-            StopCoroutine(Co_ChargeStaminaDelay());
-            StartCoroutine(Co_ChargeStaminaDelay());
-        }
     }
 
     void ChargeStamina()
     {
-        if (stamina < 100 && useStaminaFlag == false)
+        if (Input.GetKeyUp(KeyCode.LeftShift) && useStaminaFlag == true)    // 스태미나 쓰다가 버튼을 떼야 실행
+        {
+            if(stamina <= 0)
+            {
+                StartCoroutine(Co_ChargeStaminaDelay(waitForChargeEmptyStamina));
+            }
+            else
+            {
+                StartCoroutine(Co_ChargeStaminaDelay(waitForChargeStamina));
+            }
+        }
+
+        if (stamina < 100 && useStaminaFlag == false && chargeStaminaDelayFlag == false)
         {
             stamina += 10f * Time.deltaTime;
             if(stamina > 100)
@@ -166,22 +197,26 @@ public class Player_Locomotion : MonoBehaviour
         }
     }
 
-    IEnumerator Co_ChargeStaminaDelay()
+    IEnumerator Co_ChargeStaminaDelay(float delayTime)
     {
-        Debug.Log("Delay Start");
-        chargeStaminaFlag = false;
-        float delay = waitForChargeStamina;
+        Debug.Log("Delay Start, " + delayTime);
+        chargeStaminaDelayFlag = true;
+        float delay = delayTime;
         while(delay > 0)
         {
             delay -= 0.1f;
             yield return new WaitForSeconds(0.1f);
         }
-        chargeStaminaFlag = true;
+        chargeStaminaDelayFlag = false;
     }
     #endregion
 
     void Loco_UseWeapon()
     {
+        if(playerManager.isBehind == true)
+        {
+            return;
+        }
         playerManager.weapon.WeaponKeyInput();
     }
 }

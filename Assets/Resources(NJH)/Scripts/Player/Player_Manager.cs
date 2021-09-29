@@ -26,11 +26,16 @@ public class Player_Manager : MonoBehaviour
     public bool aimFlag;
     public bool moveFlag;
     public bool isGrounded;
+    public bool isBehind;
     public bool rotateLock;
 
+    [Header("UI")]
     public Text bulletText;
     public Text reloadText;
     public Text staminaText;
+    public Image aimPointImage;
+    public Image disableAimPointImage;
+
 
     public Vector3 moveDirection;
 
@@ -72,5 +77,10 @@ public class Player_Manager : MonoBehaviour
         moveDirection += camera.transform.right * horizontal;
         moveDirection.y = 0f;   // 먼저 0으로 만들고 정규화 함
         moveDirection.Normalize();
+    }
+
+    public void takeDamage()
+    {
+        
     }
 }
