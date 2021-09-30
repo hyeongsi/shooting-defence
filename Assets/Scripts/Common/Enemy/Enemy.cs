@@ -40,25 +40,31 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
             // 삭제 말고, 캐싱해서 메모리 아끼자,
             // 비활성화 시켜놓고 돌려쓰자, 오브젝트풀링
-        } 
+        }
     }
 
     public GameObject FindAttackObject()
     {
-        // 여기에 목표물 탐지 코드 작성
+        Collider[] detectedObjects = Physics.OverlapSphere(transform.position, 2.5f, 29);
 
+        // 적(자신)을 기준으로 타겟 오브젝트의 좌표를 로컬 좌표로 변환
+        // Vector3 inverseTransform = transform.InverseTransformPoint(검출된오브젝트.transform.position);
+        //if (inverseTransform.z > 0) // 0보다 크면 앞에 있음
+        //{
 
-        switch(enemyStaticData.attackType)
+        //}
+
+        switch (enemyStaticData.attackType)
         {
             case (int)AttackType.PLAYER:
                 // 공격 범위에 플레이어 있는지 검사하고 탐지된 플레이어 오브젝트 리턴
                 break;
-            case (int)AttackType.TURRET:
-                // 공격 범위에 터렛 있는지 검사하고 탐지된 터렛 오브젝트 리턴
+            case (int)AttackType.BARRICADE:
+                // 공격 범위에 장애물 있는지 검사하고 탐지된 터렛 오브젝트 리턴
                 break;
             default:
                 // 공격 범위에 플레이어든 터렛이든 탐지된 오브젝트 리턴
-                return null;
+                break;
         }
 
         return null;
@@ -81,9 +87,11 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        FindAttackObject();
+
         if (GameManager.Instance == null || GameManager.Instance.IsPause)
             return;
-
+        
         // if(!Attack(FindAttackObject()));     // 공격 못했따면 이동하도록 처리
         //  FindAWay()?Move();   // FindAWay()로 길 찾아서 Move로 이동하기   
     }
@@ -92,6 +100,6 @@ public class Enemy : MonoBehaviour
     {
         NONE = 0,       // 공격 안하고 무시
         PLAYER = 1,     // 플레이어 만 공격
-        TURRET = 2      // 터렛만 공격
+        BARRICADE = 2      // 터렛만 공격
     }
 }
