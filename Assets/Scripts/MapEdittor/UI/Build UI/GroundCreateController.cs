@@ -42,7 +42,7 @@ public class GroundCreateController : MonoBehaviour
         }
     }
 
-    public void CreateGound()
+    public void CreateGround()
     {
         if(!int.TryParse(xInputField.text, out getX))
         {

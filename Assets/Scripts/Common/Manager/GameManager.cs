@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,16 +9,10 @@ public class GameManager : MonoBehaviour
     public PauseGameDelegate pauseGameDelegate;
 
     public bool IsPause { get; private set; } = false;
-    private PlayState playState = PlayState.MAIN_MENU;
+    private PlayStates playState = PlayStates.MAIN_MENU;
 
-    #region EnumStorage
-    public enum PlayState
-    {
-        MAIN_MENU = 0,
-        SINGLE_PLAY = 1,
-        MULTY_PLAY = 2,
-        MAP_EDIT = 3,
-    }
+    #region Property
+    public PlayStates PlayeState { set { playState = value; }  get { return playState; } }
     #endregion
 
     #region Singleton
@@ -37,7 +32,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     public static GameManager Instance { get { return instance; } }
     #endregion
 
@@ -52,10 +46,10 @@ public class GameManager : MonoBehaviour
     {
         switch(playState)
         {
-            case PlayState.SINGLE_PLAY:
+            case PlayStates.SINGLE_PLAY:
                 // 캠페인 맵 모두 로딩하도록
                 break;
-            case PlayState.MULTY_PLAY:
+            case PlayStates.MULTY_PLAY:
                 // 들어갈 방 선택하면 해당 방 데이터 통신해서 받도록 구현
                 break;
             default:
@@ -80,9 +74,19 @@ public class GameManager : MonoBehaviour
 
     public void ExitGame()
     {
-        playState = PlayState.MAIN_MENU;
+        playState = PlayStates.MAIN_MENU;
 
         // 메인 메뉴로 씬 이동
     }
 
+
+    #region EnumStorage
+    public enum PlayStates
+    {
+        MAIN_MENU = 0,
+        SINGLE_PLAY = 1,
+        MULTY_PLAY = 2,
+        MAP_EDIT = 3,
+    }
+    #endregion
 }
