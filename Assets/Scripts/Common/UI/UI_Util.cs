@@ -4,43 +4,16 @@ using UnityEngine;
 
 public class UI_Utill
 {
-    public static GameObject FindChild(GameObject go, string name = null, bool recursive = false)
+    public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
     {
-        Transform transform = FindChild<Transform>(go, name, recursive);
-        if (transform == null)
-            return null;
-
-        return transform.gameObject;
-    }
-
-    public static T FindChild<T>(GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
-    {
-        if (go == null)
-            return null;
-
-        if (recursive == false)  // 직속 자식들만 검사
+        T component = go.GetComponent<T>();
+        if (component == null)
         {
-            for (int i = 0; i < go.transform.childCount; i++)
-            {
-                Transform transform = go.transform.GetChild(i);
-                if (string.IsNullOrEmpty(name) || transform.name == name)
-                {
-                    T component = transform.GetComponent<T>();
-                    if (component != null)
-                        return component;
-                }
-            }
-        }
-        else  // 자식의 자식의 자식 ... 까지 검사
-        {
-            foreach (T component in go.GetComponentsInChildren<T>())
-            {
-                if (string.IsNullOrEmpty(name) || component.name == name)
-                    return component;
-            }
+            component = go.AddComponent<T>();
+            return component;
         }
 
-        return null;
+        return component;
     }
 }
 

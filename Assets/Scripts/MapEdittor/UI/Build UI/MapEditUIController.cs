@@ -69,9 +69,9 @@ public class MapEditUIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            SwitchEditUIActive();
-        }
+        //if(Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    SwitchEditUIActive();
+        //}
     }
 }

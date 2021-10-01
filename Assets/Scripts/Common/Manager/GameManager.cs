@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public PauseGameDelegate pauseGameDelegate;
 
     public bool IsPause { get; private set; } = false;
-    private PlayStates playState = PlayStates.MAIN_MENU;
+    private PlayStates playState = PlayStates.MAP_EDIT;
 
     #region Property
     public PlayStates PlayeState { set { playState = value; }  get { return playState; } }
@@ -57,12 +57,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SwitchIsPause()
+    {
+        IsPause = !IsPause;
+    }
+
     public void PauseGame()
     {
         IsPause = true;
         pauseGameDelegate?.Invoke();
-
-        //pauseGameDelegate 에 esc 메뉴 관련해서 함수 등록하기
     }
 
     public void ContinueGame()
