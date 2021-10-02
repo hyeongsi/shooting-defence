@@ -7,6 +7,7 @@ public class UI_Scene : UI_Base
     private void Start()
     {
         Init();
+        gameObject.SetActive(false);
     }
 
     public override void Init()
@@ -22,4 +23,6 @@ public class UI_Scene : UI_Base
     {
         UIManager.Instance.ShowSceneUI();
     }
+
+    
 }

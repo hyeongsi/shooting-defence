@@ -3,26 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class UI_PopupData
+public class UI_Data<T> where T : UI_Base 
 {
-    public UI_Popup ui_popup;
+    public T ui_data;
     public Canvas canvas;
 
-    public UI_PopupData(UI_Popup ui_popup, Canvas canvas)
+    public UI_Data(T ui_data, Canvas canvas)
     {
-        this.ui_popup = ui_popup;
-        this.canvas = canvas;
-    }
-}
-
-public class UI_SceneData
-{
-    public UI_Scene ui_scene;
-    public Canvas canvas;
-
-    public UI_SceneData(UI_Scene ui_scene, Canvas canvas)
-    {
-        this.ui_scene = ui_scene;
+        this.ui_data = ui_data;
         this.canvas = canvas;
     }
 }
@@ -31,14 +19,14 @@ public class UIManager : MonoBehaviour
 {
     private int _order = 10;    // 현재까지 최근에 사용한 오더
 
-    private Dictionary<string, UI_PopupData> uiPopupDictionary = new Dictionary<string, UI_PopupData>();
+    private Hashtable uiHashTable = new Hashtable();
     private Stack<UI_Popup> popupStack = new Stack<UI_Popup>();    // 팝업 캔버스
-    private UI_SceneData sceneUIData = null;    // 고정 캔버스
+    private UI_Data<UI_Scene> sceneUIData = null;    // 고정 캔버스
 
     #region Property
-    public Dictionary<string, UI_PopupData> UiPopupDictionary
+    public Hashtable UiHashTable
     {
-        get { return uiPopupDictionary; }
+        get { return uiHashTable; }
     }
     #endregion
     // 씬마다 사용하는 UI 이름 여기다가 enum 값으로 등록시켜 놓고, 해당 씬에서 UI 이름 찾아가서 enum값 string 으로 바꿔서 사용하면 됨
@@ -67,27 +55,29 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get { return instance; } }
 
     #endregion
-    public void AddPopupUI(UI_Popup ui_popup, Canvas canvas)
+    public void AddUIToHashTable<T>(T ui_data, Canvas canvas) where T : UI_Base
     {
-        UI_PopupData ui_popdata = new UI_PopupData(ui_popup, canvas);
-        uiPopupDictionary.Add(ui_popup.gameObject.name, ui_popdata);
+        UI_Data<T> ui_popdata = new UI_Data<T>(ui_data, canvas);
+        uiHashTable.Add(ui_data.gameObject.name, ui_popdata);
     }
 
-    public void AddSceneUI(UI_Scene ui_scene, Canvas canvas)
+    public void AddSceneUI<T>(T ui_scene, Canvas canvas) where T : UI_Scene
     {
-        UI_SceneData ui_scenedata = new UI_SceneData(ui_scene, canvas);
+        UI_Data<T> ui_scenedata = new UI_Data<T>(ui_scene, canvas);
+        uiHashTable.Add(ui_scene.gameObject.name, ui_scenedata);
         canvas.sortingOrder = 0;    // 무조건 첫번째로 출력
 
-        sceneUIData = ui_scenedata;
+        // sceneUIData = ui_scenedata;
     }
 
     public void ShowPopupUI(string name)
     {
-        UI_PopupData ui_popupdata;
+        UI_Data<UI_Popup> ui_popupdata;
 
-        if(uiPopupDictionary.TryGetValue(name, out ui_popupdata))
+        if(uiHashTable.ContainsKey(name))
         {
-            popupStack.Push(ui_popupdata.ui_popup);
+            ui_popupdata = uiHashTable[name];
+            popupStack.Push(ui_popupdata.ui_data);
             ui_popupdata.canvas.sortingOrder = _order;
             _order++;
 
