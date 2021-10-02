@@ -9,16 +9,6 @@ public class UI_Popup_BuildEdit : UI_Popup
         base.Init();
     }
 
-    public override object Instance()
-    {
-        return this;
-    }
-
-    public override void ShowPopupUI()
-    {
-        UIManager.Instance.ShowPopupUI(gameObject.name);
-    }
-
     public void SwitchCursorLockState()
     {
         if (GameManager.Instance.IsPause)

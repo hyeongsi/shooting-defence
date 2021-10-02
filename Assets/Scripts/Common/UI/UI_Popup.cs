@@ -28,4 +28,5 @@ public class UI_Popup : UI_Base
     {
         UIManager.Instance.ClosePopupUI(this);
     }
+
 }

@@ -8,37 +8,37 @@ public class MapEditUIController : MonoBehaviour
 
     void SwitchEditUIActive()
     {
-        isActiveEditUi = !isActiveEditUi;
+        //isActiveEditUi = !isActiveEditUi;
 
-        for (int i = 0; i < transform.childCount; i++)
-            transform.GetChild(i).gameObject.SetActive(isActiveEditUi);
+        //for (int i = 0; i < transform.childCount; i++)
+        //    transform.GetChild(i).gameObject.SetActive(isActiveEditUi);
 
-        if (isActiveEditUi)
-            GameManager.Instance.PauseGame();
-        else
-            GameManager.Instance.ContinueGame();
+        //if (isActiveEditUi)
+        //    GameManager.Instance.PauseGame();
+        //else
+        //    GameManager.Instance.ContinueGame();
 
-        if (isActiveEditUi)
-        {
-            Transform buildMenuUI = transform.Find("Build Menu UI");
+        //if (isActiveEditUi)
+        //{
+        //    Transform buildMenuUI = transform.Find("Build Menu UI");
 
-            if (buildMenuUI == null)
-                return;
+        //    if (buildMenuUI == null)
+        //        return;
 
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+        //    Cursor.visible = true;
+        //    Cursor.lockState = CursorLockMode.None;
 
-            Transform selectPanel = buildMenuUI.GetChild(0);
-            selectPanel.gameObject.SetActive(false);
+        //    Transform selectPanel = buildMenuUI.GetChild(0);
+        //    selectPanel.gameObject.SetActive(false);
 
-            for(int i = 0; i < selectPanel.childCount; i++)
-            {
-                selectPanel.GetChild(i).gameObject.SetActive(false);
-            }
-        } 
-        else
-        {
-            //SwitchLockCursor();
-        }
+        //    for(int i = 0; i < selectPanel.childCount; i++)
+        //    {
+        //        selectPanel.GetChild(i).gameObject.SetActive(false);
+        //    }
+        //} 
+        //else
+        //{
+        //    //SwitchLockCursor();
+        //}
     }
 }

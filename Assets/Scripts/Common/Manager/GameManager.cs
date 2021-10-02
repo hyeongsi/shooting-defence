@@ -59,7 +59,10 @@ public class GameManager : MonoBehaviour
 
     public void SwitchIsPause()
     {
-        IsPause = !IsPause;
+        if (IsPause)
+            ContinueGame();
+        else
+            PauseGame();
     }
 
     public void PauseGame()

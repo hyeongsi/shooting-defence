@@ -4,8 +4,4 @@ using UnityEngine;
 
 public class UI_Scene_PlayUI : UI_Scene
 {
-    public override object Instance()
-    {
-        return this;
-    }
 }
