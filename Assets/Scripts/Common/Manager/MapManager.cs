@@ -127,6 +127,9 @@ public class MapManager : MonoBehaviour
 #if UNITY_EDITOR
         selectPath = EditorUtility.SaveFilePanel("create dat file", path, "", "dat");    // 저장 파일 이름 선택
 #endif
+
+        //System.Diagnostics.Process.Start();
+
         if (string.IsNullOrEmpty(selectPath))   // 선택 취소 시 종료
             return;
 

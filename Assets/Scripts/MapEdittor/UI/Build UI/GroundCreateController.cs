@@ -89,17 +89,4 @@ public class GroundCreateController : MonoBehaviour
         xInputField.text = string.Empty;
         yInputField.text = string.Empty;
     }
-
-    public void Cancel()
-    {
-        if(xInputField != null)
-        {
-            xInputField.text = string.Empty;
-        }
-
-        if (yInputField != null)
-        {
-            yInputField.text = string.Empty;
-        }
-    }
 }

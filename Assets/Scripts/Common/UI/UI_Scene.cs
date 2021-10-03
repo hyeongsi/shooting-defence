@@ -23,6 +23,4 @@ public class UI_Scene : UI_Base
     {
         UIManager.Instance.ShowSceneUI();
     }
-
-    
 }
