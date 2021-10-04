@@ -7,7 +7,7 @@ public class Stage
 {
     private int wave = 5;
     private int stageEnemyPower = 100;
-    public List<int> enemyIndexData = new List<int>();
+    public Dictionary<int, bool> enemyIndexData = new Dictionary<int, bool>();
     public List<EditBlockData> editBlockData = new List<EditBlockData>();
 
     public int Wave
@@ -27,7 +27,7 @@ public class Stage
         get { return stageEnemyPower; }
         set 
         {
-            if (stageEnemyPower <= 100)
+            if (value <= 100)
                 return;
 
             stageEnemyPower = value;

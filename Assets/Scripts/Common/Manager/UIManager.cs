@@ -167,10 +167,13 @@ public class UIManager : MonoBehaviour
                 else
                     tempUi_PopupData.ui_popup.ClosePopupUI();
 
-                if (tempUi_PopupData.ui_popup is UI_Popup_BuildEdit)
+                if (sceneUIData.ui_scene == default)
+                    return;
+
+                if (sceneUIData.ui_scene is UI_Scene_EditAimUI)
                 {
-                    UI_Popup_BuildEdit tempUi = tempUi_PopupData.ui_popup as UI_Popup_BuildEdit;
-                    tempUi.SwitchCursorLockState();
+                    UI_Scene_EditAimUI aimUI = sceneUIData.ui_scene as UI_Scene_EditAimUI;
+                    aimUI.SwitchCursorLockState();
                 }
                 return;
         }
