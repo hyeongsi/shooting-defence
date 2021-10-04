@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 
 // 맵 불러오기, 저장, 현재 맵 정보
 public class MapManager : MonoBehaviour
@@ -17,7 +14,7 @@ public class MapManager : MonoBehaviour
     private GameObject mapGameObject;
     private GameObject[] parentGameObject = null;
 
-    private BinaryFormatter bf;
+    private BinaryFormatter bf = new BinaryFormatter();
     private FileStream file;
     private string path;
     private Stage stageData = new Stage();
@@ -51,13 +48,15 @@ public class MapManager : MonoBehaviour
     #endregion
 
     #region MapLoader
-
     public void SaveEditBlockData()  
     {
         EditBlockData editBlockData;
         Transform childGameObjectTransform;
-        if(stageData == null)
-            stageData = new Stage();
+        if (stageData == null)
+        {
+            Debug.Log("stageData null error,  MapManager.SaveEditBlockData()");
+            return;
+        }
 
         // 설치된 맵 데이터 개수 계산
         for (int i = 0; i < mapGameObject.transform.childCount - 1; i ++)  // preview 데이터는 빼고 계산 (-1 처리)
@@ -88,30 +87,32 @@ public class MapManager : MonoBehaviour
             Destroy(mapGameObject);
         }
 
+        stageData = stage;
+
         mapGameObject = Instantiate(mapObjectPrefab);
 
         // 저장되어 있는 데이터로 블럭들 생성
         Transform instantiateGameObjectTransform;
-        for (int i = 0; i < stage.editBlockData.Count; i ++)
+        for (int i = 0; i < stageData.editBlockData.Count; i ++)
         {
-            switch(stage.editBlockData[i].objectType)
+            switch(stageData.editBlockData[i].objectType)
             {
                 case (int)MapType.BLOCK:
-                    instantiateGameObjectTransform = Instantiate(BlockManager.Instance.BlockPrefabArray[stage.editBlockData[i].mapNumber].transform);
+                    instantiateGameObjectTransform = Instantiate(BlockManager.Instance.BlockPrefabArray[stageData.editBlockData[i].mapNumber].transform);
                     break;
                 case (int)MapType.TURRET:
-                    instantiateGameObjectTransform = Instantiate(TurretManager.Instance.TurretPrefabArray[stage.editBlockData[i].mapNumber].transform);
+                    instantiateGameObjectTransform = Instantiate(TurretManager.Instance.TurretPrefabArray[stageData.editBlockData[i].mapNumber].transform);
                     break;
                 case (int)MapType.BARRICADE:
-                    instantiateGameObjectTransform = Instantiate(BarricadeManager.Instance.BarricadePrefabArray[stage.editBlockData[i].mapNumber].transform);
+                    instantiateGameObjectTransform = Instantiate(BarricadeManager.Instance.BarricadePrefabArray[stageData.editBlockData[i].mapNumber].transform);
                     break;
                 default:
                     return;
             }
 
-            instantiateGameObjectTransform.position = new Vector3(stage.editBlockData[i].positionX, stage.editBlockData[i].positionY, stage.editBlockData[i].positionZ);  // 위치 설정
-            instantiateGameObjectTransform.parent = mapGameObject.transform.GetChild(stage.editBlockData[i].objectType);     // 부모 객체 설정
-            instantiateGameObjectTransform.GetChild(0).localRotation = Quaternion.Euler(stage.editBlockData[i].rotationX, stage.editBlockData[i].rotationY, stage.editBlockData[i].rotationZ);
+            instantiateGameObjectTransform.position = new Vector3(stageData.editBlockData[i].positionX, stageData.editBlockData[i].positionY, stageData.editBlockData[i].positionZ);  // 위치 설정
+            instantiateGameObjectTransform.parent = mapGameObject.transform.GetChild(stageData.editBlockData[i].objectType);     // 부모 객체 설정
+            instantiateGameObjectTransform.GetChild(0).localRotation = Quaternion.Euler(stageData.editBlockData[i].rotationX, stageData.editBlockData[i].rotationY, stageData.editBlockData[i].rotationZ);
         }
     }
 
@@ -124,11 +125,7 @@ public class MapManager : MonoBehaviour
         }
 
         string selectPath = default;
-#if UNITY_EDITOR
         selectPath = EditorUtility.SaveFilePanel("create dat file", path, "", "dat");    // 저장 파일 이름 선택
-#endif
-
-        //System.Diagnostics.Process.Start();
 
         if (string.IsNullOrEmpty(selectPath))   // 선택 취소 시 종료
             return;
@@ -149,18 +146,27 @@ public class MapManager : MonoBehaviour
         }
 
         string selectPath = default;
-#if UNITY_EDITOR
         selectPath = EditorUtility.OpenFilePanel("select dat file", path, "dat");    // 불러오기 경로 선택
-#endif
+
         if (string.IsNullOrEmpty(selectPath))   // 선택 취소 시 종료
             return;
 
         file = File.Open(selectPath, FileMode.Open);  
         CreateEditBlockData((Stage)bf.Deserialize(file));    // 불러온 맵데이터를 기준으로 오브젝트 생성  // 역직렬화 수행하여 데이터 로드
+        RegisterParentGameObject();
 
         file.Close();
     }
     #endregion
+
+    public void RegisterParentGameObject()
+    {
+        parentGameObject = new GameObject[mapGameObject.transform.childCount];
+        for (int i = 0; i < mapGameObject.transform.childCount; i++)
+        {
+            parentGameObject[i] = mapGameObject.transform.GetChild(i).gameObject;
+        }
+    }
 
     private void Start()    // 나중에 start 말고, 게임시작 ui 눌렀을 때 실행하도록 변경 해야함, 적당히 로드하던 아무튼 그런기능 추가해야함
     {
@@ -176,6 +182,8 @@ public class MapManager : MonoBehaviour
             }
         }
 
+        path = Application.streamingAssetsPath + "/Mapdata";
+
         mapTypeNameParser = new Dictionary<string, int>();
 
         // name parser 초기화
@@ -187,11 +195,7 @@ public class MapManager : MonoBehaviour
             mapTypeNameParser.Add(TurretManager.Instance.TurretPrefabArray[i].name + "(Clone)", i);
 
         // 맵 생성 부모 초기화
-        parentGameObject = new GameObject[mapGameObject.transform.childCount];
-        for (int i = 0; i < mapGameObject.transform.childCount; i++)
-        {
-            parentGameObject[i] = mapGameObject.transform.GetChild(i).gameObject;
-        }
+        RegisterParentGameObject();
     }
 }
 
