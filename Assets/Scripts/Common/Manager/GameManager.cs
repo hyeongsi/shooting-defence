@@ -42,21 +42,6 @@ public class GameManager : MonoBehaviour
         EnemyManager.Instance.LoadEnemyData();
     }
 
-    public void LoadMapData() 
-    {
-        switch(playState)
-        {
-            case PlayStates.SINGLE_PLAY:
-                // 캠페인 맵 모두 로딩하도록
-                break;
-            case PlayStates.MULTY_PLAY:
-                // 들어갈 방 선택하면 해당 방 데이터 통신해서 받도록 구현
-                break;
-            default:
-                return;
-        }
-    }
-
     public void SwitchIsPause()
     {
         if (IsPause)

@@ -35,7 +35,7 @@ public class UI_Popup_BuildEdit : UI_Popup
         const string EXPLANATION_TEXT = "Wave : ";
         const int MIN_WAVE = 1;
 
-        int wave = MapManager.Instance.StageData.Wave;
+        int wave = MapManager.Instance.StageData.MaxWave;
 
         if (wave <= MIN_WAVE)
         {
@@ -83,7 +83,7 @@ public class UI_Popup_BuildEdit : UI_Popup
     public void SetStageWave(Text text)
     {
         const string EXPLANATION_TEXT = "Wave : ";
-        MapManager.Instance.StageData.Wave = int.Parse(text.text.Substring(EXPLANATION_TEXT.Length));
+        MapManager.Instance.StageData.MaxWave = int.Parse(text.text.Substring(EXPLANATION_TEXT.Length));
     }
 
     public void SetStagePower(Text text)

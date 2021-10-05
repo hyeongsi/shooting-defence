@@ -5,23 +5,25 @@ using UnityEngine;
 [System.Serializable]
 public class Stage
 {
-    private int wave = 5;
+    private int maxWave = 5;
     private int stageEnemyPower = 100;
     public Dictionary<int, bool> enemyIndexData = new Dictionary<int, bool>();
     public List<EditBlockData> editBlockData = new List<EditBlockData>();
+    public List<EnemySpawner> enemySpawnerList = new List<EnemySpawner>();
 
-    public int Wave
+    private int currentWave = 0;
+
+    public int MaxWave
     {
-        get { return wave; }
+        get { return maxWave; }
         set 
         { 
             if (value <= 3)
                 return;
 
-            wave = value;  
+            maxWave = value;  
         }
     }
-
     public int StageEnemyPower
     {
         get { return stageEnemyPower; }
@@ -32,6 +34,11 @@ public class Stage
 
             stageEnemyPower = value;
         }
+    }
+    public int CurrentWave
+    {
+        get { return currentWave; }
+        set { currentWave = value; }
     }
 }
 

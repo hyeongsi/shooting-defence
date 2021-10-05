@@ -11,7 +11,7 @@ public class StageTextController : MonoBehaviour
     public void UpdateStageText()
     {
         if (MapManager.Instance.StageData != null)
-            stageText.text = "Wave : " + MapManager.Instance.StageData.Wave;
+            stageText.text = "Wave : " + MapManager.Instance.StageData.MaxWave;
     }
 
     public void UpdateStagePowerText()
