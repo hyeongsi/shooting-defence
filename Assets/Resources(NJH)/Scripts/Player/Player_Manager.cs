@@ -22,6 +22,7 @@ public class Player_Manager : MonoBehaviour
     public Cinemachine.AxisState yAxis;
 
     [Header("플레이어 상태")]
+    public float hp;
     public bool sprintFlag;
     public bool aimFlag;
     public bool moveFlag;

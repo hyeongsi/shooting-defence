@@ -26,9 +26,8 @@ public class Player_Locomotion : MonoBehaviour
     public float waitForChargeEmptyStamina;
     public float smoothingSpeed = 15f;
 
-    public bool chargeStaminaFlag;
-    public bool useStaminaFlag;
-    public bool chargeStaminaDelayFlag;
+    bool useStaminaFlag;
+    bool chargeStaminaDelayFlag;
 
     Vector3 velocity;
 

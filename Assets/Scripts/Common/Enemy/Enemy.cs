@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    NavMeshAgent navMeshAgent;
+    LayerMask plyaerLayer;
+
     protected float hp;
     EnemyStaticData enemyStaticData;
 
@@ -45,28 +49,59 @@ public class Enemy : MonoBehaviour
 
     public GameObject FindAttackObject()
     {
-        Collider[] detectedObjects = Physics.OverlapSphere(transform.position, 2.5f, 29);
+        Collider[] detectedObjects = Physics.OverlapSphere(transform.position, 5f, plyaerLayer);
+        GameObject targetPlayer = null;
 
-        // 적(자신)을 기준으로 타겟 오브젝트의 좌표를 로컬 좌표로 변환
-        // Vector3 inverseTransform = transform.InverseTransformPoint(검출된오브젝트.transform.position);
-        //if (inverseTransform.z > 0) // 0보다 크면 앞에 있음
-        //{
+        Vector3 temp = new Vector3(0, 1, 0);    // 플레이어 위치 보정
 
-        //}
-
-        switch (enemyStaticData.attackType)
+        // 거리 비교
+        if (detectedObjects.Length > 0)
         {
-            case (int)AttackType.PLAYER:
-                // 공격 범위에 플레이어 있는지 검사하고 탐지된 플레이어 오브젝트 리턴
-                break;
-            case (int)AttackType.BARRICADE:
-                // 공격 범위에 장애물 있는지 검사하고 탐지된 터렛 오브젝트 리턴
-                break;
-            default:
-                // 공격 범위에 플레이어든 터렛이든 탐지된 오브젝트 리턴
-                break;
+            float shortestDistance = Mathf.Infinity;
+            foreach (Collider collider in detectedObjects)
+            {
+                float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
+                if (shortestDistance > distance)
+                {
+                    shortestDistance = distance;
+                    targetPlayer = collider.gameObject;
+                }
+            }
         }
 
+        // 벽 뒤에 있어도 검출되는 문제 발생. 아마 위에서는 targetPlayer 지정해줬는데 여기서 다시 null로 바꾸면서 생기는 문제 같음
+        if (Physics.Raycast(transform.position, (targetPlayer.transform.position + temp) - transform.position, out RaycastHit hit))
+        {
+            Debug.DrawLine(transform.position, hit.point, Color.red);
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+            {
+                targetPlayer = null;
+            }
+        }
+
+        // 적(자신)을 기준으로 타겟 오브젝트의 좌표를 로컬 좌표로 변환
+        if (targetPlayer != null)
+        {
+            Vector3 inverseTransform = transform.InverseTransformPoint(targetPlayer.transform.position);
+            if (inverseTransform.z > 0) // 0보다 크면 앞에 있음
+            {
+                // 임시로 작성한 코드
+                navMeshAgent.SetDestination(targetPlayer.transform.position);
+
+                switch (enemyStaticData.attackType)
+                {
+                    case (int)AttackType.PLAYER:
+                        // 공격 범위에 플레이어 있는지 검사하고 탐지된 플레이어 오브젝트 리턴
+                        break;
+                    case (int)AttackType.BARRICADE:
+                        // 공격 범위에 장애물 있는지 검사하고 탐지된 터렛 오브젝트 리턴
+                        break;
+                    default:
+                        // 공격 범위에 플레이어든 터렛이든 탐지된 오브젝트 리턴
+                        break;
+                }
+            }
+        }
         return null;
     }
 
@@ -83,6 +118,12 @@ public class Enemy : MonoBehaviour
         // 방향 입력받고, 해당 방향으로 이동 처리 하도록 구현, 이동할 땐, 1칸씩 이동하도록 구현하기
         // 길막하면 
         // 이속, deltatime으로 이동 처리
+    }
+
+    private void Awake()
+    {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        plyaerLayer = 1 << LayerMask.NameToLayer("Player");
     }
 
     private void Update()
