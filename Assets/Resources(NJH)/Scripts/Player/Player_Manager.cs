@@ -22,7 +22,6 @@ public class Player_Manager : MonoBehaviour
     public Cinemachine.AxisState yAxis;
 
     [Header("플레이어 상태")]
-    public float hp;
     public bool sprintFlag;
     public bool aimFlag;
     public bool moveFlag;
@@ -78,10 +77,5 @@ public class Player_Manager : MonoBehaviour
         moveDirection += camera.transform.right * horizontal;
         moveDirection.y = 0f;   // 먼저 0으로 만들고 정규화 함
         moveDirection.Normalize();
-    }
-
-    public void takeDamage()
-    {
-        
     }
 }

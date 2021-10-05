@@ -15,6 +15,7 @@ public class Player_Locomotion : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
 
     [Header("플레이어 값")]
+    public float hp = 100f;
     public float moveSpeed;
     public float sprintSpeed;
     public float aimMoveSpeed;
@@ -217,5 +218,22 @@ public class Player_Locomotion : MonoBehaviour
             return;
         }
         playerManager.weapon.WeaponKeyInput();
+    }
+
+    public void takeDamage(float damage)
+    {
+        hp -= damage;
+
+        animator.CrossFade("Hit", 0f);
+
+        if (hp <= 0)
+        {
+            Loco_Die();
+        }
+    }
+
+    void Loco_Die()
+    {
+
     }
 }
