@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAutomatic: 1
   weaponType: 1
-  damage: 19
-  magazineSize: 30
-  bulletsLeft: 30
+  damage: 14
+  bulletSpeed: 30
+  magazineSize: 28
+  bulletsLeft: 28
   bulletsPerShot: 1
   burstBulletCount: 0
   reloadTime: 2.2
-  nextShotDelay: 0.08
+  nextShotDelay: 0.058
   burstFireDelay: 0
+  bullet: {fileID: 3253493382313019143, guid: f6368dfcc12205e44895e81ce2792235, type: 3}

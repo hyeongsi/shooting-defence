@@ -17,9 +17,7 @@ public class Weapon_Gun : MonoBehaviour
     [SerializeField] Text reloadText;
 
     [Header("Particle System")]
-    [SerializeField] ParticleSystem hitEffect;
     [SerializeField] ParticleSystem muzzleFlash;
-    [SerializeField] TrailRenderer bulletTrail;
 
     [SerializeField] Transform muzzleFlashPosition;
 
@@ -34,31 +32,35 @@ public class Weapon_Gun : MonoBehaviour
 
     private void Start()
     {
+        // 총기 및 총알 정보 설정
+        weaponInfo.bullet.GetComponent<BulletProjectile>().SetBulletInfo(weaponInfo.bulletSpeed, weaponInfo.damage);
+        weaponInfo.bulletsLeft = weaponInfo.magazineSize;
+        isReadyToShoot = true;
+
+        // 플레이어에서 가져오는 것들
         playerManager = GetComponentInParent<Player_Manager>();
         camera = playerManager.camera;
         bulletText = playerManager.bulletText;
         reloadText = playerManager.reloadText;
 
-        impulseSource = GetComponent<Cinemachine.CinemachineImpulseSource>();
+        impulseSource = GetComponent<Cinemachine.CinemachineImpulseSource>();   // 다른 방법으로 구현하면 안 쓸수도 있음
         animator = GetComponent<Animator>();
-        weaponInfo.bulletsLeft = weaponInfo.magazineSize;
-        isReadyToShoot = true;
     }
 
     private void Update()
-    {        
+    {
         bulletText.text = weaponInfo.bulletsLeft.ToString();
     }
 
     public void WeaponKeyInput()
     {
         // 자동
-        if(weaponInfo.isAutomatic == true) { isShooting = Input.GetButton("Fire1"); }
+        if (weaponInfo.isAutomatic == true) { isShooting = Input.GetButton("Fire1"); }
         //반자동
         else { isShooting = Input.GetButtonDown("Fire1"); }
 
         // 사격
-        if(isReadyToShoot && isShooting && !isReloading && weaponInfo.bulletsLeft > 0)
+        if (isReadyToShoot && isShooting && !isReloading && weaponInfo.bulletsLeft > 0)
         {
             Weapon_Shoot();
         }
@@ -70,9 +72,9 @@ public class Weapon_Gun : MonoBehaviour
         }
 
         // 탄창의 모든 탄 소모 or 남은 탄 전체의 20퍼센트
-        if(weaponInfo.bulletsLeft <= Mathf.Round(weaponInfo.magazineSize * 0.2f))
+        if (weaponInfo.bulletsLeft <= Mathf.Round(weaponInfo.magazineSize * 0.2f))
         {
-            if(weaponInfo.bulletsLeft <= 0)
+            if (weaponInfo.bulletsLeft <= 0)
             {
                 reloadText.text = "재장전";
             }
@@ -88,38 +90,27 @@ public class Weapon_Gun : MonoBehaviour
         }
     }
 
+    void FiringBullet()
+    {
+        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+        Instantiate(weaponInfo.bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+    }
+
+    // 만약에 사용한다면 레이저 무기에 사용할 수도 있어서 남겨 놓음
     void HitScan()
     {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
         // 총구화염 생성
-        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
-
-        // 탄환궤적
-        var trail = Instantiate(bulletTrail, muzzleFlashPosition.position, Quaternion.identity);
-        trail.AddPosition(muzzleFlashPosition.position);
+        
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Weapon_HitEffect(trail, ray, hit);
-
             // 적일 때
             if (hit.collider.gameObject.layer == 28)
             {
                 Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
                 enemy.TakeDamage(weaponInfo.damage);
-            }
-        }
-    }
-
-    void Weapon_HitEffect(TrailRenderer trail, Ray ray, RaycastHit hit)
-    {
-        if(Physics.Raycast(ray, out hit))
-        {
-            if (hit.collider.gameObject != null)
-            {
-                Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                trail.transform.position = hit.point;
             }
         }
     }
@@ -146,7 +137,7 @@ public class Weapon_Gun : MonoBehaviour
         if (weaponInfo.weaponType == WeaponType.weaponTypeID.shotgun)    // 샷건
         {
             StartCoroutine(Co_PelletShot());
-            
+
         }
         else    // 샷건말고 다른 총들(한번에 한발씩 나가는 총)
         {
@@ -164,15 +155,16 @@ public class Weapon_Gun : MonoBehaviour
 
         while (weaponInfo.burstBulletCount > 0 && weaponInfo.bulletsLeft > 0)
         {
-            HitScan();
             impulseSource.GenerateImpulse();
+
+            FiringBullet();
 
             animator.SetTrigger("Shoot");
             playerManager.animator.CrossFade("Firing Rifle", 0f);
 
             weaponInfo.bulletsLeft--;
             weaponInfo.burstBulletCount--;
-            
+
             yield return new WaitForSeconds(weaponInfo.burstFireDelay);
         }
 
@@ -190,8 +182,6 @@ public class Weapon_Gun : MonoBehaviour
 
         while (weaponInfo.burstBulletCount > 0)
         {
-            HitScan();
-
             weaponInfo.burstBulletCount--;
             Debug.Log("산탄" + weaponInfo.burstBulletCount);
             yield return new WaitForSeconds(weaponInfo.burstFireDelay);
@@ -207,11 +197,4 @@ public class Weapon_Gun : MonoBehaviour
         weaponInfo.bulletsLeft = weaponInfo.magazineSize;
         isReloading = false;
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), GetOppositeTransform());
-    //    Gizmos.DrawSphere(GetOppositeTransform(), 0.3f);
-    //}
 }

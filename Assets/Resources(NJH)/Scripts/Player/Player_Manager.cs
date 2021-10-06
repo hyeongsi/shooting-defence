@@ -17,10 +17,6 @@ public class Player_Manager : MonoBehaviour
     public float horizontal;
     public float vertical;
 
-    [Header("마우스 입력")]
-    public Cinemachine.AxisState xAxis;
-    public Cinemachine.AxisState yAxis;
-
     [Header("플레이어 상태")]
     public bool sprintFlag;
     public bool aimFlag;
@@ -36,13 +32,11 @@ public class Player_Manager : MonoBehaviour
     public Image aimPointImage;
     public Image disableAimPointImage;
 
-
-    public Vector3 moveDirection;
+    Vector3 moveDirection;
 
     private void Start()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
 
         playerLocomotion = GetComponent<Player_Locomotion>();
         playerAnimation = GetComponent<Player_Animation>();
@@ -56,9 +50,6 @@ public class Player_Manager : MonoBehaviour
     {
         staminaText.text = playerLocomotion.stamina.ToString();
 
-        xAxis.Update(Time.fixedDeltaTime);
-        yAxis.Update(Time.fixedDeltaTime);
-
         sprintFlag = Input.GetButton("Sprint") && aimFlag == false && weapon.isShooting == false;
         aimFlag = cameraFunction.aimCamFlag;
 
@@ -71,11 +62,30 @@ public class Player_Manager : MonoBehaviour
     {
         playerLocomotion.FixedUpdateFunction();
     }
-    public void SetDirection()
+    public Vector3 GetDirection()
     {
-        moveDirection = camera.transform.forward * vertical;
-        moveDirection += camera.transform.right * horizontal;
-        moveDirection.y = 0f;   // 먼저 0으로 만들고 정규화 함
-        moveDirection.Normalize();
+        //moveDirection = camera.transform.forward * vertical;
+        //moveDirection += camera.transform.right * horizontal;
+        //moveDirection.y = 0f;   // 먼저 0으로 만들고 정규화 함
+        //moveDirection.Normalize();
+
+        moveDirection = new Vector3(horizontal, 0, vertical);
+
+        return moveDirection.normalized;
+    }
+
+    public Vector3 GetMousePosition()
+    {
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+        Vector3 lookDir = Vector3.zero;
+
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            lookDir = hit.point - transform.position;
+            lookDir = new Vector3(lookDir.x, transform.position.y, lookDir.z);
+        }
+
+        return lookDir.normalized;
     }
 }

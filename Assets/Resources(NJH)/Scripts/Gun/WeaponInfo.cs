@@ -8,6 +8,7 @@ public class WeaponInfo : ScriptableObject
     public bool isAutomatic;
     public WeaponType.weaponTypeID weaponType;  // 0: 단발, 1: 연발, 2: 점사, 3: 점사연발, 4: 산탄
     public int damage;
+    public float bulletSpeed;
     public int magazineSize;
     public int bulletsLeft;
     public int bulletsPerShot;
@@ -15,6 +16,9 @@ public class WeaponInfo : ScriptableObject
     public float reloadTime;
     public float nextShotDelay;
     public float burstFireDelay;
+
+    public GameObject bullet;
+    
 }
 
 public class WeaponType

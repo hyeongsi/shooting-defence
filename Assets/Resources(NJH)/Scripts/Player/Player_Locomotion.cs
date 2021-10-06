@@ -9,17 +9,13 @@ public class Player_Locomotion : MonoBehaviour
 
     CharacterController characterController;
     [SerializeField] Transform groundChecker;
-    [SerializeField] Transform behindChecker;
-    [SerializeField] Transform aimingTarget;
-    
+    [SerializeField] Transform behindChecker;    
     [SerializeField] LayerMask groundLayer;
 
     [Header("플레이어 값")]
     public float hp = 100f;
     public float moveSpeed;
     public float sprintSpeed;
-    public float aimMoveSpeed;
-    public float jumpHeight;
     public float gravity = -9.81f;
     public float groundCheckDistance = 0.2f;
     public float stamina;
@@ -41,7 +37,7 @@ public class Player_Locomotion : MonoBehaviour
 
     public void FixedUpdateFunction()
     {
-        CheckBehind();
+        // CheckBehind();
         CheckGround();
         Loco_Move();
     }
@@ -49,7 +45,6 @@ public class Player_Locomotion : MonoBehaviour
     public void UpdateFunction()
     {
         Loco_Rotate();
-        Loco_Jump();
         Loco_UseWeapon();
         Loco_Stamina();
     }
@@ -84,7 +79,6 @@ public class Player_Locomotion : MonoBehaviour
                 playerManager.isBehind = false;
                 playerManager.disableAimPointImage.gameObject.SetActive(false);
                 playerManager.aimPointImage.gameObject.SetActive(true);
-
             }
             else // 0보다 작으면 뒤에 있음
             {
@@ -97,32 +91,20 @@ public class Player_Locomotion : MonoBehaviour
 
     void Loco_Rotate()
     {
-        float mouseX = playerManager.xAxis.Value;
-        float mouseY = playerManager.yAxis.Value;
-
-        aimingTarget.eulerAngles = new Vector3(mouseY, mouseX, 0f);
-
-        Quaternion mouseRotate = Quaternion.Euler(0f, mouseX, 0f);
-        transform.rotation = Quaternion.Slerp(transform.rotation, mouseRotate, smoothingSpeed * Time.fixedDeltaTime);
+        // 마우스를 가운데로 가져가면 떨리는 이슈 있음
+        transform.forward = playerManager.GetMousePosition();
     }
 
     void Loco_Move()
     {
-        playerManager.SetDirection();
-
         float speed = moveSpeed;
-        playerManager.moveFlag = false;
+
+        playerManager.moveFlag = playerManager.GetDirection().magnitude > 0 ? true : false;
 
         playerManager.horizontal = Input.GetAxisRaw("Horizontal");
         playerManager.vertical = Input.GetAxisRaw("Vertical");
 
-        if (playerManager.aimFlag == true)
-        {
-            speed = aimMoveSpeed;
-            playerManager.horizontal *= 0.5f;
-            playerManager.vertical *= 0.5f;
-        }
-        else if (playerManager.sprintFlag == true && playerManager.vertical > 0 && stamina > 0)
+        if (playerManager.sprintFlag == true && playerManager.vertical > 0 && stamina > 0)
         {
             speed = sprintSpeed;
             playerManager.horizontal *= 2f;
@@ -130,27 +112,14 @@ public class Player_Locomotion : MonoBehaviour
         }
 
         useStaminaFlag = playerManager.sprintFlag 
-                         && playerManager.moveDirection.magnitude > 0f
+                         && playerManager.moveFlag == true
                          && playerManager.vertical > 0
                          ? true : false;
 
         // 이동
-        if (playerManager.moveDirection.magnitude > 0f)
+        if(playerManager.moveFlag == true)
         {
-            playerManager.moveFlag = true;
-            characterController.Move(playerManager.moveDirection * speed * Time.deltaTime);
-        }
-    }
-
-    void Loco_Jump()
-    {
-        if (Input.GetButtonDown("Jump"))
-        {
-            if (playerManager.isGrounded == true)
-            {
-                animator.CrossFade("Player_JumpLoop", 0.25f);
-                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            }
+            characterController.Move(playerManager.GetDirection() * speed * Time.deltaTime);
         }
     }
 
