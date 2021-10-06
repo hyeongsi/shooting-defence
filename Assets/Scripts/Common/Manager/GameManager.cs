@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public PauseGameDelegate pauseGameDelegate;
 
     public bool IsPause { get; private set; } = false;
-    private PlayStates playState = PlayStates.MAP_EDIT;
+    private PlayStates playState = PlayStates.MAIN_MENU;
 
     #region Property
     public PlayStates PlayeState { set { playState = value; }  get { return playState; } }
@@ -24,8 +24,6 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-
-            InitGame();
         }
         else
         {
