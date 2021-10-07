@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MainMenuScrollViewController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class MainMenuScrollViewController : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 {
     public Scrollbar scrollbar;
     public Button exit;
@@ -36,15 +36,11 @@ public class MainMenuScrollViewController : MonoBehaviour, IBeginDragHandler, ID
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
         isDrag = true;
 
         SetActiveFalseBtn();
     }
+
 
     public void OnEndDrag(PointerEventData eventData)
     {

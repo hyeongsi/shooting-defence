@@ -11,9 +11,4 @@ public class UI_Popup_SelectStage : UI_Popup
         base.Init();
         gameObject.SetActive(false);
     }
-
-    public void StartStage(int i)
-    {
-
-    }
 }
