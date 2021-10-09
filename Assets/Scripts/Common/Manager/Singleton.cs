@@ -4,9 +4,21 @@ using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-    private static T instance;
+    protected static T instance = null;
 
-    public T Instance
+    private void Awake()
+    {
+        if (null == instance)
+        {
+            instance = Instance;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public static T Instance
     {
         get
         {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
+using UnityEngine.SceneManagement;
 
 public class UI_Popup_SelectStage : UI_Popup
 {
@@ -10,5 +10,10 @@ public class UI_Popup_SelectStage : UI_Popup
     {
         base.Init();
         gameObject.SetActive(false);
+    }
+
+    public void StartStage()
+    {
+        SceneManager.LoadScene("Loading", LoadSceneMode.Additive);
     }
 }

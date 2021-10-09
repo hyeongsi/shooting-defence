@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     public delegate void PauseGameDelegate();
     public PauseGameDelegate pauseGameDelegate;
@@ -11,27 +12,16 @@ public class GameManager : MonoBehaviour
     public bool IsPause { get; private set; } = false;
     private PlayStates playState = PlayStates.MAIN_MENU;
 
+    private Scene nextScene;
+
     #region Property
     public PlayStates PlayeState { set { playState = value; }  get { return playState; } }
     #endregion
 
-    #region Singleton
-    private static GameManager instance = null;
-
-    private void Awake()
+    public void LoadScecne(PlayStates state)
     {
-        if (null == instance)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+
     }
-    public static GameManager Instance { get { return instance; } }
-    #endregion
 
     public void InitGame()
     {
@@ -39,7 +29,6 @@ public class GameManager : MonoBehaviour
         TurretManager.Instance.LoadTurretData();
         EnemyManager.Instance.LoadEnemyData();
     }
-
     public void SwitchIsPause()
     {
         if (IsPause)
@@ -47,20 +36,17 @@ public class GameManager : MonoBehaviour
         else
             PauseGame();
     }
-
     public void PauseGame()
     {
         IsPause = true;
         pauseGameDelegate?.Invoke();
     }
-
     public void ContinueGame()
     {
         IsPause = false;
 
         // esc 메뉴 치우는 함수 등록하기
     }
-
     public void ExitGame()
     {
         playState = PlayStates.MAIN_MENU;
@@ -73,9 +59,9 @@ public class GameManager : MonoBehaviour
     public enum PlayStates
     {
         MAIN_MENU = 0,
-        SINGLE_PLAY = 1,
-        MULTY_PLAY = 2,
-        MAP_EDIT = 3,
+        IN_GAME = 1,
+        MAP_EDIT = 2,
+        LOADING = 3,
     }
     #endregion
 }
