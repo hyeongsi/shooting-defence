@@ -10,10 +10,9 @@ public class UI_Scene_MainMenuUI : UI_Scene
         ShowSceneUI();
     }
 
-    public void StartSingleGame()
+    public void StartGame()
     {
-        GameManager.Instance.PlayeState = GameManager.PlayStates.SINGLE_PLAY;
-        
+        UIManager.Instance.ShowPopupUI(UIManager.MainMenuPopUpUI.SelectStage_Canvas.ToString());
     }
 
     public void StartHostGame()

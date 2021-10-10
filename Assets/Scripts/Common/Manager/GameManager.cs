@@ -11,16 +11,16 @@ public class GameManager : Singleton<GameManager>
 
     public bool IsPause { get; private set; } = false;
     private PlayStates playState = PlayStates.MAIN_MENU;
-
     private Scene nextScene;
 
     #region Property
     public PlayStates PlayeState { set { playState = value; }  get { return playState; } }
+    public Scene NextScene { set { nextScene = value; } get { return nextScene; } }
     #endregion
 
-    public void LoadScecne(PlayStates state)
+    public void LoadScene(PlayStates nextstate)
     {
-
+        StartCoroutine(LoadAsyncSceneCourtine(nextstate));
     }
 
     public void InitGame()
@@ -54,6 +54,26 @@ public class GameManager : Singleton<GameManager>
         // 메인 메뉴로 씬 이동
     }
 
+    IEnumerator LoadAsyncSceneCourtine(PlayStates next)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Additive);
+
+        while(!operation.isDone) 
+        {
+            yield return null;
+        }
+
+        operation = SceneManager.UnloadSceneAsync(((int)playState));
+        while(!operation.isDone)
+        {
+            yield return null;
+        }
+
+        playState = next;
+
+        UI_Scene_Loading loadingUI = UIManager.Instance.SceneUIData.ui_scene as UI_Scene_Loading;
+        loadingUI.LoadScene();
+    }
 
     #region EnumStorage
     public enum PlayStates
@@ -61,7 +81,6 @@ public class GameManager : Singleton<GameManager>
         MAIN_MENU = 0,
         IN_GAME = 1,
         MAP_EDIT = 2,
-        LOADING = 3,
     }
     #endregion
 }

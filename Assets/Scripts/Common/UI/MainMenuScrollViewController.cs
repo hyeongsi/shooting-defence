@@ -26,6 +26,11 @@ public class MainMenuScrollViewController : MonoBehaviour, IBeginDragHandler, IE
         }
     }
 
+    private void OnEnable()
+    {
+        Init();
+    }
+
     public void Init()
     {
         targetPos = scrollbar.value = 0.0f;

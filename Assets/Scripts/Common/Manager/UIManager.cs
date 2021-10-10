@@ -40,9 +40,15 @@ public class UIManager : MonoBehaviour
     {
         get { return uiPopupDictionary; }
     }
+    public UI_SceneData SceneUIData { get { return sceneUIData; } }
     #endregion
     // 씬마다 사용하는 UI 이름 여기다가 enum 값으로 등록시켜 놓고, 해당 씬에서 UI 이름 찾아가서 enum값 string 으로 바꿔서 사용하면 됨
     #region SceneUIEnum
+    public enum MainMenuPopUpUI
+    {
+        SelectStage_Canvas,
+    }
+
     public enum MapEditPopUpUI
     {
         Build_Canvas,
@@ -153,8 +159,7 @@ public class UIManager : MonoBehaviour
         {
             case GameManager.PlayStates.MAIN_MENU:
                 return;
-            case GameManager.PlayStates.SINGLE_PLAY:
-            case GameManager.PlayStates.MULTY_PLAY:
+            case GameManager.PlayStates.IN_GAME:
                 // 인게임 씬에서의 esc 메뉴 활/비활성화
                 return;
             case GameManager.PlayStates.MAP_EDIT:

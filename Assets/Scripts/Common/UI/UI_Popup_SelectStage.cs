@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class UI_Popup_SelectStage : UI_Popup
 {
@@ -14,6 +12,6 @@ public class UI_Popup_SelectStage : UI_Popup
 
     public void StartStage()
     {
-        SceneManager.LoadScene("Loading", LoadSceneMode.Additive);
+        GameManager.Instance.LoadScene(GameManager.PlayStates.IN_GAME);
     }
 }
