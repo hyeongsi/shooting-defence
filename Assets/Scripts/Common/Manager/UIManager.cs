@@ -27,7 +27,7 @@ public class UI_SceneData
     }
 }
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
     private int _order = 10;    // 현재까지 최근에 사용한 오더
 
@@ -55,24 +55,7 @@ public class UIManager : MonoBehaviour
         Aim_Canvas,
     }
     #endregion
-    #region Singleton
-    static UIManager instance = null;
-    private void Awake()
-    {
-        if (null == instance)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
-    public static UIManager Instance { get { return instance; } }
-
-    #endregion
     public void AddPopupUI(UI_Popup ui_popup, Canvas canvas)
     {
         UI_PopupData ui_popdata = new UI_PopupData(ui_popup, canvas);

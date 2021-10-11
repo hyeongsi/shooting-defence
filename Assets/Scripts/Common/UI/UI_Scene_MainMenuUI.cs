@@ -15,16 +15,6 @@ public class UI_Scene_MainMenuUI : UI_Scene
         UIManager.Instance.ShowPopupUI(UIManager.MainMenuPopUpUI.SelectStage_Canvas.ToString());
     }
 
-    public void StartHostGame()
-    {
-
-    }
-
-    public void BrowseGames()
-    {
-
-    }
-
     public void ExitGame()
     {
         Application.Quit();

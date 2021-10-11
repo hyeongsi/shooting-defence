@@ -18,9 +18,16 @@ public class GameManager : Singleton<GameManager>
     public Scene NextScene { set { nextScene = value; } get { return nextScene; } }
     #endregion
 
-    public void LoadScene(PlayStates nextstate)
+    public void LoadScene(PlayStates nextstate, int stage = -1)
     {
-        StartCoroutine(LoadAsyncSceneCourtine(nextstate));
+        if(stage < 0)
+        {
+            StartCoroutine(LoadAsyncSceneCourtine(nextstate));
+        }
+        else
+        {
+            StartCoroutine(LoadAsyncSceneCourtine(nextstate));
+        }
     }
 
     public void InitGame()

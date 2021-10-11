@@ -10,8 +10,8 @@ public class UI_Popup_SelectStage : UI_Popup
         gameObject.SetActive(false);
     }
 
-    public void StartStage()
+    public void StartStage(int stageIndex)
     {
-        GameManager.Instance.LoadScene(GameManager.PlayStates.IN_GAME);
+        GameManager.Instance.LoadScene(GameManager.PlayStates.IN_GAME, stageIndex);
     }
 }

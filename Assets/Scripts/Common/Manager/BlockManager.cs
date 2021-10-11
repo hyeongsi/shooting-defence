@@ -1,39 +1,61 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class BlockManager : MonoBehaviour
+public class BlockManager : Singleton<BlockManager>
 {
-    [SerializeField]
-    private GameObject[] blockPrefabArray;
-    private List<Block> blockArray = new List<Block>();
+    private GameObject loadBlockObject;
+    private AsyncOperationHandle<GameObject> loadAsyncOperationHandle;
+    private Dictionary<int, AsyncOperationHandle<GameObject>> blockDictionary = new Dictionary<int, AsyncOperationHandle<GameObject>>();
 
-    public GameObject[] BlockPrefabArray { get { return blockPrefabArray; } }
-    public List<Block> BlockArray { get { return blockArray; } }
-
-    #region Singleton
-    static BlockManager instance = null;
     private void Awake()
     {
         if (null == instance)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-            Init();
+            instance = Instance;
         }
         else
         {
             Destroy(gameObject);
         }
     }
-    public static BlockManager Instance { get { return instance; } }
-    #endregion
 
-    private void Init()
+    public GameObject LoadBlock(BlockName blockName)
     {
-        for (int i = 0; i < blockPrefabArray.Length; i++)
+        loadBlockObject = null;
+        loadAsyncOperationHandle = default;
+
+        if(!blockDictionary.TryGetValue((int)blockName, out loadAsyncOperationHandle))
         {
-            blockArray.Add(blockPrefabArray[i].GetComponent<Block>());
+
         }
+        else
+        {
+            return loadAsyncOperationHandle.Result;
+        }
+
+        if(loadBlockObject == null)
+        {
+            Addressables.LoadAssetAsync<GameObject>(blockName.ToString()).Completed +=
+                (AsyncOperationHandle<GameObject> asyncOperationHandle) =>
+                {
+                    blockDictionary.Add((int)blockName, asyncOperationHandle);
+                };
+        }
+        else
+        {
+            return loadBlockObject;
+        }
+
+        return null;
+    }
+
+    public enum BlockName
+    {
+        Block1_Gray = 0,
+        Block1_White = 1,
+        Block1_Yellow = 2,
     }
 }
