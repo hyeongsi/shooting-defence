@@ -23,6 +23,8 @@ public class Weapon_Gun : MonoBehaviour
 
     [Header("Weapon Information")]
     [SerializeField] WeaponInfo weaponInfo;
+    int maxBullet;
+    int burstCount;
 
     [Header("Weapon Status")]
     public bool isShooting; // 키 입력
@@ -30,11 +32,14 @@ public class Weapon_Gun : MonoBehaviour
     public bool isburstShot;
     public bool isReloading;
 
+    BulletProjectile bullet;
+
     private void Start()
     {
         // 총기 및 총알 정보 설정
-        weaponInfo.bullet.GetComponent<BulletProjectile>().SetBulletInfo(weaponInfo.bulletSpeed, weaponInfo.damage);
-        weaponInfo.bulletsLeft = weaponInfo.magazineSize;
+        bullet = weaponInfo.bullet.GetComponent<BulletProjectile>();
+        bullet.SetBulletInfo(weaponInfo.bulletSpeed, weaponInfo.damage);
+        maxBullet = weaponInfo.magazineSize;
         isReadyToShoot = true;
 
         // 플레이어에서 가져오는 것들
@@ -49,7 +54,7 @@ public class Weapon_Gun : MonoBehaviour
 
     private void Update()
     {
-        bulletText.text = weaponInfo.bulletsLeft.ToString();
+        bulletText.text = maxBullet.ToString();
     }
 
     public void WeaponKeyInput()
@@ -60,7 +65,7 @@ public class Weapon_Gun : MonoBehaviour
         else { isShooting = Input.GetButtonDown("Fire1"); }
 
         // 사격
-        if (isReadyToShoot && isShooting && !isReloading && weaponInfo.bulletsLeft > 0)
+        if (isReadyToShoot && isShooting && !isReloading && maxBullet > 0)
         {
             Weapon_Shoot();
         }
@@ -72,9 +77,9 @@ public class Weapon_Gun : MonoBehaviour
         }
 
         // 탄창의 모든 탄 소모 or 남은 탄 전체의 20퍼센트
-        if (weaponInfo.bulletsLeft <= Mathf.Round(weaponInfo.magazineSize * 0.2f))
+        if (maxBullet <= Mathf.Round(weaponInfo.magazineSize * 0.2f))
         {
-            if (weaponInfo.bulletsLeft <= 0)
+            if (maxBullet <= 0)
             {
                 reloadText.text = "재장전";
             }
@@ -92,8 +97,10 @@ public class Weapon_Gun : MonoBehaviour
 
     void FiringBullet()
     {
-        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
-        Instantiate(weaponInfo.bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+        Vector3 bulletDir = playerManager.GetMousePosition();
+        bullet.bulletDir = bulletDir;
+        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward)); // 총구 화염 생성
+        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward)); // 총알 생성
     }
 
     // 만약에 사용한다면 레이저 무기에 사용할 수도 있어서 남겨 놓음
@@ -117,13 +124,13 @@ public class Weapon_Gun : MonoBehaviour
 
     void Weapon_Shoot()
     {
-        weaponInfo.burstBulletCount = weaponInfo.bulletsPerShot;
+        burstCount = weaponInfo.bulletsPerShot;
         StartCoroutine(Co_Shooting());
     }
 
     void Weapon_Reload()
     {
-        if (isReloading || weaponInfo.bulletsLeft == weaponInfo.magazineSize)
+        if (isReloading || maxBullet == weaponInfo.magazineSize)
         {
             return;
         }
@@ -153,7 +160,7 @@ public class Weapon_Gun : MonoBehaviour
     {
         isburstShot = false;
 
-        while (weaponInfo.burstBulletCount > 0 && weaponInfo.bulletsLeft > 0)
+        while (burstCount > 0 && maxBullet > 0)
         {
             impulseSource.GenerateImpulse();
 
@@ -162,8 +169,8 @@ public class Weapon_Gun : MonoBehaviour
             animator.SetTrigger("Shoot");
             playerManager.animator.CrossFade("Firing Rifle", 0f);
 
-            weaponInfo.bulletsLeft--;
-            weaponInfo.burstBulletCount--;
+            maxBullet--;
+            burstCount--;
 
             yield return new WaitForSeconds(weaponInfo.burstFireDelay);
         }
@@ -175,15 +182,15 @@ public class Weapon_Gun : MonoBehaviour
     {
         isburstShot = false;
 
-        weaponInfo.bulletsLeft--;
+        maxBullet--;
 
         animator.SetTrigger("Shoot");
         playerManager.animator.CrossFade("Firing Rifle", 0f);
 
-        while (weaponInfo.burstBulletCount > 0)
+        while (burstCount > 0)
         {
-            weaponInfo.burstBulletCount--;
-            Debug.Log("산탄" + weaponInfo.burstBulletCount);
+            burstCount--;
+            Debug.Log("산탄" + burstCount);
             yield return new WaitForSeconds(weaponInfo.burstFireDelay);
         }
 
@@ -194,7 +201,7 @@ public class Weapon_Gun : MonoBehaviour
     {
         isReloading = true;
         yield return new WaitForSeconds(weaponInfo.reloadTime);
-        weaponInfo.bulletsLeft = weaponInfo.magazineSize;
+        maxBullet = weaponInfo.magazineSize;
         isReloading = false;
     }
 }

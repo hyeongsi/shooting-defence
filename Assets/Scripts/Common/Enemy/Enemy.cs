@@ -10,9 +10,12 @@ public class Enemy : MonoBehaviour
     NavMeshAgent navMeshAgent;
     LayerMask plyaerLayer;
 
-    protected float hp;
-    protected float damage;
+    protected float hp = 1000; // 임시
+    protected float damage = 10;
     EnemyStaticData enemyStaticData;
+
+    BoxCollider damageCollider;
+    bool isAttackalbe;
 
     public float HP { get { return hp; }  set { hp = value; } }
     public float DAMAGE { get { return damage; } set { damage = value; } }
@@ -28,12 +31,36 @@ public class Enemy : MonoBehaviour
         if (targetObject == null)
             return false;
 
-        if (navMeshAgent.velocity == Vector3.zero)
+        if (targetObject != null && navMeshAgent.velocity == Vector3.zero)
         {
-            animator.SetTrigger("Attack");
-            targetObject.GetComponent<Player_Locomotion>().takeDamage(damage);
+            if(isAttackalbe == true)
+            {
+                StartCoroutine(Co_Attack(targetObject, 0.5f)); // 임시로 딜레이 넣음
+            }
         }
         return true;
+    }
+
+    IEnumerator Co_Attack(GameObject targetObject, float attackDelay)
+    {
+        isAttackalbe = false;
+
+        float delay = attackDelay;
+        animator.SetTrigger("Attack");
+
+        // 플레이어일 때
+        targetObject.GetComponent<Player_Locomotion>().TakeDamage(damage);
+
+        // 포탑일 때
+
+
+        while (delay > 0)
+        {
+            Debug.Log("Delay");
+            delay -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        isAttackalbe = true;
     }
 
     public virtual void TakeDamage(float damage)    // 피격
@@ -151,11 +178,20 @@ public class Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         plyaerLayer = 1 << LayerMask.NameToLayer("Player");
+
+        damageCollider = GetComponentInChildren<BoxCollider>();
+
+        Debug.Log(damageCollider);
+
+        isAttackalbe = true;
     }
 
     private void Update()
     {
-        Move(FindAttackObject());
+        if(isAttackalbe == false)
+            Move(FindAttackObject());
+
+        Attack(FindAttackObject());
 
         if (GameManager.Instance == null || GameManager.Instance.IsPause)
             return;
@@ -169,5 +205,20 @@ public class Enemy : MonoBehaviour
         NONE = 0,       // 공격 안하고 무시
         PLAYER = 1,     // 플레이어 만 공격
         BARRICADE = 2      // 터렛만 공격
+    }
+
+    public void DamageColliderOn()
+    {
+        damageCollider.enabled = true;
+    }
+    public void DamageColliderOff()
+    {
+        damageCollider.enabled = false;
+    }
+
+    private void OnMouseEnter()
+    {
+        // 마우스가 들어오면 강조 표시 하기
+        // 십자선을 고정
     }
 }

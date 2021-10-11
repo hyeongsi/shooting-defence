@@ -14,11 +14,11 @@ public class Player_Locomotion : MonoBehaviour
 
     [Header("플레이어 값")]
     public float hp = 100f;
+    public float stamina = 100;
     public float moveSpeed;
     public float sprintSpeed;
     public float gravity = -9.81f;
     public float groundCheckDistance = 0.2f;
-    public float stamina;
     public float waitForChargeStamina;
     public float waitForChargeEmptyStamina;
     public float smoothingSpeed = 15f;
@@ -37,7 +37,6 @@ public class Player_Locomotion : MonoBehaviour
 
     public void FixedUpdateFunction()
     {
-        // CheckBehind();
         CheckGround();
         Loco_Move();
     }
@@ -66,33 +65,40 @@ public class Player_Locomotion : MonoBehaviour
         characterController.Move(velocity * Time.deltaTime);
     }
 
-    void CheckBehind()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    //void CheckBehind()
+    //{
+    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            // 캐릭터를 기준으로 레이캐스트 맞은 위치를 로컬좌표로 변환
-            Vector3 inverseTransform = behindChecker.InverseTransformPoint(hit.point);
-            if (inverseTransform.z > 0) // 0보다 크면 앞에 있음
-            {
-                playerManager.isBehind = false;
-                playerManager.disableAimPointImage.gameObject.SetActive(false);
-                playerManager.aimPointImage.gameObject.SetActive(true);
-            }
-            else // 0보다 작으면 뒤에 있음
-            {
-                playerManager.isBehind = true;
-                playerManager.disableAimPointImage.gameObject.SetActive(true);
-                playerManager.aimPointImage.gameObject.SetActive(false);
-            }
-        }
-    }
+    //    if (Physics.Raycast(ray, out RaycastHit hit))
+    //    {
+    //        // 캐릭터를 기준으로 레이캐스트 맞은 위치를 로컬좌표로 변환
+    //        Vector3 inverseTransform = behindChecker.InverseTransformPoint(hit.point);
+    //        if (inverseTransform.z > 0) // 0보다 크면 앞에 있음
+    //        {
+    //            playerManager.isBehind = false;
+    //            playerManager.disableAimPointImage.gameObject.SetActive(false);
+    //            playerManager.aimPointImage.gameObject.SetActive(true);
+    //        }
+    //        else // 0보다 작으면 뒤에 있음
+    //        {
+    //            playerManager.isBehind = true;
+    //            playerManager.disableAimPointImage.gameObject.SetActive(true);
+    //            playerManager.aimPointImage.gameObject.SetActive(false);
+    //        }
+    //    }
+    //}
 
     void Loco_Rotate()
     {
-        // 마우스를 가운데로 가져가면 떨리는 이슈 있음
-        transform.forward = playerManager.GetMousePosition();
+        Quaternion characterRotation;
+        characterRotation = Quaternion.LookRotation(playerManager.GetMousePosition());
+        characterRotation.x = 0;
+        characterRotation.z = 0;
+
+        transform.rotation = characterRotation;
+
+        //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(playerManager.GetMousePosition()), 15f);
+        //transform.forward = playerManager.GetMousePosition();
     }
 
     void Loco_Move()
@@ -104,7 +110,7 @@ public class Player_Locomotion : MonoBehaviour
         playerManager.horizontal = Input.GetAxisRaw("Horizontal");
         playerManager.vertical = Input.GetAxisRaw("Vertical");
 
-        if (playerManager.sprintFlag == true && playerManager.vertical > 0 && stamina > 0)
+        if (playerManager.sprintFlag == true && stamina > 0)
         {
             speed = sprintSpeed;
             playerManager.horizontal *= 2f;
@@ -113,7 +119,6 @@ public class Player_Locomotion : MonoBehaviour
 
         useStaminaFlag = playerManager.sprintFlag 
                          && playerManager.moveFlag == true
-                         && playerManager.vertical > 0
                          ? true : false;
 
         // 이동
@@ -189,7 +194,7 @@ public class Player_Locomotion : MonoBehaviour
         playerManager.weapon.WeaponKeyInput();
     }
 
-    public void takeDamage(float damage)
+    public void TakeDamage(float damage)
     {
         hp -= damage;
 

@@ -8,6 +8,7 @@ public class Player_Manager : MonoBehaviour
     Player_Locomotion playerLocomotion;
     Player_Animation playerAnimation;
     [SerializeField] Player_CameraFunction cameraFunction;
+    [SerializeField] LayerMask checkThisLayer;
 
     public Animator animator;
     public Camera camera;
@@ -28,18 +29,28 @@ public class Player_Manager : MonoBehaviour
     [Header("UI")]
     public Text bulletText;
     public Text reloadText;
-    public Text staminaText;
-    public Image aimPointImage;
-    public Image disableAimPointImage;
+    public Slider hpBar;
+    public Slider staminaBar;
+    public Texture2D aimPointImage;
+    public Texture2D disableAimPointImage;
+
+    public GameObject targetGuide;
 
     Vector3 moveDirection;
 
     private void Start()
     {
-        //Cursor.visible = false;
+        Cursor.visible = false;
+
+        targetGuide.SetActive(false);
+
+        checkThisLayer = 1 << LayerMask.NameToLayer("Ground");
 
         playerLocomotion = GetComponent<Player_Locomotion>();
         playerAnimation = GetComponent<Player_Animation>();
+
+        hpBar.maxValue = playerLocomotion.hp;
+        staminaBar.maxValue = playerLocomotion.stamina;
 
         cameraFunction.Initialize();
         playerLocomotion.Initialize();
@@ -48,10 +59,11 @@ public class Player_Manager : MonoBehaviour
 
     private void Update()
     {
-        staminaText.text = playerLocomotion.stamina.ToString();
-
         sprintFlag = Input.GetButton("Sprint") && aimFlag == false && weapon.isShooting == false;
         aimFlag = cameraFunction.aimCamFlag;
+
+        hpBar.value = playerLocomotion.hp;
+        staminaBar.value = playerLocomotion.stamina;
 
         playerLocomotion.UpdateFunction();
         playerAnimation.UpdateFunction();
@@ -64,13 +76,7 @@ public class Player_Manager : MonoBehaviour
     }
     public Vector3 GetDirection()
     {
-        //moveDirection = camera.transform.forward * vertical;
-        //moveDirection += camera.transform.right * horizontal;
-        //moveDirection.y = 0f;   // 먼저 0으로 만들고 정규화 함
-        //moveDirection.Normalize();
-
         moveDirection = new Vector3(horizontal, 0, vertical);
-
         return moveDirection.normalized;
     }
 
@@ -80,8 +86,12 @@ public class Player_Manager : MonoBehaviour
 
         Vector3 lookDir = Vector3.zero;
 
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        targetGuide.SetActive(false);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, checkThisLayer))
         {
+            targetGuide.SetActive(true);
+            targetGuide.transform.position = new Vector3(hit.point.x, hit.point.y + 0.1f, hit.point.z);
             lookDir = hit.point - transform.position;
             lookDir = new Vector3(lookDir.x, transform.position.y, lookDir.z);
         }

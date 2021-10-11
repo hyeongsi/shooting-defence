@@ -16,8 +16,8 @@ MonoBehaviour:
   weaponType: 1
   damage: 14
   bulletSpeed: 30
-  magazineSize: 28
-  bulletsLeft: 28
+  magazineSize: 100
+  bulletsLeft: 100
   bulletsPerShot: 1
   burstBulletCount: 0
   reloadTime: 2.2
