@@ -136,7 +136,7 @@ public class UIManager : Singleton<UIManager>
     public void SwitchPauseUI()
     {
         GameManager.Instance.SwitchIsPause();
-        UI_PopupData tempUi_PopupData;
+        //UI_PopupData tempUi_PopupData;
 
         switch (GameManager.Instance.PlayeState)
         {
@@ -145,25 +145,25 @@ public class UIManager : Singleton<UIManager>
             case GameManager.PlayStates.IN_GAME:
                 // 인게임 씬에서의 esc 메뉴 활/비활성화
                 return;
-            case GameManager.PlayStates.MAP_EDIT:
-                uiPopupDictionary.TryGetValue(MapEditPopUpUI.Build_Canvas.ToString(), out tempUi_PopupData);
-                if (tempUi_PopupData == null)
-                    return;
+            //case GameManager.PlayStates.MAP_EDIT:
+            //    uiPopupDictionary.TryGetValue(MapEditPopUpUI.Build_Canvas.ToString(), out tempUi_PopupData);
+            //    if (tempUi_PopupData == null)
+            //        return;
 
-                if (GameManager.Instance.IsPause)
-                    tempUi_PopupData.ui_popup.ShowPopupUI();
-                else
-                    tempUi_PopupData.ui_popup.ClosePopupUI();
+            //    if (GameManager.Instance.IsPause)
+            //        tempUi_PopupData.ui_popup.ShowPopupUI();
+            //    else
+            //        tempUi_PopupData.ui_popup.ClosePopupUI();
 
-                if (sceneUIData.ui_scene == default)
-                    return;
+            //    if (sceneUIData.ui_scene == default)
+            //        return;
 
-                if (sceneUIData.ui_scene is UI_Scene_EditAimUI)
-                {
-                    UI_Scene_EditAimUI aimUI = sceneUIData.ui_scene as UI_Scene_EditAimUI;
-                    aimUI.SwitchCursorLockState();
-                }
-                return;
+            //    if (sceneUIData.ui_scene is UI_Scene_EditAimUI)
+            //    {
+            //        UI_Scene_EditAimUI aimUI = sceneUIData.ui_scene as UI_Scene_EditAimUI;
+            //        aimUI.SwitchCursorLockState();
+            //    }
+            //    return;
         }
     }
 

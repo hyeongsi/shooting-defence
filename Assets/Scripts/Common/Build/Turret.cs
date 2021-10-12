@@ -109,8 +109,8 @@ public class Turret : Barricade
         if (GameManager.Instance == null || GameManager.Instance.IsPause)
             return;
 
-        if (gameObject.layer != (int)LayerNumbering.BLOCK)  // 타워 생성 전 상태 -> 종료
-            return;
+        //if (gameObject.layer != (int)LayerNumbering.BLOCK)  // 타워 생성 전 상태 -> 종료
+        //    return;
 
         if (turretStaticData == null)
             return;

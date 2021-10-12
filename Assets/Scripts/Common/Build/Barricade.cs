@@ -5,6 +5,7 @@ using UnityEngine;
 public class Barricade : MonoBehaviour
 {
     protected float hp = 1;
+    private BarricadeStaticData barricadeStaticData;
 
     #region property
     public float HP
@@ -13,4 +14,20 @@ public class Barricade : MonoBehaviour
         set { hp = value; }
     }
     #endregion
+
+    public void Init(BarricadeStaticData barricadeStaticData)
+    {
+        this.barricadeStaticData = barricadeStaticData;
+        hp = barricadeStaticData.maxHp;
+    }
+
+    private void Awake()
+    {
+        Init();
+    }
+
+    private void Init()
+    {
+        hp = barricadeStaticData.maxHp;
+    }
 }

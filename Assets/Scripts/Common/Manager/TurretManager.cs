@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class TurretManager : Singleton<TurretManager>
 {
-    //[SerializeField]
-    //private GameObject[] turretPrefabArray;
-    //private List<Block> turretBlockArray = new List<Block>();
-    //private readonly List<TurretStaticData> turretStaticDataList = new List<TurretStaticData>();
+    private GameObject tempInstantiateGameObject;
+
+    private AsyncOperationHandle<GameObject> loadAsyncOperationHandle;
+    private Dictionary<int, AsyncOperationHandle<GameObject>> turretDictionary = new Dictionary<int, AsyncOperationHandle<GameObject>>();
+
+    private AsyncOperationHandle<TextAsset> turretStaticDataAsyncOperationHandle;
+    private TurretStaticData loadTurretStaticData;
+    private Dictionary<int, TurretStaticData> turretStaticDataDictionary = new Dictionary<int, TurretStaticData>();
 
     private void Awake()
     {
         if (null == instance)
         {
             instance = Instance;
+            DontDestroyOnLoad(instance);
         }
         else
         {
@@ -23,53 +29,153 @@ public class TurretManager : Singleton<TurretManager>
         }
     }
 
-    public void LoadTurretData()
+    public void LoadAll()
     {
-
+        LoadTurretStaticData();
+        foreach (TurretName turretName in Enum.GetValues(typeof(TurretName)))
+        {
+            LoadTurret(turretName);
+        }
     }
 
-    //public void SettingTurretData(ref GameObject turretObject, int turretIndex) // 터렛 생성 후 데이터 초기화
-    //{
-    //    if (turretIndex < 0 || turretStaticDataList.Count <= turretIndex)
-    //        return;
+    public void LoadTurretStaticData()  // 터렛 데이터 로드
+    {
+        const float CORRECTION_VALUE = 0.1f;
 
-    //    turretObject.GetComponent<Turret>().Init(turretStaticDataList[turretIndex]);
-    //}
+        Addressables.LoadAssetAsync<TextAsset>("TurretData").Completed +=
+            (AsyncOperationHandle<TextAsset> asyncOperationHandle) =>
+            {
+                turretStaticDataAsyncOperationHandle = asyncOperationHandle;
 
-    //public void LoadTurretData()
-    //{
-    //    TextAsset textAsset = Resources.Load("Turret") as TextAsset;
-    //    string turretCsvString = textAsset.text;
+                TurretStaticData newTurretStaticData;
+                string turretCsvString = asyncOperationHandle.Result.text;
+                List<string[]> csvString = FileManager.Instance.ConvertCsvToString(turretCsvString);
 
-    //    if (turretCsvString == default)     // 로딩 데이터 없으면 종료
-    //        return;
+                try
+                {
+                    for (int i = 0; i < csvString.Count; i++)
+                    {
+                        newTurretStaticData = new TurretStaticData(
+                            int.Parse(csvString[i][(int)TurretCsvColumn.HP]) * CORRECTION_VALUE,
+                            int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_DAMAGE]) * CORRECTION_VALUE,
+                            int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_RANGE]) * CORRECTION_VALUE,
+                            int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_DELAY]) * CORRECTION_VALUE,
+                            int.Parse(csvString[i][(int)TurretCsvColumn.SPIN_SPEED]) * CORRECTION_VALUE);
 
-    //    List<string[]> csvString = FileManager.Instance.ConvertCsvToString(turretCsvString);
-    //    TurretStaticData newTurretStaticData;
+                        turretStaticDataDictionary.Add(int.Parse(csvString[i][(int)TurretCsvColumn.INDEX]), newTurretStaticData);
+                    }
+                }
+                catch
+                {
+                    Debug.Log("Turret static data load error");
+                    return;
+                }
+            };
+    }
 
-    //    const float CORRECTION_VALUE = 0.1f;
-    //    turretStaticDataList.Clear();
+    public void LoadTurret(TurretName turretName)  // 터렛 오브젝트 로딩
+    {
+        loadAsyncOperationHandle = default;
 
-    //    try
-    //    {
-    //        for (int i = 0; i < csvString.Count; i++)
-    //        {
-    //            newTurretStaticData = new TurretStaticData(
-    //                int.Parse(csvString[i][(int)TurretCsvColumn.HP]) * CORRECTION_VALUE,
-    //                int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_DAMAGE]) * CORRECTION_VALUE,
-    //                int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_RANGE]) * CORRECTION_VALUE,
-    //                int.Parse(csvString[i][(int)TurretCsvColumn.ATTACK_DELAY]) * CORRECTION_VALUE,
-    //                int.Parse(csvString[i][(int)TurretCsvColumn.SPIN_SPEED]) * CORRECTION_VALUE);
+        if (!turretDictionary.TryGetValue((int)turretName, out loadAsyncOperationHandle))
+        {
+            Addressables.LoadAssetAsync<GameObject>(turretName.ToString()).Completed +=
+                (AsyncOperationHandle<GameObject> asyncOperationHandle) =>
+                {
+                    turretDictionary.Add((int)turretName, asyncOperationHandle);
+                    Debug.Log(turretName.ToString() + " Turret 로드 완료");
+                };
+        }
+        else
+        {
+            if (loadAsyncOperationHandle.Result != null)
+                return;
 
-    //            turretStaticDataList.Add(newTurretStaticData);
-    //        }
-    //    }
-    //    catch
-    //    {
-    //        turretStaticDataList.Clear();
-    //        return;
-    //    }
-    //}
+            Addressables.LoadAssetAsync<GameObject>(turretName.ToString()).Completed +=
+                (AsyncOperationHandle<GameObject> asyncOperationHandle) =>
+                {
+                    turretDictionary[(int)turretName] = asyncOperationHandle;
+                };
+        }
+    }
+
+    public void ClearDictionary()   // 초기화
+    {
+        // 터렛 오브젝트 메모리 초기화
+        foreach (KeyValuePair<int, AsyncOperationHandle<GameObject>> turrets in turretDictionary)
+        {
+            Addressables.Release(turretDictionary[turrets.Key]);
+        }
+        turretDictionary.Clear();
+
+        // 터렛 데이터 메모리 초기화
+        Addressables.Release(turretStaticDataAsyncOperationHandle);
+        turretStaticDataDictionary.Clear();
+    }
+
+    public GameObject GetTurret(TurretName turretName)  // 터렛 오브젝트 리턴
+    {
+        loadAsyncOperationHandle = default;
+
+        if (turretDictionary.TryGetValue((int)turretName, out loadAsyncOperationHandle))
+        {
+            if (loadAsyncOperationHandle.Result == null)
+            {
+                Debug.Log("로딩된 터렛이 없어서 가져올 수 없습니다.");
+                return null;
+            }
+
+            return loadAsyncOperationHandle.Result;
+        }
+
+        Debug.Log("로딩된 터렛이 없어서 가져올 수 없습니다.");
+        return null;
+    }
+
+    public TurretStaticData GetTurretStaticData(TurretName turretName)  // 터렛 데이터 리턴
+    {
+        loadTurretStaticData = null;
+
+        if (turretStaticDataDictionary.TryGetValue((int)turretName, out loadTurretStaticData))
+        {
+            if (loadTurretStaticData == null)
+            {
+                Debug.Log("로딩된 터렛 데이터가 없어서 가져올 수 없습니다.");
+                return null;
+            }
+
+            return loadTurretStaticData;
+        }
+
+        Debug.Log("로딩된 터렛 데이터가 없어서 가져올 수 없습니다.");
+        return null;
+    }
+
+    public GameObject InstantiateTurret(TurretName turretName)
+    {
+        loadAsyncOperationHandle = default;
+        loadTurretStaticData = null;
+        tempInstantiateGameObject = null;
+
+        if (turretDictionary.TryGetValue((int)turretName, out loadAsyncOperationHandle))
+        {
+            if (loadAsyncOperationHandle.Result == null)
+                return null;
+
+            if (turretStaticDataDictionary.TryGetValue((int)turretName, out loadTurretStaticData))
+            {
+                if (loadTurretStaticData == null)
+                    return null;
+
+                tempInstantiateGameObject = Instantiate(loadAsyncOperationHandle.Result);
+                tempInstantiateGameObject.GetComponent<Turret>().Init(loadTurretStaticData);
+
+                return tempInstantiateGameObject;
+            }
+        }
+
+        return null;
+    }
 
     public enum TurretName
     {
@@ -78,6 +184,8 @@ public class TurretManager : Singleton<TurretManager>
 
     private enum TurretCsvColumn
     {
+        INDEX = 0,
+        NAME = 1,
         HP = 2,
         ATTACK_DAMAGE = 3,
         ATTACK_RANGE = 4,

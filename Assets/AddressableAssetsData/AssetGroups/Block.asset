@@ -17,24 +17,20 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 7a7e5d3f0054ea54183f1786013f97cd
   m_SerializeEntries:
-  - m_GUID: 2d8a21c314ccac440a0baf3d7b0ac542
-    m_Address: Block1_Gray
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 8287372045822694922, guid: 2d8a21c314ccac440a0baf3d7b0ac542,
-      type: 3}
-    m_TargetAsset: {fileID: 8287372045822694922, guid: 2d8a21c314ccac440a0baf3d7b0ac542,
-      type: 3}
   - m_GUID: 8cba69100776f204ebcfdb91777fa7e2
     m_Address: Block1_White
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 8287372045822694922, guid: 8cba69100776f204ebcfdb91777fa7e2,
-      type: 3}
-    m_TargetAsset: {fileID: 8287372045822694922, guid: 8cba69100776f204ebcfdb91777fa7e2,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 3187b1340106b0543a280ab51830f653
     m_Address: Block1_Yellow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 2d8a21c314ccac440a0baf3d7b0ac542
+    m_Address: Block1_Gray
     m_ReadOnly: 0
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}

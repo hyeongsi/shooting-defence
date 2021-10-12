@@ -18,6 +18,13 @@ public class GameManager : Singleton<GameManager>
     public Scene NextScene { set { nextScene = value; } get { return nextScene; } }
     #endregion
 
+    public void LoadMapEditorData()
+    {
+        BlockManager.Instance.LoadAll();
+        BarricadeManager.Instance.LoadAll();
+        TurretManager.Instance.LoadAll();
+    }
+
     public void LoadScene(PlayStates nextstate, int stage = -1)
     {
         if(stage < 0)
@@ -30,11 +37,10 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public void InitGame()
+    public void LoadInGameData(Stage stage)
     {
-        // 게임 시작 시, 게임에 필요한 데이터 모두 로딩 작업, (블럭, 타워, 몬스터, 플레이어, ui 등)
-        TurretManager.Instance.LoadTurretData();
-        EnemyManager.Instance.LoadEnemyData();
+        // 스테이지의 정보에 따라 필요로 하는 정보 로딩,
+        // 터렛, 적, 블럭, 바리게이트, 스테이지 등등
     }
     public void SwitchIsPause()
     {
