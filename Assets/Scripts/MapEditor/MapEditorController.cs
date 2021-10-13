@@ -1,42 +1,59 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class MapEditorController : MonoBehaviour
 {
-    public AssetReference tilePrefab;
+    public Camera mainCamera;
+
+    public Transform tilePrefab;
     public Vector2 mapSize;
 
     void Start()
     {
         GameManager.Instance.LoadMapEditorData();
-        GenerateMap();
     }
 
     public void GenerateMap()
     {
-        //string generateMapParentName = "Generated Map";
-        //Transform generateMapParent = transform.Find(generateMapParentName);
-        //if(generateMapParent == null)
-        //{
-        //    GameObject newGenerateMapParent = new GameObject();
-        //    newGenerateMapParent.transform.parent = 
-        //}
+        const string GENERATE_MAP_PARENT_NAME = "Generated Map";
+        const float HALF = 0.5f;
+        const int INITIAL_Y_POSITION = 1;
+        const int Y_INCREMENT = 1;
 
+        GameObject generateMapParent = GameObject.Find(GENERATE_MAP_PARENT_NAME);
+
+        if (generateMapParent != null)
+        {
+            DestroyImmediate(generateMapParent);
+        }
+
+        generateMapParent = new GameObject(GENERATE_MAP_PARENT_NAME);
 
         for (int x = 0; x < mapSize.x; x++) 
         {
             for(int y = 0; y < mapSize.y; y++)
             {
-                Vector3 tilePosition = new Vector3(-mapSize.x / 2 + 0.5f + x, 0, -mapSize.y / 2 + 0.5f + y);
-                tilePrefab.InstantiateAsync(tilePosition, Quaternion.identity).Completed +=
-                    (AsyncOperationHandle<GameObject> obj) =>
-                    {
-                        GameObject newTile = obj.Result;
-                    };
+                Vector3 tilePosition = new Vector3(x, 0, y);
+                Transform newTile = Instantiate(tilePrefab, tilePosition, Quaternion.identity);
+                newTile.parent = generateMapParent.transform;
             }
         }
+
+        int cameraYPosition = INITIAL_Y_POSITION;
+
+        if(mapSize.x > mapSize.y)
+        {
+            cameraYPosition += ((int)mapSize.x * Y_INCREMENT);
+        }
+        else if(mapSize.x <= mapSize.y)
+        {
+            cameraYPosition += ((int)mapSize.y * Y_INCREMENT);
+        }
+
+        if (cameraYPosition < INITIAL_Y_POSITION)
+            cameraYPosition = INITIAL_Y_POSITION;
+
+        mainCamera.transform.position = new Vector3(mapSize.x * HALF, cameraYPosition, mapSize.y * HALF);
     }
 }
