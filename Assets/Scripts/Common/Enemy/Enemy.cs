@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
 
     BoxCollider damageCollider;
     bool isAttackalbe;
+    bool isAttacking;
 
     public float HP { get { return hp; }  set { hp = value; } }
     public float DAMAGE { get { return damage; } set { damage = value; } }
@@ -26,37 +27,38 @@ public class Enemy : MonoBehaviour
         hp = enemyStaticData.maxHp;
     }
 
-    public virtual bool Attack(GameObject targetObject)
+    public virtual void Attack(GameObject targetObject)
     {
         if (targetObject == null)
-            return false;
+            return;
 
-        if (targetObject != null && navMeshAgent.velocity == Vector3.zero)
+        float targetDistance = Vector3.SqrMagnitude(transform.position - targetObject.transform.position);
+
+        if (targetDistance <= 2.5f && isAttackalbe == true) // 임시로 
         {
-            if(isAttackalbe == true)
-            {
-                StartCoroutine(Co_Attack(targetObject, 0.5f)); // 임시로 딜레이 넣음
-            }
+            StartCoroutine(Co_Attack(targetObject, 0.8f, targetDistance)); // 임시로 딜레이 넣음
         }
-        return true;
     }
 
-    IEnumerator Co_Attack(GameObject targetObject, float attackDelay)
+    IEnumerator Co_Attack(GameObject targetObject, float attackDelay, float targetDistance)
     {
         isAttackalbe = false;
 
         float delay = attackDelay;
-        animator.SetTrigger("Attack");
+        animator.CrossFade("Attack", 0.3f);
+
+        Debug.Log(damageCollider.enabled);
 
         // 플레이어일 때
-        targetObject.GetComponent<Player_Locomotion>().TakeDamage(damage);
+        if(isAttacking == true && targetDistance <= 2.5f)
+        {
+            targetObject.GetComponent<Player_Locomotion>().TakeDamage(damage);
+        }
 
         // 포탑일 때
 
-
         while (delay > 0)
         {
-            Debug.Log("Delay");
             delay -= 0.1f;
             yield return new WaitForSeconds(0.1f);
         }
@@ -106,7 +108,6 @@ public class Enemy : MonoBehaviour
                 // 레이캐스트로 가려졌는지 확인 후 가려졌으면 목표물을 다시 null로 바꿈
                 if (Physics.Raycast(eye.position, (targetPlayer.transform.position + playerPosCorrection) - eye.position, out RaycastHit hit))
                 {
-                    Debug.DrawLine(eye.position, hit.point, Color.red);
                     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
                     {
                         targetPlayer = null;
@@ -114,7 +115,6 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
-        Debug.Log(targetPlayer);
 
         //if (targetPlayer != null)
         //{
@@ -153,11 +153,7 @@ public class Enemy : MonoBehaviour
         // 길막하면 
         // 이속, deltatime으로 이동 처리
 
-        if(targetObject == null) // 정지
-        {
-            // navMeshAgent.SetDestination(목적지);
-        }
-        else // 이동
+        if(targetObject != null) // 이동
         {
             navMeshAgent.SetDestination(targetObject.transform.position);
         }
@@ -170,6 +166,8 @@ public class Enemy : MonoBehaviour
         {
             animator.SetBool("isMove", true);
         }
+
+        Debug.Log(navMeshAgent.velocity);
     }
 
     private void Awake()
@@ -177,20 +175,16 @@ public class Enemy : MonoBehaviour
         eye = GetComponentInChildren<EyePosition>().transform;
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        plyaerLayer = 1 << LayerMask.NameToLayer("Player");
-
         damageCollider = GetComponentInChildren<BoxCollider>();
 
-        Debug.Log(damageCollider);
+        plyaerLayer = 1 << LayerMask.NameToLayer("Player");
 
         isAttackalbe = true;
     }
 
     private void Update()
     {
-        if(isAttackalbe == false)
-            Move(FindAttackObject());
-
+        Move(FindAttackObject());
         Attack(FindAttackObject());
 
         if (GameManager.Instance == null || GameManager.Instance.IsPause)
@@ -209,11 +203,11 @@ public class Enemy : MonoBehaviour
 
     public void DamageColliderOn()
     {
-        damageCollider.enabled = true;
+        isAttacking = true;
     }
     public void DamageColliderOff()
     {
-        damageCollider.enabled = false;
+        isAttacking = false;
     }
 
     private void OnMouseEnter()

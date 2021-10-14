@@ -22,6 +22,7 @@ public class Player_Manager : MonoBehaviour
     public bool sprintFlag;
     public bool aimFlag;
     public bool moveFlag;
+    public bool reloadFlag;
     public bool isGrounded;
     public bool isBehind;
     public bool rotateLock;
@@ -91,7 +92,7 @@ public class Player_Manager : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, checkThisLayer))
         {
             targetGuide.SetActive(true);
-            targetGuide.transform.position = new Vector3(hit.point.x, hit.point.y + 0.1f, hit.point.z);
+            targetGuide.transform.position = new Vector3(hit.point.x, hit.point.y + 0.8f, hit.point.z);
             lookDir = hit.point - transform.position;
             lookDir = new Vector3(lookDir.x, transform.position.y, lookDir.z);
         }

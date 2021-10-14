@@ -199,9 +199,9 @@ public class Weapon_Gun : MonoBehaviour
 
     IEnumerator Co_Reloading()
     {
-        isReloading = true;
+        isReloading = playerManager.reloadFlag = true;
         yield return new WaitForSeconds(weaponInfo.reloadTime);
         maxBullet = weaponInfo.magazineSize;
-        isReloading = false;
+        isReloading = playerManager.reloadFlag = false;
     }
 }
