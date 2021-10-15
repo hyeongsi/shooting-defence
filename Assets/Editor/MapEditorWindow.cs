@@ -1,51 +1,79 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEditor;
 
 public class MapEditorWindow : EditorWindow
 {
-    private bool paintMode = false;
-    private Vector2 cellSize = new Vector2(2f, 2f);
+    const string MAP_EDITOR_NAME = "MapEditor";
+    GameObject mapEditorGameObject;
+    Vector2 mapSize;
+
+    int[,] Cell;
+    string[] blockNames;
 
     [MenuItem("Window/Map Editor Window")]
-    private static void ShowWindow()
+    private static void Init()
     {
-        EditorWindow.GetWindow(typeof(MapEditorWindow));
+        MapEditorWindow mapEditorWindow = GetWindow<MapEditorWindow>();
+        mapEditorWindow.InitMap();
     }
 
-    private void OnGUI()    // UI 추가
+    private void InitMap()
     {
-        paintMode = GUILayout.Toggle(paintMode, "Start painting", "Button", GUILayout.Height(60f));
-    }
+        LoadMapSize();
+  
+        blockNames = new string[System.Enum.GetValues(typeof(BlockManager.BlockName)).Length];
 
-    private void OnSceneGUI(SceneView sceneView)    // 장면 보기 도우미 표시
-    {
-        if(paintMode)
+        for(int i = 0; i < blockNames.Length; i ++)
         {
-            DisplayVisualHelp();
+            blockNames[i] = System.Enum.GetValues(typeof(BlockManager.BlockName)).GetValue(i).ToString();
         }
     }
 
-    private void DisplayVisualHelp()
+    private void OnGUI()
     {
-        //Ray guiRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-        Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay(Event.current.mousePosition);
-        //Debug.Log(ray.origin);
+        if (GUILayout.Button("Load Map Size"))
+        {
+            LoadMapSize();
+        }
 
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(Event.current.mousePosition);
+        for (int x = 0; x < mapSize.x; x ++)
+        {
+            GUILayout.BeginHorizontal();
+            for (int y = 0; y < mapSize.y; y++)
+            {
+                if(GUILayout.Button(GetCellString(x,y), GUILayout.Width(60), GUILayout.Height(60)) && Cell[y, x] == 0)
+                {
 
-        Debug.Log(worldPos);
+                }
+            }
+            GUILayout.EndHorizontal();
+        }
     }
 
-    private void OnFocus()
+    private string GetCellString(int x, int y)
     {
-        SceneView.onSceneGUIDelegate -= this.OnSceneGUI;
-        SceneView.onSceneGUIDelegate += this.OnSceneGUI;
+        return " ";
     }
 
-    private void OnDestroy()
+    private void LoadMapSize()
     {
-        SceneView.onSceneGUIDelegate -= this.OnSceneGUI;
+        if (mapEditorGameObject == null)
+        {
+            mapEditorGameObject = GameObject.Find(MAP_EDITOR_NAME);
+        }
+
+        if (mapEditorGameObject != null)
+        {
+            mapSize = mapEditorGameObject.GetComponent<MapEditorController>().mapSize;
+            Cell = new int[(int)mapSize.y, (int)mapSize.x];
+        }
+        else
+        {
+            mapSize.x = 0;
+            mapSize.y = 0;
+        }
     }
 }
