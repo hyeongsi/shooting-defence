@@ -23,14 +23,18 @@ public class MapEditor : Editor
                 mapEditorController.GenerateMap();
             }
         }
+
+        GUILayout.Space(20f);
+
+        if (GUILayout.Button("Open Map Editor Window"))
+        {
+            EditorApplication.ExecuteMenuItem("Window/Map Editor Window");
+        }
     }
 
     private void OnSceneGUI()
     {
-        using (new HandleGUIScope())
-        {
-            GUILayout.Button("Button", GUILayout.Width(50));
-        }
+       
     }
 }
 

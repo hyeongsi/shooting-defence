@@ -29,7 +29,7 @@ public class MapEditorController : MonoBehaviour
         {
             for(int y = 0; y < mapSize.y; y++)
             {
-                Vector3 tilePosition = new Vector3(x, 0, y);
+                Vector3 tilePosition = new Vector3(x, 0, -y);
                 Transform newTile = Instantiate(tilePrefab, tilePosition, Quaternion.identity);
                 newTile.parent = generateMapParent.transform;
             }
