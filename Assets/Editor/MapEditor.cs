@@ -34,7 +34,14 @@ public class MapEditor : Editor
 
     private void OnSceneGUI()
     {
-       
+        var mousePosition = Event.current.mousePosition * EditorGUIUtility.pixelsPerPoint;
+        mousePosition.y = Camera.current.pixelHeight - mousePosition.y;
+        Ray ray = Camera.current.ScreenPointToRay(mousePosition);
+
+        //Debug.Log(mousePosition);
+        //Debug.Log(SceneView.currentDrawingSceneView.camera.ScreenToWorldPoint(Event.current.mousePosition));
+
+        Camera.current.transform.position = Vector3.zero;
     }
 }
 

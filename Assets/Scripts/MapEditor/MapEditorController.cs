@@ -7,6 +7,8 @@ public class MapEditorController : MonoBehaviour
     public Transform tilePrefab;
     public Vector2 mapSize;
 
+    public Wave[] waveList;
+
     void Start()
     {
         GameManager.Instance.LoadMapEditorData();
