@@ -1,31 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_SelectBlockImageController : MonoBehaviour
 {
-    private Image currentSelectImage = null;
-    private List<Image> childSelectImageList = new List<Image>();
+    public RectTransform selectedImageRectTransform;
+    public GameObject contentGameObject;
+    [Space(10)]
+    public UI_Scene_MapEditor mapEditor;
 
-    public GameObject contentGameObject;    // 콘텐츠들을 담고 있는 오브젝트
+    private List<Button> contentChildButtonList = new List<Button>();
 
     private void Start()
     {
-        InitSelectBlockImageComponent();
+        Init();
         gameObject.SetActive(false);
     }
 
-    private void InitSelectBlockImageComponent()
+    private void Init()
     {
-        for( int i = 0; i < contentGameObject.transform.childCount; i ++)
+        for (int i = 0; i < contentGameObject.transform.childCount; i ++)
         {
-            childSelectImageList.Add(contentGameObject.transform.GetChild(i).GetComponent<Image>());
+            int _i = i;
+            contentChildButtonList.Add(contentGameObject.transform.GetChild(i).GetComponent<Button>());
+            contentChildButtonList[i].onClick.AddListener(delegate() {
+                mapEditor.SetSelectBlockIndex(_i);
+                FixedSelectImageLocation();
+            });
         }
     }
     
-    public void ChangeSelectedBlockButtonColor(UI_Scene_MapEditor mapEditor)
+    public void FixedSelectImageLocation()
     {
-        
+        Debug.Log(mapEditor.SelectBlockIndex);
+        selectedImageRectTransform.SetParent(contentChildButtonList[(int)mapEditor.SelectBlockIndex].transform);
+        selectedImageRectTransform.anchoredPosition = Vector2.zero;
     }
 }
