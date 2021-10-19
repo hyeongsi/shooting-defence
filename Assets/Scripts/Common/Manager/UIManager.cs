@@ -51,8 +51,7 @@ public class UIManager : Singleton<UIManager>
 
     public enum MapEditPopUpUI
     {
-        Build_Canvas,
-        Aim_Canvas,
+        
     }
     #endregion
 

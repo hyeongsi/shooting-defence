@@ -10,10 +10,29 @@ public class UI_Scene_MapEditor : UI_Scene
     private InputField xInputField;
     private InputField yInputField;
 
+    public BlockManager.BlockName SelectBlockIndex
+    {
+        set { selectBlockIndex = value; }
+        get { return selectBlockIndex; }
+    }
+
     private void Start()
     {
         Init();
-        UIManager.Instance.ShowPopupUI(UIManager.MainMenuPopUpUI.SelectStage_Canvas.ToString());
+        BlockManager.Instance.LoadAll();
+    }
+
+    public void SetSelectBlockIndex(int value)
+    {
+        if(value >= 0 && value < Enum.GetValues(typeof(BlockManager.BlockName)).Length)
+        {
+            SetSelectBlockIndex((BlockManager.BlockName)value);
+        }
+    }
+
+    public void SetSelectBlockIndex(BlockManager.BlockName value)
+    {
+        selectBlockIndex = value;
     }
 
     public void SwitchActiveCavnas(Canvas canvas)
