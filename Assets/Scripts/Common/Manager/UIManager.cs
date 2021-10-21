@@ -166,6 +166,21 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void SwitchActiveCavnas(Canvas canvas)
+    {
+        if (canvas == null)
+            return;
+
+        if (canvas.gameObject.activeSelf == true)
+        {
+            canvas.gameObject.SetActive(false);
+        }
+        else
+        {
+            canvas.gameObject.SetActive(true);
+        }
+    }
+
     private void Update()
     {
         if (GameManager.Instance == null)
