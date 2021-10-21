@@ -8,15 +8,14 @@ public class Enemy : MonoBehaviour
     Transform eye;
     Animator animator;
     NavMeshAgent navMeshAgent;
-    LayerMask plyaerLayer;
+    LayerMask playerLayer;
 
     protected float hp = 1000; // 임시
     protected float damage = 10;
     EnemyStaticData enemyStaticData;
 
-    BoxCollider damageCollider;
     bool isAttackalbe;
-    bool isAttacking;
+    bool damageFlag;
 
     public float HP { get { return hp; }  set { hp = value; } }
     public float DAMAGE { get { return damage; } set { damage = value; } }
@@ -36,26 +35,19 @@ public class Enemy : MonoBehaviour
 
         if (targetDistance <= 2.5f && isAttackalbe == true) // 임시로 
         {
-            StartCoroutine(Co_Attack(targetObject, 0.8f, targetDistance)); // 임시로 딜레이 넣음
+            StartCoroutine(Co_Attack(2f, targetObject)); // 임시로 딜레이 넣음
         }
     }
 
-    IEnumerator Co_Attack(GameObject targetObject, float attackDelay, float targetDistance)
+    IEnumerator Co_Attack(float attackDelay, GameObject targetObject)
     {
         isAttackalbe = false;
 
         float delay = attackDelay;
         animator.CrossFade("Attack", 0.3f);
 
-        Debug.Log(damageCollider.enabled);
-
-        // 플레이어일 때
-        if(isAttacking == true && targetDistance <= 2.5f)
-        {
-            targetObject.GetComponent<Player_Locomotion>().TakeDamage(damage);
-        }
-
-        // 포탑일 때
+        // 여기에 데미지 주는 코드 입력
+        targetObject.GetComponent<Player_Locomotion>().TakeDamage(damage);
 
         while (delay > 0)
         {
@@ -80,7 +72,7 @@ public class Enemy : MonoBehaviour
 
     public GameObject FindAttackObject()
     {
-        Collider[] detectedObjects = Physics.OverlapSphere(transform.position, 5f, plyaerLayer);
+        Collider[] detectedObjects = Physics.OverlapSphere(transform.position, 5f, playerLayer);
         GameObject targetPlayer = null;
         GameObject targetBarricade = null;
 
@@ -166,8 +158,6 @@ public class Enemy : MonoBehaviour
         {
             animator.SetBool("isMove", true);
         }
-
-        Debug.Log(navMeshAgent.velocity);
     }
 
     private void Awake()
@@ -175,9 +165,8 @@ public class Enemy : MonoBehaviour
         eye = GetComponentInChildren<EyePosition>().transform;
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        damageCollider = GetComponentInChildren<BoxCollider>();
 
-        plyaerLayer = 1 << LayerMask.NameToLayer("Player");
+        playerLayer = 1 << LayerMask.NameToLayer("Player");
 
         isAttackalbe = true;
     }
@@ -186,6 +175,8 @@ public class Enemy : MonoBehaviour
     {
         Move(FindAttackObject());
         Attack(FindAttackObject());
+
+        Debug.Log(damageFlag);
 
         if (GameManager.Instance == null || GameManager.Instance.IsPause)
             return;
@@ -201,13 +192,13 @@ public class Enemy : MonoBehaviour
         BARRICADE = 2      // 터렛만 공격
     }
 
-    public void DamageColliderOn()
+    public void DamageOn()
     {
-        isAttacking = true;
+        damageFlag = true;
     }
-    public void DamageColliderOff()
+    public void DamageOff()
     {
-        isAttacking = false;
+        damageFlag = false;
     }
 
     private void OnMouseEnter()
