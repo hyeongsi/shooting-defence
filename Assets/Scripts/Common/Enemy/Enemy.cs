@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
     NavMeshAgent navMeshAgent;
     LayerMask playerLayer;
 
-    protected float hp = 1000; // 임시
+    protected float hp = 150; // 임시
     protected float damage = 10;
     EnemyStaticData enemyStaticData;
 
@@ -24,50 +24,6 @@ public class Enemy : MonoBehaviour
     {
         this.enemyStaticData = enemyStaticData;
         hp = enemyStaticData.maxHp;
-    }
-
-    public virtual void Attack(GameObject targetObject)
-    {
-        if (targetObject == null)
-            return;
-
-        float targetDistance = Vector3.SqrMagnitude(transform.position - targetObject.transform.position);
-
-        if (targetDistance <= 2.5f && isAttackalbe == true) // 임시로 
-        {
-            StartCoroutine(Co_Attack(2f, targetObject)); // 임시로 딜레이 넣음
-        }
-    }
-
-    IEnumerator Co_Attack(float attackDelay, GameObject targetObject)
-    {
-        isAttackalbe = false;
-
-        float delay = attackDelay;
-        animator.CrossFade("Attack", 0.3f);
-
-        // 여기에 데미지 주는 코드 입력
-        targetObject.GetComponent<Player_Locomotion>().TakeDamage(damage);
-
-        while (delay > 0)
-        {
-            delay -= 0.1f;
-            yield return new WaitForSeconds(0.1f);
-        }
-        isAttackalbe = true;
-    }
-
-    public virtual void TakeDamage(float damage)    // 피격
-    {
-        hp -= damage;
-        animator.CrossFade("Hit", 0f);
-
-        if (hp <= 0)
-        {
-            Destroy(gameObject, 3f);
-            // 삭제 말고, 캐싱해서 메모리 아끼자,
-            // 비활성화 시켜놓고 돌려쓰자, 오브젝트풀링
-        }
     }
 
     public GameObject FindAttackObject()
@@ -131,12 +87,56 @@ public class Enemy : MonoBehaviour
             return targetPlayer;
     }
 
-    public virtual Vector3 FindAWay()
+    public virtual void Attack(GameObject targetObject)
     {
-        // 맵 정보를 토대로 이동해야할 방향 구해서 이동하기 
-        // astar 알고리즘 통해서 이동방향 구하기, 이동가능하면 해당 방향 리턴
-        // 이동방향을 벽으로 다 막지 못하도록 건축에서 제어 할거라 이동 못하는 곳은 없음
-        return Vector3.zero;   
+        if (targetObject == null)
+            return;
+
+        float targetDistance = Vector3.SqrMagnitude(transform.position - targetObject.transform.position);
+
+        if (targetDistance <= 2.5f && isAttackalbe == true)
+        {
+            StartCoroutine(Co_Attack(2f, targetObject)); // 임시로 딜레이 넣음
+        }
+    }
+
+    IEnumerator Co_Attack(float attackDelay, GameObject targetObject)
+    {
+        isAttackalbe = false;
+
+        float delay = attackDelay;
+        animator.CrossFade("Attack", 0.3f);
+
+        // 여기에 데미지 주는 코드 입력
+        targetObject.GetComponent<Player_Locomotion>().TakeDamage(damage);
+
+        while (delay > 0)
+        {
+            delay -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        isAttackalbe = true;
+    }
+
+    public virtual void TakeDamage(float damage)    // 피격
+    {
+        hp -= damage;
+        animator.CrossFade("Hit", 0f);
+
+        if (hp <= 0)
+        {
+            isAttackalbe = false;
+            CapsuleCollider collider;
+            gameObject.GetComponent<CapsuleCollider>().enabled = false;
+
+            navMeshAgent.Stop();
+
+            animator.applyRootMotion = true;
+            animator.SetTrigger("Die");
+            Destroy(gameObject, 2.5f);
+            // 삭제 말고, 캐싱해서 메모리 아끼자,
+            // 비활성화 시켜놓고 돌려쓰자, 오브젝트풀링
+        }
     }
 
     public virtual void Move(GameObject targetObject)
@@ -176,8 +176,6 @@ public class Enemy : MonoBehaviour
         Move(FindAttackObject());
         Attack(FindAttackObject());
 
-        Debug.Log(damageFlag);
-
         if (GameManager.Instance == null || GameManager.Instance.IsPause)
             return;
         
@@ -190,20 +188,5 @@ public class Enemy : MonoBehaviour
         NONE = 0,       // 공격 안하고 무시
         PLAYER = 1,     // 플레이어 만 공격
         BARRICADE = 2      // 터렛만 공격
-    }
-
-    public void DamageOn()
-    {
-        damageFlag = true;
-    }
-    public void DamageOff()
-    {
-        damageFlag = false;
-    }
-
-    private void OnMouseEnter()
-    {
-        // 마우스가 들어오면 강조 표시 하기
-        // 십자선을 고정
     }
 }
