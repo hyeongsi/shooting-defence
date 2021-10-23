@@ -32,7 +32,7 @@ public class UIManager : Singleton<UIManager>
     private int _order = 10;    // 현재까지 최근에 사용한 오더
 
     private Dictionary<string, UI_PopupData> uiPopupDictionary = new Dictionary<string, UI_PopupData>();
-    private Stack<UI_Popup> popupStack = new Stack<UI_Popup>();    // 팝업 캔버스
+    private List<UI_Popup> popupList = new List<UI_Popup>();    // 팝업 캔버스
     private UI_SceneData sceneUIData = null;    // 고정 캔버스
 
     #region Property
@@ -51,7 +51,8 @@ public class UIManager : Singleton<UIManager>
 
     public enum MapEditPopUpUI
     {
-        
+        Create_Base_Map_Canvas,
+        Set_Stage_Info_Canvas,
     }
     #endregion
 
@@ -75,7 +76,7 @@ public class UIManager : Singleton<UIManager>
 
         if(uiPopupDictionary.TryGetValue(name, out ui_popupdata))
         {
-            popupStack.Push(ui_popupdata.ui_popup);
+            popupList.Add(ui_popupdata.ui_popup);
             ui_popupdata.canvas.sortingOrder = _order;
             _order++;
 
@@ -103,32 +104,49 @@ public class UIManager : Singleton<UIManager>
 
     public void ClosePopupUI(UI_Popup popup) // 안전 차원
     {
-        if (popupStack.Count == 0) // 비어있는 스택이라면 삭제 불가
+        if (popupList.Count == 0) // 비어있는 스택이라면 삭제 불가
             return;
 
-        if (popupStack.Peek() != popup)
+        int i;
+        for(i = 0;  i < popupList.Count; i ++)
         {
-            Debug.Log("Close Popup Failed!"); // 스택의 가장 위에있는 Peek() 것만 삭제할 수 잇기 때문에 popup이 Peek()가 아니면 삭제 못함
-            return;
-        }
-
-        ClosePopupUI();
+            if(popupList[i] == popup)
+            {
+                ClosePopupUI(i);
+                return;
+            }
+        } 
     }
 
-    private void ClosePopupUI()
+    private void ClosePopupUI(int index)
     {
-        if (popupStack.Count == 0)
+        if (popupList.Count == 0)
+            return;
+        if (popupList.Count <= index || index < 0)
             return;
 
-        UI_Popup popup = popupStack.Pop();
+        UI_Popup popup = popupList[index];
         popup.gameObject.SetActive(false);
+        popupList.RemoveAt(index);
+
+        _order--; // order 줄이기
+    }
+
+    private void ClosePopupUI() // 최상위 popup 닫기
+    {
+        if (popupList.Count == 0)
+            return;
+
+        UI_Popup popup = popupList[0];
+        popup.gameObject.SetActive(false);
+        popupList.RemoveAt(0);
 
         _order--; // order 줄이기
     }
 
     public void CloseAllPopupUI()
     {
-        while (popupStack.Count > 0)
+        while (popupList.Count > 0)
             ClosePopupUI();
     }
 
@@ -166,7 +184,7 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    public void SwitchActiveCavnas(Canvas canvas)
+    public void SwitchCanvasActivation(Canvas canvas)   // canvas 껏다 켰다
     {
         if (canvas == null)
             return;
@@ -179,6 +197,27 @@ public class UIManager : Singleton<UIManager>
         {
             canvas.gameObject.SetActive(true);
         }
+    }
+
+    public void SwitchPopUpUIActivation(Canvas canvas)  // popui 전용 ui switch
+    {
+        if (canvas == null)
+            return;
+
+        UI_PopupData ui_popupdata;
+        if (uiPopupDictionary.TryGetValue(canvas.transform.name, out ui_popupdata))
+        {
+            for (int i = 0; i < popupList.Count; i++)
+            {
+                if (popupList[i] != ui_popupdata.ui_popup)
+                    continue;
+
+                popupList[i].ClosePopupUI();        // 만약 활성화 된 POPUP UI 라면 비활성화
+                return;
+            }
+        }
+
+        ShowPopupUI(canvas.transform.name);
     }
 
     private void Update()
