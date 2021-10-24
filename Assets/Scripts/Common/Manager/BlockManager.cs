@@ -12,7 +12,7 @@ public class BlockManager : Singleton<BlockManager>
 
     private void Awake()
     {
-        if (null == instance)
+        if (false == instance)
         {
             instance = Instance;
             DontDestroyOnLoad(instance);
@@ -46,7 +46,7 @@ public class BlockManager : Singleton<BlockManager>
         }
         else
         {
-            if (loadAsyncOperationHandle.Result != null)
+            if (loadAsyncOperationHandle.Result != false)
                 return;
 
             Addressables.LoadAssetAsync<GameObject>(blockName.ToString()).Completed +=
@@ -73,7 +73,7 @@ public class BlockManager : Singleton<BlockManager>
 
         if (blockDictionary.TryGetValue((int)blockName, out loadAsyncOperationHandle))
         {
-            if (loadAsyncOperationHandle.Result == null)
+            if (loadAsyncOperationHandle.Result == false)
             {
                 Debug.Log("로딩된 블럭이 없어서 가져올 수 없습니다.");
                 return null;

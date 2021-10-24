@@ -7,7 +7,7 @@ public class UI_Utill
     public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
     {
         T component = go.GetComponent<T>();
-        if (component == null)
+        if (!component)
         {
             component = go.AddComponent<T>();
             return component;

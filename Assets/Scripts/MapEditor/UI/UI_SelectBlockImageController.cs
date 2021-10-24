@@ -18,7 +18,7 @@ public class UI_SelectBlockImageController : MonoBehaviour
 
     private void Init()
     {
-        if (MapEditorController.Instance == null)
+        if (!MapEditorController.Instance)
         {
             Debug.Log("MapEditorController is null");
             return;
@@ -37,7 +37,7 @@ public class UI_SelectBlockImageController : MonoBehaviour
     
     public void FixedSelectImageLocation()
     {
-        if (MapEditorController.Instance == null)
+        if (!MapEditorController.Instance)
         {
             Debug.Log("MapEditorController is null");
             return;

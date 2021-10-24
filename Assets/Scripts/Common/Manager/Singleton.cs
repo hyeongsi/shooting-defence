@@ -8,7 +8,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     private void Awake()
     {
-        if (null == instance)
+        if (!instance)
         {
             instance = Instance;
         }
@@ -22,14 +22,14 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
-            if (instance != null)
+            if (instance)
             {
                 return instance;
             }
 
             instance = (T)FindObjectOfType(typeof(T));  // T타입 오브젝트 있는지 찾기 
 
-            if(instance == null)
+            if(!instance)
             {
                 GameObject singleton = new GameObject();
                 instance = singleton.AddComponent<T>();

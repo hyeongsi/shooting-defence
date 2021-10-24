@@ -37,7 +37,7 @@ public class MapEditorController : MonoBehaviour
 
     private void Awake()
     {
-        if (null == instance)
+        if (false == instance)
         {
             instance = this;
         }
@@ -49,13 +49,14 @@ public class MapEditorController : MonoBehaviour
     private void Start()
     {
         BlockManager.Instance.LoadAll();
+        UIManager.Instance.EnrollUI(UIManager.PopUpUIEnums.MapEditPopUpUI);
     }
 
     public static MapEditorController Instance
     {
         get
         {
-            if (instance == null)
+            if (instance == false)
                 return null;
 
             return instance;
@@ -88,10 +89,10 @@ public class MapEditorController : MonoBehaviour
         GameObject generateBlockGameObject = BlockManager.Instance.GetBlock(selectBlockIndex);
         GameObject generateMapParent = GameObject.Find(GENERATE_MAP_PARENT_NAME);
 
-        if (generateBlockGameObject == null)
+        if (generateBlockGameObject == false)
             return;
 
-        if (generateMapParent != null)
+        if (generateMapParent != false)
         {
             DestroyImmediate(generateMapParent);
         }

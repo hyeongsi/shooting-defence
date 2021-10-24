@@ -15,7 +15,7 @@ public class UI_Popup : UI_Base
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.overrideSorting = true;
 
-        UIManager.Instance.AddPopupUI(this, canvas); 
+        UIManager.Instance.AddPopupUI(this, canvas);
     }
 
     public virtual void ShowPopupUI()

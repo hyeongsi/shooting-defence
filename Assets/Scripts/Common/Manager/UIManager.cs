@@ -35,6 +35,8 @@ public class UIManager : Singleton<UIManager>
     private List<UI_Popup> popupList = new List<UI_Popup>();    // 팝업 캔버스
     private UI_SceneData sceneUIData = null;    // 고정 캔버스
 
+    private const string canvasParentName = "Canvas_Collection";
+
     #region Property
     public Dictionary<string, UI_PopupData> UiPopupDictionary
     {
@@ -44,6 +46,12 @@ public class UIManager : Singleton<UIManager>
     #endregion
     // 씬마다 사용하는 UI 이름 여기다가 enum 값으로 등록시켜 놓고, 해당 씬에서 UI 이름 찾아가서 enum값 string 으로 바꿔서 사용하면 됨
     #region SceneUIEnum
+    public enum PopUpUIEnums
+    {
+        MainMenuPopUpUI,
+        MapEditPopUpUI,
+    }
+
     public enum MainMenuPopUpUI
     {
         SelectStage_Canvas,
@@ -186,7 +194,7 @@ public class UIManager : Singleton<UIManager>
 
     public void SwitchCanvasActivation(Canvas canvas)   // canvas 껏다 켰다
     {
-        if (canvas == null)
+        if (canvas == false)
             return;
 
         if (canvas.gameObject.activeSelf == true)
@@ -201,7 +209,7 @@ public class UIManager : Singleton<UIManager>
 
     public void SwitchPopUpUIActivation(Canvas canvas)  // popui 전용 ui switch
     {
-        if (canvas == null)
+        if (canvas == false)
             return;
 
         UI_PopupData ui_popupdata;
@@ -217,12 +225,70 @@ public class UIManager : Singleton<UIManager>
             }
         }
 
+        for(int i = 0; i < popupList.Count; i ++)
+        {
+            popupList[i].ClosePopupUI();
+        }
+
         ShowPopupUI(canvas.transform.name);
+    }
+
+    public void EnrollUI(PopUpUIEnums popUpUIEnums) // ui에 등록된 자식들을 찾아서 on,off 해서 UIManager에 등록 시키도록 하는 메소드
+    {
+        Array array;
+
+        switch (popUpUIEnums)
+        {
+            case PopUpUIEnums.MainMenuPopUpUI:
+                array = Enum.GetValues(typeof(MainMenuPopUpUI));
+                break;
+            case PopUpUIEnums.MapEditPopUpUI:
+                array = Enum.GetValues(typeof(MapEditPopUpUI));
+                break;
+            default:
+                return;
+        }
+
+        if (array.Length == 0)
+            return;
+
+        Transform findTransformParent;
+        Transform findTransform;
+        for(int i = 0; i < array.Length; i ++)
+        {
+            // 모든 Canvas들은 Canvas_Collection 이름을 가진 오브젝트 안에 들어가 있으며, 이것들 통해 비활성화 된 오브젝트를 찾아 start()를 실행
+
+            findTransformParent = GameObject.Find(canvasParentName).transform;
+            if (findTransformParent == false)
+                return;
+
+            for (int j = 0; j < findTransformParent.childCount; j++)
+            {
+                findTransform = findTransformParent.GetChild(j);
+
+                if (findTransform.name != array.GetValue(i).ToString())
+                    continue;
+
+                if (findTransform.gameObject.activeSelf == true)
+                    continue;
+
+                StartCoroutine(GameObjectInitCoroutine(findTransform));
+            } 
+        }
+    }
+
+    private IEnumerator GameObjectInitCoroutine(Transform transform)
+    {
+        // start() 는 활성화 된 후 1프레임 후에 실행되기 때문에 조금 기다리고 비활성화 처리
+        // 1프레임 쉬면서 start() / Init() 끝난 후 비활성화 처리
+        transform.gameObject.SetActive(true);
+        yield return null;
+        transform.gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        if (GameManager.Instance == null)
+        if (GameManager.Instance == false)
             return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
