@@ -115,6 +115,7 @@ public class MapEditorController : MonoBehaviour
         UIManager.Instance.SwitchPopUpUIActivation(canvas);
     }
 
+
     public void ExitGame()
     {
         Application.Quit();

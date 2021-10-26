@@ -61,6 +61,7 @@ public class UIManager : Singleton<UIManager>
     {
         Create_Base_Map_Canvas,
         Set_Stage_Info_Canvas,
+        Set_Stage_Wave_Info_Canvas,
     }
     #endregion
 
