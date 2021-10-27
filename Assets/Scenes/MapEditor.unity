@@ -11434,7 +11434,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1823604039
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11468,7 +11468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   setWaveUI: {fileID: 2034149214}
-  waveCountDropDown: {fileID: 0}
+  waveCountDropDown: {fileID: 1209217329}
 --- !u!114 &1823604041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13179,7 +13179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2034149210
 MonoBehaviour:
   m_ObjectHideFlags: 0

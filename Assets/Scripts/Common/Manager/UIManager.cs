@@ -274,6 +274,7 @@ public class UIManager : Singleton<UIManager>
                     continue;
 
                 StartCoroutine(GameObjectInitCoroutine(findTransform));
+                break;
             } 
         }
     }
