@@ -111,6 +111,25 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void ClosePopupUI(Canvas canvas)
+    {
+        if (canvas == false)
+            return;
+
+        UI_PopupData ui_popupdata;
+        if (uiPopupDictionary.TryGetValue(canvas.transform.name, out ui_popupdata))
+        {
+            for (int i = 0; i < popupList.Count; i++)
+            {
+                if (popupList[i] != ui_popupdata.ui_popup)
+                    continue;
+
+                popupList[i].ClosePopupUI();        // 만약 활성화 된 POPUP UI 라면 비활성화
+                return;
+            }
+        }
+    }
+
     public void ClosePopupUI(UI_Popup popup) // 안전 차원
     {
         if (popupList.Count == 0) // 비어있는 스택이라면 삭제 불가
@@ -209,21 +228,6 @@ public class UIManager : Singleton<UIManager>
         }
 
         ShowPopupUI(canvas.transform.name);
-    }
-
-    public void SwitchCanvasActivation(Canvas canvas)   // canvas 껏다 켰다
-    {
-        if (canvas == false)
-            return;
-
-        if (canvas.gameObject.activeSelf == true)
-        {
-            canvas.gameObject.SetActive(false);
-        }
-        else
-        {
-            canvas.gameObject.SetActive(true);
-        }
     }
 
     public void SwitchPopUpUIActivation(Canvas canvas)  // popui 전용 ui switch
