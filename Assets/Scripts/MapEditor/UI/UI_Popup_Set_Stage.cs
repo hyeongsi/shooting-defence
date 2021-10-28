@@ -11,30 +11,52 @@ public class UI_Popup_Set_Stage : UI_Popup
     public Dropdown waveCountDropDown;
     public const string INIT_STRING = "1";
 
+    public Dropdown spawnEnemyListDropDown;
+
     public override void Init()
     {
         base.Init();
     }
 
-    private void OnEnable()
+    public void InitEditWaveDropDown()
     {
-        if (setWaveUI == null)
+        waveCountDropDown.options.Clear();
+
+        for (int i = 0; i < setWaveUI.GetWaveCountNumber(); i++)
+        {
+            Dropdown.OptionData option = new Dropdown.OptionData();
+            option.text = (i + 1).ToString();
+            waveCountDropDown.options.Add(option);
+        }
+
+        InitSpawnEnemyListDropDown();
+    }
+
+    public void InitSpawnEnemyListDropDown()
+    {
+        if (MapEditorController.Instance.GetSpawnEnemyInfoList().Count <= 0)
             return;
 
-        if (setWaveUI.gameObject.activeSelf == true)
+        spawnEnemyListDropDown.options.Clear();
+
+        List<int> spawnEnemyList = MapEditorController.Instance.GetSpawnEnemyInfoList()[0].spawnEnemyList;
+        for (int i = 0; i < spawnEnemyList.Count; i++)
         {
-            setWaveUI.gameObject.SetActive(false);
-            if (waveCountDropDown == null)
-                return;
+            Dropdown.OptionData option = new Dropdown.OptionData();
+            option.text = (i + 1).ToString();
+            spawnEnemyListDropDown.options.Add(option);
+        }
+    }
 
-            waveCountDropDown.options.Clear();
+    private void OnEnable()
+    {
+        InitEditWaveDropDown();
+    }
 
-            for (int i = 0; i < 3; i++)
-            {
-                Dropdown.OptionData option = new Dropdown.OptionData();
-                option.text = (i + 1).ToString();
-                waveCountDropDown.options.Add(option);
-            }
-        } 
+    public enum UpdateEnemyList
+    {
+        ADD_ENEMYLIST = 1,
+        DELETE_ENEMYLIST = 2,
+        CLEAR_ENEMYLIST = 3,
     }
 }

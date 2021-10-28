@@ -6,49 +6,50 @@ using UnityEngine.UI;
 
 public class UI_Popup_Set_Wave : UI_Popup
 {
-    public InputField waveCountInputField;
+    [SerializeField]
+    private InputField editWaveCountInputField;
+    [SerializeField]
+    private InputField waveCountInputField;
+
     public const string INIT_STRING = "1";
+    public const int INIT_WAVE_COUNT = 1;
 
     public override void Init()
     {
         base.Init();
+        MapEditorController.Instance.InitWaveData();
     }
 
     public void InitWaveData()
     {
+        editWaveCountInputField.text = INIT_STRING;
         waveCountInputField.text = INIT_STRING;
-        //SetEnemyDropDown(1);
-        //editEnemyDropdown.value = 0;
+
+        MapEditorController.Instance.InitWaveData();
     }
-
-    //public void SetEnemyDropDown(int value)
-    //{
-    //    if(value <= 0)
-    //    {
-    //        value = 1;
-    //    }
-
-    //    editEnemyDropdown.options.Clear();
-        
-    //    for(int i = 0; i < value; i ++)
-    //    {
-    //        Dropdown.OptionData option = new Dropdown.OptionData();
-    //        option.text = (i+1).ToString();
-    //        editEnemyDropdown.options.Add(option);
-    //    }
-    //}
 
     public void EditWaveCount()
     {
-        if (String.IsNullOrEmpty(waveCountInputField.text))
+        if (String.IsNullOrEmpty(editWaveCountInputField.text))
             return;
 
-        int waveCountInputFieldValue = int.Parse(waveCountInputField.text);
+        int waveCountInputFieldValue = int.Parse(editWaveCountInputField.text);
 
         if (waveCountInputFieldValue <= 0)
         {
             waveCountInputFieldValue = 1;
-            waveCountInputField.text = INIT_STRING;
+            editWaveCountInputField.text = INIT_STRING;
         }
+
+        waveCountInputField.text = editWaveCountInputField.text;
+        MapEditorController.Instance.SetSpawnEnemyInfoList(waveCountInputFieldValue);
+    }
+
+    public int GetWaveCountNumber()
+    {
+        int result = 1;
+        int.TryParse(waveCountInputField.text, out result);
+
+        return result;
     }
 }

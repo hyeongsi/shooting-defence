@@ -3,12 +3,24 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+public class SpawnEnemyInfo
+{
+    public List<int> spawnEnemyList = new List<int>();
+    public List<int> waitTimeBeforeSpawnList = new List<int>();
+    public List<int> spawnDelayList = new List<int>();
+    public List<int> spawnCountList = new List<int>();
+}
+
 public class MapEditorController : MonoBehaviour
 {
     private static MapEditorController instance = null;
     private BlockManager.BlockName selectBlockIndex = BlockManager.BlockName.Block1_Gray;
     private int xValue;
     private int yValue;
+
+    private int editWave = 1;   // 수정하고 있는 wave 번호  / 기본값 : 1
+    private int selectEnemy = 0;   // 추가를 원하는 Enemy / 기본값 : 0
+    private List<SpawnEnemyInfo> spawnEnemyInfoList = new List<SpawnEnemyInfo>();
 
     public int XValue 
     { 
@@ -69,6 +81,52 @@ public class MapEditorController : MonoBehaviour
         get { return selectBlockIndex; }
     }
 
+    public void InitEditData()
+    {
+        editWave = 1;
+        selectEnemy = 0;
+    }
+    public void InitWaveData()
+    {
+        InitEditData();
+        InitSpawnEnemyInfoList();
+    }
+
+    #region SetSpawnEnemyInfoList
+    public List<SpawnEnemyInfo> GetSpawnEnemyInfoList()
+    {
+        return spawnEnemyInfoList;
+    }
+
+    public void InitSpawnEnemyInfoList()
+    {
+        spawnEnemyInfoList.Clear();
+
+        SpawnEnemyInfo list = new SpawnEnemyInfo();
+        spawnEnemyInfoList.Add(list);
+    }
+
+    public void SetSpawnEnemyInfoList(int waveCount)
+    {
+        if (spawnEnemyInfoList.Count > waveCount)
+        {
+            spawnEnemyInfoList.RemoveRange(waveCount, spawnEnemyInfoList.Count - waveCount);
+        }
+        else if (spawnEnemyInfoList.Count < waveCount)
+        {
+            for (int i = 0; i < waveCount - spawnEnemyInfoList.Count; i++)
+            {
+                SpawnEnemyInfo spawnEnemyInfo = new SpawnEnemyInfo();
+                spawnEnemyInfoList.Add(spawnEnemyInfo);
+            }
+        }
+        else
+            return;
+
+        InitEditData();
+    }
+    #endregion
+
     public void SetSelectBlockIndex(int value)
     {
         if (value >= 0 && value < Enum.GetValues(typeof(BlockManager.BlockName)).Length)
@@ -110,11 +168,15 @@ public class MapEditorController : MonoBehaviour
         }
     }
 
+    public void ActiveCanvasUI(Canvas canvas)
+    {
+        UIManager.Instance.ActiveCanvasUI(canvas);
+    }
+
     public void SwitchCanvas(Canvas canvas)
     {
         UIManager.Instance.SwitchPopUpUIActivation(canvas);
     }
-
 
     public void ExitGame()
     {

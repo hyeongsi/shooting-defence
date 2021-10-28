@@ -193,6 +193,24 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void ActiveCanvasUI(Canvas canvas)
+    {
+        UI_PopupData ui_popupdata;
+        if (uiPopupDictionary.TryGetValue(canvas.transform.name, out ui_popupdata))
+        {
+            for (int i = 0; i < popupList.Count; i++)
+            {
+                if (popupList[i] != ui_popupdata.ui_popup)
+                    continue;
+
+                popupList[i].ClosePopupUI();        // 만약 활성화 된 POPUP UI 라면 비활성화
+                break;
+            }
+        }
+
+        ShowPopupUI(canvas.transform.name);
+    }
+
     public void SwitchCanvasActivation(Canvas canvas)   // canvas 껏다 켰다
     {
         if (canvas == false)
