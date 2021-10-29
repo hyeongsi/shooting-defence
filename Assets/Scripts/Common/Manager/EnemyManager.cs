@@ -28,6 +28,16 @@ public class EnemyManager : Singleton<EnemyManager>
         }
     }
 
+    public void LoadAll()
+    {
+        foreach (EnemyName enemyName in System.Enum.GetValues(typeof(EnemyName)))
+        {
+            LoadEnemy(enemyName);
+        }
+
+        LoadEnemyStaticData();
+    }
+
     public void LoadEnemyStaticData()   // 적 데이터 로드
     {
         const float CORRECTION_VALUE = 0.1f;
@@ -46,12 +56,11 @@ public class EnemyManager : Singleton<EnemyManager>
                     for (int i = 0; i < csvString.Count; i++)
                     {
                         newEnemyStaticData = new EnemyStaticData(
-                           int.Parse(csvString[i][(int)EnemyCsvColumn.ATTACK_TYPE]),
                            int.Parse(csvString[i][(int)EnemyCsvColumn.HP]) * CORRECTION_VALUE,
                            int.Parse(csvString[i][(int)EnemyCsvColumn.ATTACK_DAMAGE]) * CORRECTION_VALUE,
                            int.Parse(csvString[i][(int)EnemyCsvColumn.ATTACK_RANGE]) * CORRECTION_VALUE,
                            int.Parse(csvString[i][(int)EnemyCsvColumn.ATTACK_DELAY]) * CORRECTION_VALUE,
-                           int.Parse(csvString[i][(int)EnemyCsvColumn.SPIN_SPEED]) * CORRECTION_VALUE);
+                           int.Parse(csvString[i][(int)EnemyCsvColumn.MOVE_SPEED]) * CORRECTION_VALUE);
 
                         enemyStaticDataDictionary.Add(int.Parse(csvString[i][(int)EnemyCsvColumn.INDEX]), newEnemyStaticData);
                     }
@@ -170,32 +179,31 @@ public class EnemyManager : Singleton<EnemyManager>
 
     public enum EnemyName
     {
-        Zombie1 = 0,
+        zombie1 = 0,
+        zombie2 = 1,
     }
 
     private enum EnemyCsvColumn
     {
         INDEX = 0,
         NAME = 1,
-        ATTACK_TYPE = 2,
-        HP = 3,
-        ATTACK_DAMAGE = 4,
-        ATTACK_RANGE = 5,
-        ATTACK_DELAY = 6,
-        SPIN_SPEED = 7,
+        HP = 2,
+        ATTACK_DAMAGE = 3,
+        ATTACK_RANGE = 4,
+        ATTACK_DELAY = 5,
+        MOVE_SPEED = 6,
     }
 }
 
 public class EnemyStaticData
 {
-    public int attackType = 0;
     public float maxHp = 0.0f;
     public float attackDamage = 0.0f;
     public float attackRange = 0.0f;
     public float attackDelay = 0.0f;
     public float moveSpeed = 0.0f;
 
-    public EnemyStaticData(int attackType, float maxHp, float attackDamage, float attackRange, float attackDelay, float moveSpeed)
+    public EnemyStaticData(float maxHp, float attackDamage, float attackRange, float attackDelay, float moveSpeed)
     {
         this.maxHp = maxHp;
         this.attackDamage = attackDamage;

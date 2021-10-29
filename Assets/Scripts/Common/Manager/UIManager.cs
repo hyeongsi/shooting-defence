@@ -310,6 +310,18 @@ public class UIManager : Singleton<UIManager>
         transform.gameObject.SetActive(false);
     }
 
+    public void ToggleCanvas(Canvas canvas)
+    {
+        if(canvas.gameObject.activeSelf == true)
+        {
+            canvas.gameObject.SetActive(false);
+        }
+        else
+        {
+            canvas.gameObject.SetActive(true);
+        }
+    }
+
     private void Update()
     {
         if (GameManager.Instance == false)

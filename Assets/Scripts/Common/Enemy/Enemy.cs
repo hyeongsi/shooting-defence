@@ -44,24 +44,6 @@ public class Enemy : MonoBehaviour
         } 
     }
 
-    public bool FindAttackObject()
-    {
-        switch(enemyStaticData.attackType)
-        {
-            case (int)AttackType.PLAYER:
-                // 공격 범위에 플레이어 있는지 검사하고 return true
-                break;
-            case (int)AttackType.TURRET:
-                // 공격 범위에 터렛 있는지 검사하고 return true
-                break;
-            default:
-                // 모두다 때려버려
-                return false;
-        }
-
-        return false;
-    }
-
     public virtual Vector3 FindAWay()
     {
         // 맵 정보를 토대로 이동해야할 방향 구해서 이동하기 

@@ -15,12 +15,14 @@ public class MapEditorController : MonoBehaviour
 {
     private static MapEditorController instance = null;
     private BlockManager.BlockName selectBlockIndex = BlockManager.BlockName.Block1_Gray;
+    private EnemyManager.EnemyName selectEnemyIndex = EnemyManager.EnemyName.zombie1;
     private int xValue;
     private int yValue;
 
-    private int editWave = 1;   // 수정하고 있는 wave 번호  / 기본값 : 1
-    private int selectEnemy = 0;   // 추가를 원하는 Enemy / 기본값 : 0
     private List<SpawnEnemyInfo> spawnEnemyInfoList = new List<SpawnEnemyInfo>();
+
+    public delegate void SetSelectEnemyIndexDelegate();
+    public SetSelectEnemyIndexDelegate setSelectEnemyIndexDelegate;
 
     public int XValue 
     { 
@@ -61,6 +63,7 @@ public class MapEditorController : MonoBehaviour
     private void Start()
     {
         BlockManager.Instance.LoadAll();
+        EnemyManager.Instance.LoadAll();
         UIManager.Instance.EnrollUI(UIManager.PopUpUIEnums.MapEditPopUpUI);
     }
 
@@ -75,20 +78,48 @@ public class MapEditorController : MonoBehaviour
         }
     }
 
+    #region SelectIndexProperty
     public BlockManager.BlockName SelectBlockIndex
     {
         set { selectBlockIndex = value; }
         get { return selectBlockIndex; }
     }
-
-    public void InitEditData()
+    public EnemyManager.EnemyName SelectEnemyIndex
     {
-        editWave = 1;
-        selectEnemy = 0;
+        set { selectEnemyIndex = value; }
+        get { return selectEnemyIndex; }
     }
+    #endregion
+
+    #region SelectIndexSetMethod
+    public void SetSelectBlockIndex(int value)
+    {
+        if (value >= 0 && value < Enum.GetValues(typeof(BlockManager.BlockName)).Length)
+        {
+            SetSelectBlockIndex((BlockManager.BlockName)value);
+        }
+    }
+    public void SetSelectBlockIndex(BlockManager.BlockName value)
+    {
+        selectBlockIndex = value;
+    }
+
+    public void SetSelectEnemyIndex(int value)
+    {
+        if (value >= 0 && value < Enum.GetValues(typeof(EnemyManager.EnemyName)).Length)
+        {
+            SetSelectEnemyIndex((EnemyManager.EnemyName)value);
+        }
+    }
+    public void SetSelectEnemyIndex(EnemyManager.EnemyName value)
+    {
+        selectEnemyIndex = value;
+        setSelectEnemyIndexDelegate?.Invoke();
+    }
+    #endregion
+
     public void InitWaveData()
     {
-        InitEditData();
         InitSpawnEnemyInfoList();
     }
 
@@ -120,25 +151,8 @@ public class MapEditorController : MonoBehaviour
                 spawnEnemyInfoList.Add(spawnEnemyInfo);
             }
         }
-        else
-            return;
-
-        InitEditData();
     }
     #endregion
-
-    public void SetSelectBlockIndex(int value)
-    {
-        if (value >= 0 && value < Enum.GetValues(typeof(BlockManager.BlockName)).Length)
-        {
-            SetSelectBlockIndex((BlockManager.BlockName)value);
-        }
-    }
-
-    public void SetSelectBlockIndex(BlockManager.BlockName value)
-    {
-        selectBlockIndex = value;
-    }
 
     public void GenerateMap()
     {
@@ -166,6 +180,11 @@ public class MapEditorController : MonoBehaviour
                 newTile.parent = generateMapParent.transform;
             }
         }
+    }
+
+    public void ToggleCanvas(Canvas canvas) // UI_POPUP을 상속받지 않은 캔버스 전용 on,off 메소드
+    {
+        UIManager.Instance.ToggleCanvas(canvas);
     }
 
     public void SwitchCanvas(Canvas canvas)
