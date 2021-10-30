@@ -6,8 +6,8 @@ using UnityEngine;
 public class SpawnEnemyInfo
 {
     public List<int> spawnEnemyList = new List<int>();
-    public List<int> waitTimeBeforeSpawnList = new List<int>();
-    public List<int> spawnDelayList = new List<int>();
+    public List<float> waitTimeBeforeSpawnList = new List<float>();
+    public List<float> spawnDelayList = new List<float>();
     public List<int> spawnCountList = new List<int>();
 }
 
@@ -145,7 +145,8 @@ public class MapEditorController : MonoBehaviour
         }
         else if (spawnEnemyInfoList.Count < waveCount)
         {
-            for (int i = 0; i < waveCount - spawnEnemyInfoList.Count; i++)
+            int spawnEnemyInfoListCount = spawnEnemyInfoList.Count;
+            for (int i = 0; i < waveCount - spawnEnemyInfoListCount; i++)
             {
                 SpawnEnemyInfo spawnEnemyInfo = new SpawnEnemyInfo();
                 spawnEnemyInfoList.Add(spawnEnemyInfo);
