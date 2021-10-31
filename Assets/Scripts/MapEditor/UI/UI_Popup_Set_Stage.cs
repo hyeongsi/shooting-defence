@@ -61,6 +61,7 @@ public class UI_Popup_Set_Stage : UI_Popup
             waveCountDropDown.options.Add(option);
         }
         waveCountDropDown.value = 0;
+        waveCountDropDown.captionText.text = waveCountDropDown.options[waveCountDropDown.value].text;
         InitSpawnEnemyListDropDown();
     }
 
@@ -82,6 +83,14 @@ public class UI_Popup_Set_Stage : UI_Popup
         }
 
         spawnEnemyListDropDown.value = 0;
+        if(spawnEnemyList[0].spawnEnemyList.Count == 0)
+        {
+            spawnEnemyListDropDown.captionText.text = "";
+        }
+        else
+        {
+            spawnEnemyListDropDown.captionText.text = spawnEnemyListDropDown.options[0].text;
+        }
     }
 
     public void SetAllInputFieldInitText()  // 입력값 정보 모두 초기화
