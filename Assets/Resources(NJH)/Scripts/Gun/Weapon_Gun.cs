@@ -21,6 +21,10 @@ public class Weapon_Gun : MonoBehaviour
 
     [SerializeField] Transform muzzleFlashPosition;
 
+    [Header("Weapon SFX")]
+    [SerializeField] AudioClip shootingSound;
+    [SerializeField] AudioClip reloadSound;
+
     [Header("Weapon Information")]
     [SerializeField] WeaponInfo weaponInfo;
     int maxBullet;
@@ -65,26 +69,22 @@ public class Weapon_Gun : MonoBehaviour
         else { isShooting = Input.GetButtonDown("Fire1"); }
 
         // 사격
-        if (isReadyToShoot && isShooting && !isReloading && maxBullet > 0)
-        {
-            Weapon_Shoot();
+        if (isReadyToShoot && isShooting && !isReloading && maxBullet > 0) { 
+            Weapon_Shoot(); 
         }
-
         // 재장전
-        if (Input.GetKeyDown(KeyCode.R))
-        {
+        if (Input.GetKeyDown(KeyCode.R)) {
             Weapon_Reload();
         }
 
         // 탄창의 모든 탄 소모 or 남은 탄 전체의 20퍼센트
         if (maxBullet <= Mathf.Round(weaponInfo.magazineSize * 0.2f))
         {
-            if (maxBullet <= 0)
-            {
+            if (maxBullet <= 0) { 
                 reloadText.text = "재장전";
+                playerManager.disableFlag = true;
             }
-            else
-            {
+            else {
                 reloadText.text = "탄약 적음";
             }
             reloadText.gameObject.SetActive(true);
@@ -92,6 +92,7 @@ public class Weapon_Gun : MonoBehaviour
         else
         {
             reloadText.gameObject.SetActive(false);
+            playerManager.disableFlag = false;
         }
     }
 
@@ -122,19 +123,23 @@ public class Weapon_Gun : MonoBehaviour
         }
     }
 
+    // 격발
     void Weapon_Shoot()
     {
-        burstCount = weaponInfo.bulletsPerShot;
+        burstCount = weaponInfo.bulletsPerShot; // 점사 카운트(최초 사격 시 3점사면 3으로 초기화)
         StartCoroutine(Co_Shooting());
+        SoundManager.instance.PlaySound("Fire", shootingSound, 0.4f);
     }
 
     void Weapon_Reload()
     {
-        if (isReloading || maxBullet == weaponInfo.magazineSize)
+        if(isReloading || maxBullet == weaponInfo.magazineSize)
         {
             return;
         }
+
         StartCoroutine(Co_Reloading());
+        SoundManager.instance.PlaySound("Reload", reloadSound, 0.7f);
     }
 
     IEnumerator Co_Shooting()
@@ -144,7 +149,6 @@ public class Weapon_Gun : MonoBehaviour
         if (weaponInfo.weaponType == WeaponType.weaponTypeID.shotgun)    // 샷건
         {
             StartCoroutine(Co_PelletShot());
-
         }
         else    // 샷건말고 다른 총들(한번에 한발씩 나가는 총)
         {
@@ -191,6 +195,7 @@ public class Weapon_Gun : MonoBehaviour
         {
             burstCount--;
             Debug.Log("산탄" + burstCount);
+            FiringBullet();
             yield return new WaitForSeconds(weaponInfo.burstFireDelay);
         }
 

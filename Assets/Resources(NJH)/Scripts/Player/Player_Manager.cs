@@ -23,6 +23,7 @@ public class Player_Manager : MonoBehaviour
     public bool aimFlag;
     public bool moveFlag;
     public bool reloadFlag;
+    public bool disableFlag;
     public bool isGrounded;
     public bool isBehind;
     public bool rotateLock;
@@ -32,8 +33,8 @@ public class Player_Manager : MonoBehaviour
     public Text reloadText;
     public Slider hpBar;
     public Slider staminaBar;
-    public Texture2D aimPointImage;
-    public Texture2D disableAimPointImage;
+    public Sprite aimPointSprite;
+    public Sprite disableAimPointSprite;
 
     public GameObject targetGuide;
 
@@ -60,6 +61,15 @@ public class Player_Manager : MonoBehaviour
 
     private void Update()
     {
+        if(disableFlag == true || reloadFlag == true)
+        {
+            targetGuide.GetComponent<SpriteRenderer>().sprite = disableAimPointSprite;
+        }
+        else
+        {
+            targetGuide.GetComponent<SpriteRenderer>().sprite = aimPointSprite;
+        }
+
         sprintFlag = Input.GetButton("Sprint") && aimFlag == false && weapon.isShooting == false;
         aimFlag = cameraFunction.aimCamFlag;
 

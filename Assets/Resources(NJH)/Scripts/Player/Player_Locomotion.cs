@@ -202,12 +202,7 @@ public class Player_Locomotion : MonoBehaviour
 
         if (hp <= 0)
         {
-            Loco_Die();
+
         }
-    }
-
-    void Loco_Die()
-    {
-
     }
 }

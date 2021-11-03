@@ -15,12 +15,12 @@ MonoBehaviour:
   isAutomatic: 1
   weaponType: 1
   damage: 14
-  bulletSpeed: 30
-  magazineSize: 100
-  bulletsLeft: 100
+  bulletSpeed: 40
+  magazineSize: 30
+  bulletsLeft: 30
   bulletsPerShot: 1
   burstBulletCount: 0
   reloadTime: 2.2
-  nextShotDelay: 0.058
+  nextShotDelay: 0.09
   burstFireDelay: 0
   bullet: {fileID: 3253493382313019143, guid: f6368dfcc12205e44895e81ce2792235, type: 3}
