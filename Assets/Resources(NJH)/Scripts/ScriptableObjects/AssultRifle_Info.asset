@@ -21,6 +21,6 @@ MonoBehaviour:
   bulletsPerShot: 1
   burstBulletCount: 0
   reloadTime: 2.2
-  nextShotDelay: 0.09
+  nextShotDelay: 0.08
   burstFireDelay: 0
   bullet: {fileID: 3253493382313019143, guid: f6368dfcc12205e44895e81ce2792235, type: 3}
