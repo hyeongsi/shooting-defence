@@ -16,6 +16,12 @@ public class MapEditorController : MonoBehaviour
     private static MapEditorController instance = null;
     private BlockManager.BlockName selectBlockIndex = BlockManager.BlockName.Block1_Gray;
     private EnemyManager.EnemyName selectEnemyIndex = EnemyManager.EnemyName.zombie1;
+    private ObjManager.ObjName selectObjectIndex = ObjManager.ObjName.Water_Tower;
+    private bool isSelectingObject = true;
+    [HideInInspector]
+    public GameObject previewObject = null;
+    private int spawnObjectAngle = 0;
+
     private int xValue;
     private int yValue;
 
@@ -23,6 +29,8 @@ public class MapEditorController : MonoBehaviour
 
     public delegate void SetSelectEnemyIndexDelegate();
     public SetSelectEnemyIndexDelegate setSelectEnemyIndexDelegate;
+
+    private CustomTileMap customTileMap = new CustomTileMap();    // 생성된 맵의 정보 저장
 
     public int XValue 
     { 
@@ -48,7 +56,7 @@ public class MapEditorController : MonoBehaviour
             yValue = value;
         } 
     }
-
+    
     private void Awake()
     {
         if (false == instance)
@@ -64,7 +72,16 @@ public class MapEditorController : MonoBehaviour
     {
         BlockManager.Instance.LoadAll();
         EnemyManager.Instance.LoadAll();
+        ObjManager.Instance.LoadAll();
         UIManager.Instance.EnrollUI(UIManager.PopUpUIEnums.MapEditPopUpUI);
+    }
+
+    private void Update()
+    {
+        if (UIManager.Instance.PopupList.Count != 0)
+            return;
+
+        CreateCustomMapGameObject();
     }
 
     public static MapEditorController Instance
@@ -77,6 +94,10 @@ public class MapEditorController : MonoBehaviour
             return instance;
         }
     }
+    #region property
+    public bool IsSelectingObject { get { return isSelectingObject; } }
+    public int SpawnObjectAngle { get { return spawnObjectAngle; } }
+    #endregion
 
     #region SelectIndexProperty
     public BlockManager.BlockName SelectBlockIndex
@@ -90,7 +111,6 @@ public class MapEditorController : MonoBehaviour
         get { return selectEnemyIndex; }
     }
     #endregion
-
     #region SelectIndexSetMethod
     public void SetSelectBlockIndex(int value)
     {
@@ -116,6 +136,13 @@ public class MapEditorController : MonoBehaviour
         selectEnemyIndex = value;
         setSelectEnemyIndexDelegate?.Invoke();
     }
+    #endregion
+    #region SelectObjectProperty
+    public ObjManager.ObjName SelectObjectIndex { get { return selectObjectIndex; }  set { selectObjectIndex = value; } }
+    #endregion
+
+    #region CustomTileMapProperty
+    public CustomTileMap GetCustomTileMap { get { return customTileMap; } }
     #endregion
 
     public void InitWaveData()
@@ -155,6 +182,7 @@ public class MapEditorController : MonoBehaviour
     }
     #endregion
 
+    #region UpdateMap
     public void GenerateMap()
     {
         const string GENERATE_MAP_PARENT_NAME = "Generated Map";
@@ -183,6 +211,13 @@ public class MapEditorController : MonoBehaviour
         }
     }
 
+    public void CreateCustomMapGameObject()
+    {
+
+    }
+    #endregion
+
+    #region CanvasSetup
     public void ToggleCanvas(Canvas canvas) // UI_POPUP을 상속받지 않은 캔버스 전용 on,off 메소드
     {
         UIManager.Instance.ToggleCanvas(canvas);
@@ -201,5 +236,116 @@ public class MapEditorController : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+    #endregion
+
+    public void IncreaseSpawnObjectAngle()
+    {
+        spawnObjectAngle += 90;
+    }
+    public class CustomTileMap
+    {
+        public struct CustomTileMapStructData
+        {
+            public GameObject placeGameObject;
+            public int index;
+        }
+
+        public enum CustomTileMapListEnum
+        {
+            BLOCK_LIST = 0,
+            BARRICADE_LIST = 1,
+            OBJECT_LIST = 2,
+        }
+
+        private List<CustomTileMapStructData> blockList = new List<CustomTileMapStructData>();
+        private List<CustomTileMapStructData> barricadeList = new List<CustomTileMapStructData>();
+        private List<CustomTileMapStructData> objectList = new List<CustomTileMapStructData>();
+
+        public List<CustomTileMapStructData> GetCustomTileMapList(CustomTileMapListEnum customTileMapListEnum) 
+        {
+            switch (customTileMapListEnum)
+            {
+                case CustomTileMapListEnum.BLOCK_LIST:
+                    return blockList;
+                case CustomTileMapListEnum.BARRICADE_LIST:
+                    return barricadeList;
+                case CustomTileMapListEnum.OBJECT_LIST:
+                    return objectList;
+                default:
+                    return null;
+            }
+        }
+
+        #region AddCustomTileMapListData
+        public bool AddBlockList(GameObject gameobject, int index)
+        {
+            if (gameobject == null)
+                return false;
+
+            bool isIncludeIndexRange = false;
+            Array blockEnumArray = System.Enum.GetValues(typeof(BlockManager.BlockName));
+            foreach (BlockManager.BlockName block in blockEnumArray)
+            {
+                if((int)block == index)
+                {
+                    isIncludeIndexRange = true;
+                }
+            }
+
+            if (isIncludeIndexRange == false)
+                return false;
+
+            CustomTileMapStructData customTileMapStructData;
+            customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.index = index;
+
+            blockList.Add(customTileMapStructData);
+            return true;
+        }
+        public bool AddBarricadeList(GameObject gameobject, int index)
+        {
+            if (gameobject == null)
+                return false;
+
+            // 블럭 추가하는것처럼 인덱스 검사하도록 구현하기
+            CustomTileMapStructData customTileMapStructData;
+            customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.index = index;
+
+            barricadeList.Add(customTileMapStructData);
+            return false;
+        }
+        public bool AddObjectList(GameObject gameobject, int index)
+        {
+            if (gameobject == null)
+                return false;
+
+            // 블럭 추가하는것처럼 인덱스 검사하도록 구현하기
+            CustomTileMapStructData customTileMapStructData;
+            customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.index = index;
+
+            objectList.Add(customTileMapStructData);
+            return false;
+        }
+        #endregion
+        #region DeleteCustomTileMapListData
+        public bool DeleteObjectList(GameObject gameobject)
+        {
+            if (gameobject == null)
+                return false;
+
+            for(int i = 0; i < objectList.Count; i ++)
+            {
+                if(objectList[i].placeGameObject == gameobject)
+                {
+                    objectList.RemoveAt(i);
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion
     }
 }

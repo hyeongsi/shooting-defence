@@ -42,6 +42,7 @@ public class UIManager : Singleton<UIManager>
     {
         get { return uiPopupDictionary; }
     }
+    public List<UI_Popup> PopupList { get { return popupList; } }
     public UI_SceneData SceneUIData { get { return sceneUIData; } }
     #endregion
     // 씬마다 사용하는 UI 이름 여기다가 enum 값으로 등록시켜 놓고, 해당 씬에서 UI 이름 찾아가서 enum값 string 으로 바꿔서 사용하면 됨
