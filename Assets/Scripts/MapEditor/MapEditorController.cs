@@ -25,12 +25,14 @@ public class MapEditorController : MonoBehaviour
     private int xValue;
     private int yValue;
 
-    private List<SpawnEnemyInfo> spawnEnemyInfoList = new List<SpawnEnemyInfo>();
+    private List<SpawnEnemyInfo> spawnEnemyInfoList = new List<SpawnEnemyInfo>();   // 스테이지, 스폰정보 저장
 
     public delegate void SetSelectEnemyIndexDelegate();
     public SetSelectEnemyIndexDelegate setSelectEnemyIndexDelegate;
 
     private CustomTileMap customTileMap = new CustomTileMap();    // 생성된 맵의 정보 저장
+    private List<GameObject> enemyGuideLineList = new List<GameObject>();  // 적 이동 경로
+    private bool isEditGuideLine = false;
 
     public int XValue 
     { 
@@ -56,7 +58,11 @@ public class MapEditorController : MonoBehaviour
             yValue = value;
         } 
     }
-    
+    public List<GameObject> EnemyGuideLineList
+    {
+        get { return enemyGuideLineList; }
+    }
+
     private void Awake()
     {
         if (false == instance)
@@ -96,6 +102,7 @@ public class MapEditorController : MonoBehaviour
     }
     #region property
     public bool IsSelectingObject { get { return isSelectingObject; } }
+    public bool IsEditGuideLine { get { return isEditGuideLine; } }
     public int SpawnObjectAngle { get { return spawnObjectAngle; } }
     #endregion
 
@@ -240,11 +247,22 @@ public class MapEditorController : MonoBehaviour
             isSelectingObject = false;
         else
             isSelectingObject = true;
-    }
 
+        isEditGuideLine = false;
+    }
+    public void ToggleIsEditGuideLine()
+    {
+        if (isEditGuideLine == true)
+            isEditGuideLine = false;
+        else
+            isEditGuideLine = true;
+
+        isSelectingObject = false;
+    }
     public void SetDefaultIsSelect()
     {
         isSelectingObject = false;
+        isEditGuideLine = false;
     }
 
     public void ToggleCanvas(Canvas canvas) // UI_POPUP을 상속받지 않은 캔버스 전용 on,off 메소드

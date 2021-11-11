@@ -108,7 +108,6 @@ public class MapEditorCameraController : MonoBehaviour
         {
             MapEditorController.Instance.GetCustomTileMap.DeleteObjectList(hitObject.transform.gameObject);
             Destroy(hitObject.transform.gameObject);
-            Debug.Log("삭제");
         }  
     }
 
