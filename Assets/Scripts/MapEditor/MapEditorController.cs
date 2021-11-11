@@ -17,7 +17,6 @@ public class MapEditorController : MonoBehaviour
     private BlockManager.BlockName selectBlockIndex = BlockManager.BlockName.Block1_Gray;
     private EnemyManager.EnemyName selectEnemyIndex = EnemyManager.EnemyName.zombie1;
     private ObjManager.ObjName selectObjectIndex = ObjManager.ObjName.Water_Tower;
-    private bool isSelectingBlock = false;
     private bool isSelectingObject = false;
     [HideInInspector]
     public GameObject previewObject = null;
@@ -96,7 +95,6 @@ public class MapEditorController : MonoBehaviour
         }
     }
     #region property
-    public bool IsSelectingBlock { get { return isSelectingBlock; } }
     public bool IsSelectingObject { get { return isSelectingObject; } }
     public int SpawnObjectAngle { get { return spawnObjectAngle; } }
     #endregion
@@ -235,15 +233,6 @@ public class MapEditorController : MonoBehaviour
     #endregion
 
     #region CanvasSetup
-    public void ToggleIsSelectBlock()
-    {
-        if(isSelectingBlock == true)
-            isSelectingBlock = false;
-        else
-            isSelectingBlock = true;
-
-        isSelectingObject = false;
-    }
 
     public void ToggleIsSelectObject()
     {
@@ -251,13 +240,10 @@ public class MapEditorController : MonoBehaviour
             isSelectingObject = false;
         else
             isSelectingObject = true;
-
-        isSelectingBlock = false;
     }
 
     public void SetDefaultIsSelect()
     {
-        isSelectingBlock = false;
         isSelectingObject = false;
     }
 
@@ -297,13 +283,12 @@ public class MapEditorController : MonoBehaviour
         public enum CustomTileMapListEnum
         {
             BLOCK_LIST = 0,
-            BARRICADE_LIST = 1,
-            OBJECT_LIST = 2,
+            OBJECT_LIST = 1,
         }
 
         private List<CustomTileMapStructData> blockList = new List<CustomTileMapStructData>();
-        private List<CustomTileMapStructData> barricadeList = new List<CustomTileMapStructData>();
         private List<CustomTileMapStructData> objectList = new List<CustomTileMapStructData>();
+        public CustomTileMapStructData spawnPosition = new CustomTileMapStructData();
 
         public List<CustomTileMapStructData> GetCustomTileMapList(CustomTileMapListEnum customTileMapListEnum) 
         {
@@ -311,8 +296,6 @@ public class MapEditorController : MonoBehaviour
             {
                 case CustomTileMapListEnum.BLOCK_LIST:
                     return blockList;
-                case CustomTileMapListEnum.BARRICADE_LIST:
-                    return barricadeList;
                 case CustomTileMapListEnum.OBJECT_LIST:
                     return objectList;
                 default:
@@ -346,31 +329,52 @@ public class MapEditorController : MonoBehaviour
             blockList.Add(customTileMapStructData);
             return true;
         }
-        public bool AddBarricadeList(GameObject gameobject, int index)
-        {
-            if (gameobject == null)
-                return false;
 
-            // 블럭 추가하는것처럼 인덱스 검사하도록 구현하기
-            CustomTileMapStructData customTileMapStructData;
-            customTileMapStructData.placeGameObject = gameobject;
-            customTileMapStructData.index = index;
-
-            barricadeList.Add(customTileMapStructData);
-            return false;
-        }
         public bool AddObjectList(GameObject gameobject, int index)
         {
             if (gameobject == null)
                 return false;
 
-            // 블럭 추가하는것처럼 인덱스 검사하도록 구현하기
+            bool isIncludeIndexRange = false;
+            Array objEnumArray = System.Enum.GetValues(typeof(ObjManager.ObjName));
+            foreach (ObjManager.ObjName obj in objEnumArray)
+            {
+                if ((int)obj == index)
+                {
+                    isIncludeIndexRange = true;
+                }
+            }
+
+            if (isIncludeIndexRange == false)
+                return false;
+
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
             customTileMapStructData.index = index;
 
             objectList.Add(customTileMapStructData);
-            return false;
+            return true;
+        }
+        public bool SetPlayerSpawner(GameObject gameobject, int index)
+        {
+            if (gameobject == null)
+                return false;
+
+            CustomTileMapStructData customTileMapStructData;
+            customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.index = index;
+
+            if(spawnPosition.placeGameObject == null)
+            {
+                spawnPosition = customTileMapStructData;
+            }
+            else
+            {
+                Destroy(spawnPosition.placeGameObject);
+                spawnPosition = customTileMapStructData;
+            }
+
+            return true;
         }
         #endregion
         #region DeleteCustomTileMapListData

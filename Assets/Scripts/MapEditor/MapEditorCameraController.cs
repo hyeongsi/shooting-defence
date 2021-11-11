@@ -18,17 +18,32 @@ public class MapEditorCameraController : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            MapEditorController.Instance.IncreaseSpawnObjectAngle();
+        }
+
+        ObjectSpawnLoop();
+
+        if (UIManager.Instance.PopupList.Count != 0)
+            return;
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            transform.position = originPos;
+        }
+
+        MoveCamera();
+        ZoomCamera();
+    }
+
+    private void ObjectSpawnLoop()
+    {
         if (MapEditorController.Instance.IsSelectingObject)
         {
-            if(Input.GetKeyDown(KeyCode.R))
-            {
-                MapEditorController.Instance.IncreaseSpawnObjectAngle();
-            }
-
             Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-
-            if (Physics.Raycast(cameraRay, out RaycastHit hitBlock,Mathf.Infinity, 1 << LayerMask.NameToLayer("Block")))
+            if (Physics.Raycast(cameraRay, out RaycastHit hitBlock, Mathf.Infinity, 1 << LayerMask.NameToLayer("Block")))
             {
                 PreviewObject(hitBlock.point);
                 SpawnObject(hitBlock.point);
@@ -43,17 +58,6 @@ public class MapEditorCameraController : MonoBehaviour
                 DeleteObject(hitObject);
             }
         }
-
-        if (UIManager.Instance.PopupList.Count != 0)
-            return;
-
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            transform.position = originPos;
-        }
-
-        MoveCamera();
-        ZoomCamera();
     }
 
     private void DeletePreviewObject()
@@ -68,6 +72,7 @@ public class MapEditorCameraController : MonoBehaviour
         {
             MapEditorController.Instance.previewObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));
             MapEditorController.Instance.previewObject.transform.position = spawnPosition;
+            MapEditorController.Instance.previewObject.layer = LayerMask.NameToLayer("Default");
         }
         else
         {
@@ -79,10 +84,21 @@ public class MapEditorCameraController : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            GameObject spawnObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));
-            spawnObject.transform.position = spawnPosition;
-            spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
-            MapEditorController.Instance.GetCustomTileMap.AddObjectList(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+            if(MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Player_Spawner) // 플레이어 스포너 일 경우
+            {
+                GameObject spawnObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));
+                spawnObject.transform.position = spawnPosition;
+                spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
+                MapEditorController.Instance.GetCustomTileMap.SetPlayerSpawner(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+            }
+            else
+            {
+                GameObject spawnObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));
+                spawnObject.transform.position = spawnPosition;
+                spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
+                MapEditorController.Instance.GetCustomTileMap.AddObjectList(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+                spawnObject.layer = LayerMask.NameToLayer("Object");
+            }
         }
     }
 
@@ -92,6 +108,7 @@ public class MapEditorCameraController : MonoBehaviour
         {
             MapEditorController.Instance.GetCustomTileMap.DeleteObjectList(hitObject.transform.gameObject);
             Destroy(hitObject.transform.gameObject);
+            Debug.Log("삭제");
         }  
     }
 

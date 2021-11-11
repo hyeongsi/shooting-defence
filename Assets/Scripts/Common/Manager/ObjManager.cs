@@ -90,5 +90,7 @@ public class ObjManager : Singleton<ObjManager>
     {
         Water_Tower = 0,
         Apt_Door_Corner1 = 1,
+        Player_Spawner = 2,
+        //Enemy_Spawn = 3,
     }
 }
