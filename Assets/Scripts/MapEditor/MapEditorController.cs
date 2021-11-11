@@ -17,7 +17,8 @@ public class MapEditorController : MonoBehaviour
     private BlockManager.BlockName selectBlockIndex = BlockManager.BlockName.Block1_Gray;
     private EnemyManager.EnemyName selectEnemyIndex = EnemyManager.EnemyName.zombie1;
     private ObjManager.ObjName selectObjectIndex = ObjManager.ObjName.Water_Tower;
-    private bool isSelectingObject = true;
+    private bool isSelectingBlock = false;
+    private bool isSelectingObject = false;
     [HideInInspector]
     public GameObject previewObject = null;
     private int spawnObjectAngle = 0;
@@ -95,6 +96,7 @@ public class MapEditorController : MonoBehaviour
         }
     }
     #region property
+    public bool IsSelectingBlock { get { return isSelectingBlock; } }
     public bool IsSelectingObject { get { return isSelectingObject; } }
     public int SpawnObjectAngle { get { return spawnObjectAngle; } }
     #endregion
@@ -135,6 +137,18 @@ public class MapEditorController : MonoBehaviour
     {
         selectEnemyIndex = value;
         setSelectEnemyIndexDelegate?.Invoke();
+    }
+
+    public void SetSelectObjectIndex(int value)
+    {
+        if (value >= 0 && value < Enum.GetValues(typeof(ObjManager.ObjName)).Length)
+        {
+            SetSelectObjectIndex((ObjManager.ObjName)value);
+        }
+    }
+    public void SetSelectObjectIndex(ObjManager.ObjName value)
+    {
+        selectObjectIndex = value;
     }
     #endregion
     #region SelectObjectProperty
@@ -221,6 +235,32 @@ public class MapEditorController : MonoBehaviour
     #endregion
 
     #region CanvasSetup
+    public void ToggleIsSelectBlock()
+    {
+        if(isSelectingBlock == true)
+            isSelectingBlock = false;
+        else
+            isSelectingBlock = true;
+
+        isSelectingObject = false;
+    }
+
+    public void ToggleIsSelectObject()
+    {
+        if (isSelectingObject == true)
+            isSelectingObject = false;
+        else
+            isSelectingObject = true;
+
+        isSelectingBlock = false;
+    }
+
+    public void SetDefaultIsSelect()
+    {
+        isSelectingBlock = false;
+        isSelectingObject = false;
+    }
+
     public void ToggleCanvas(Canvas canvas) // UI_POPUP을 상속받지 않은 캔버스 전용 on,off 메소드
     {
         UIManager.Instance.ToggleCanvas(canvas);

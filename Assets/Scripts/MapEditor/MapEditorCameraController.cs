@@ -27,6 +27,7 @@ public class MapEditorCameraController : MonoBehaviour
 
             Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+
             if (Physics.Raycast(cameraRay, out RaycastHit hitBlock,Mathf.Infinity, 1 << LayerMask.NameToLayer("Block")))
             {
                 PreviewObject(hitBlock.point);
@@ -65,7 +66,7 @@ public class MapEditorCameraController : MonoBehaviour
     {
         if(MapEditorController.Instance.previewObject == null)
         {
-            MapEditorController.Instance.previewObject = Instantiate(ObjManager.Instance.GetObject(ObjManager.ObjName.Water_Tower));
+            MapEditorController.Instance.previewObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));
             MapEditorController.Instance.previewObject.transform.position = spawnPosition;
         }
         else

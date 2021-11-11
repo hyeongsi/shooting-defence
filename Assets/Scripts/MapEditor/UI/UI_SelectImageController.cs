@@ -45,6 +45,12 @@ public class UI_SelectImageController : MonoBehaviour
                         FixedSelectImageLocation();
                     });
                     break;
+                case SelectCanvasKind.OBJECT_SELECT_CANVAS:
+                    contentChildButtonList[i].onClick.AddListener(delegate () {
+                        MapEditorController.Instance.SetSelectObjectIndex(_i);
+                        FixedSelectImageLocation();
+                    });
+                    break;
                 default:
                     return;
             } 
@@ -67,6 +73,9 @@ public class UI_SelectImageController : MonoBehaviour
             case SelectCanvasKind.ENEMY_SELECT_CANVAS:
                 selectedImageRectTransform.SetParent(contentChildButtonList[(int)MapEditorController.Instance.SelectEnemyIndex].transform);
                 break;
+            case SelectCanvasKind.OBJECT_SELECT_CANVAS:
+                selectedImageRectTransform.SetParent(contentChildButtonList[(int)MapEditorController.Instance.SelectObjectIndex].transform);
+                break;
             default:
                 return;
         }
@@ -78,5 +87,6 @@ public class UI_SelectImageController : MonoBehaviour
     {
         BLOCK_SELECT_CANVAS = 0,
         ENEMY_SELECT_CANVAS = 1,
+        OBJECT_SELECT_CANVAS = 2,
     }
 }
