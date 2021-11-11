@@ -198,6 +198,8 @@ public class MapEditorController : MonoBehaviour
             DestroyImmediate(generateMapParent);
         }
 
+        customTileMap.ClearBlockList(); // 생성된 블럭들 모두 초기화
+
         generateMapParent = new GameObject(GENERATE_MAP_PARENT_NAME);
 
         for (int x = 0; x < xValue; x++)
@@ -205,8 +207,9 @@ public class MapEditorController : MonoBehaviour
             for (int y = 0; y < yValue; y++)
             {
                 Vector3 tilePosition = new Vector3(x, 0, -y);
-                Transform newTile = Instantiate(generateBlockGameObject.transform, tilePosition, Quaternion.identity);
-                newTile.parent = generateMapParent.transform;
+                Transform newTile = Instantiate(generateBlockGameObject.transform, tilePosition, Quaternion.identity);  // 블럭 생성
+                newTile.parent = generateMapParent.transform;   // 생성 블럭 부모 설정
+                customTileMap.AddBlockList(newTile.gameObject, (int)selectBlockIndex);  // 생성된 블럭들 등록
             }
         }
     }
@@ -331,6 +334,10 @@ public class MapEditorController : MonoBehaviour
         }
         #endregion
         #region DeleteCustomTileMapListData
+        public void ClearBlockList()
+        {
+            blockList.Clear();
+        }
         public bool DeleteObjectList(GameObject gameobject)
         {
             if (gameobject == null)
