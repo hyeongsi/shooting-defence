@@ -21,24 +21,38 @@ MonoBehaviour:
     m_Address: Apt_Door_Corner1
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 6685281679640429169, guid: 949653a57abc3a14d93e0807a1b9dc7b,
-      type: 3}
-    m_TargetAsset: {fileID: 6685281679640429169, guid: 949653a57abc3a14d93e0807a1b9dc7b,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: b15a7ca4982e91c42a84388fb537ea2e
     m_Address: Water_Tower
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 1519351171880811264, guid: b15a7ca4982e91c42a84388fb537ea2e,
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 7eeb5ec30b2b02e4da3242a404ed56f1
+    m_Address: Enemy_Spawner
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 4888827445681397449, guid: 7eeb5ec30b2b02e4da3242a404ed56f1,
       type: 3}
-    m_TargetAsset: {fileID: 1519351171880811264, guid: b15a7ca4982e91c42a84388fb537ea2e,
+    m_TargetAsset: {fileID: 4888827445681397449, guid: 7eeb5ec30b2b02e4da3242a404ed56f1,
       type: 3}
   - m_GUID: 49889fc6a4eb61946981eacb336dfe04
     m_Address: Player_Spawner
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 5006522021196676379, guid: 49889fc6a4eb61946981eacb336dfe04,
+      type: 3}
+    m_TargetAsset: {fileID: 5006522021196676379, guid: 49889fc6a4eb61946981eacb336dfe04,
+      type: 3}
+  - m_GUID: 61a03cee6a5e99540be2916a4f390238
+    m_Address: Enemy_GuideLine
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 1659628260621666041, guid: 61a03cee6a5e99540be2916a4f390238,
+      type: 3}
+    m_TargetAsset: {fileID: 1659628260621666041, guid: 61a03cee6a5e99540be2916a4f390238,
+      type: 3}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0e906e2dec284c04da74c1451ddcc7b7, type: 2}
   m_SchemaSet:

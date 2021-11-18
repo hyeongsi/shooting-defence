@@ -91,6 +91,20 @@ public class MapEditorCameraController : MonoBehaviour
                 spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
                 MapEditorController.Instance.GetCustomTileMap.SetPlayerSpawner(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
             }
+            else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Enemy_Spawner) // 적 스포너
+            {
+                GameObject spawnObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));
+                spawnObject.transform.position = spawnPosition;
+                spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
+                MapEditorController.Instance.GetCustomTileMap.SetEnemySpawner(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+            }
+            else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Enemy_GuideLine) // 적 이동경로
+            {
+                GameObject spawnObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));
+                spawnObject.transform.position = spawnPosition;
+                spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
+                MapEditorController.Instance.GetCustomTileMap.AddEnemyGuideLine(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+            }
             else
             {
                 GameObject spawnObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));

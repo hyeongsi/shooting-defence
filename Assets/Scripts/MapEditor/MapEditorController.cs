@@ -31,7 +31,6 @@ public class MapEditorController : MonoBehaviour
     public SetSelectEnemyIndexDelegate setSelectEnemyIndexDelegate;
 
     private CustomTileMap customTileMap = new CustomTileMap();    // 생성된 맵의 정보 저장
-    private List<GameObject> enemyGuideLineList = new List<GameObject>();  // 적 이동 경로
     private bool isEditGuideLine = false;
 
     public int XValue 
@@ -57,10 +56,6 @@ public class MapEditorController : MonoBehaviour
             }
             yValue = value;
         } 
-    }
-    public List<GameObject> EnemyGuideLineList
-    {
-        get { return enemyGuideLineList; }
     }
 
     private void Awake()
@@ -199,6 +194,7 @@ public class MapEditorController : MonoBehaviour
             }
         }
     }
+
     #endregion
 
     #region UpdateMap
@@ -307,6 +303,8 @@ public class MapEditorController : MonoBehaviour
         private List<CustomTileMapStructData> blockList = new List<CustomTileMapStructData>();
         private List<CustomTileMapStructData> objectList = new List<CustomTileMapStructData>();
         public CustomTileMapStructData spawnPosition = new CustomTileMapStructData();
+        public CustomTileMapStructData spawnEnemyPosition = new CustomTileMapStructData();
+        public List<CustomTileMapStructData> enemyGuideLineList = new List<CustomTileMapStructData>();  // 적 이동 경로
 
         public List<CustomTileMapStructData> GetCustomTileMapList(CustomTileMapListEnum customTileMapListEnum) 
         {
@@ -391,6 +389,41 @@ public class MapEditorController : MonoBehaviour
                 Destroy(spawnPosition.placeGameObject);
                 spawnPosition = customTileMapStructData;
             }
+
+            return true;
+        }
+        public bool SetEnemySpawner(GameObject gameobject, int index)
+        {
+            if (gameobject == null)
+                return false;
+
+            CustomTileMapStructData customTileMapStructData;
+            customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.index = index;
+
+            if (spawnEnemyPosition.placeGameObject == null)
+            {
+                spawnEnemyPosition = customTileMapStructData;
+            }
+            else
+            {
+                Destroy(spawnEnemyPosition.placeGameObject);
+                spawnEnemyPosition = customTileMapStructData;
+            }
+
+            return true;
+        }
+
+        public bool AddEnemyGuideLine(GameObject gameobject, int index)
+        {
+            if (gameobject == null)
+                return false;
+
+            CustomTileMapStructData customTileMapStructData;
+            customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.index = index;
+
+            enemyGuideLineList.Add(customTileMapStructData);
 
             return true;
         }
