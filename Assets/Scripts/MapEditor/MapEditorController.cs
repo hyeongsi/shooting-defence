@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Ookii.Dialogs;
+using System.Windows.Forms;
+using System.IO;
 
 public class SpawnEnemyInfo
 {
@@ -32,6 +35,9 @@ public class MapEditorController : MonoBehaviour
 
     private CustomTileMap customTileMap = new CustomTileMap();    // 생성된 맵의 정보 저장
     private bool isEditGuideLine = false;
+
+    VistaOpenFileDialog openFileDialog;
+    VistaSaveFileDialog saveFileDialog;
 
     public int XValue 
     { 
@@ -75,6 +81,13 @@ public class MapEditorController : MonoBehaviour
         EnemyManager.Instance.LoadAll();
         ObjManager.Instance.LoadAll();
         UIManager.Instance.EnrollUI(UIManager.PopUpUIEnums.MapEditPopUpUI);
+
+        openFileDialog = new VistaOpenFileDialog();
+        openFileDialog.Filter = "Json (*.json) |*.json";
+        openFileDialog.DefaultExt = "*.json";
+        saveFileDialog = new VistaSaveFileDialog();
+        saveFileDialog.Filter = "Json (*.json) |*.json";
+        saveFileDialog.DefaultExt = "*.json";
     }
 
     private void Update()
@@ -278,19 +291,41 @@ public class MapEditorController : MonoBehaviour
 
     public void ExitGame()
     {
-        Application.Quit();
+        UnityEngine.Application.Quit();
     }
     #endregion
+
+    public void SaveGameData()
+    {
+        if(saveFileDialog.ShowDialog() == DialogResult.OK)
+        {
+            string toJsonData = JsonUtility.ToJson(customTileMap);
+            File.WriteAllText(saveFileDialog.FileName, toJsonData);
+        }
+    }
+
+    public void LoadGameData()
+    {
+        if (openFileDialog.ShowDialog() == DialogResult.OK)
+        {
+            string readJsonString = File.ReadAllText(openFileDialog.FileName);
+            customTileMap = JsonUtility.FromJson<CustomTileMap>(readJsonString);
+        }
+    }
 
     public void IncreaseSpawnObjectAngle()
     {
         spawnObjectAngle += 90;
     }
+
+    [System.Serializable]
     public class CustomTileMap
     {
+        [System.Serializable]
         public struct CustomTileMapStructData
         {
             public GameObject placeGameObject;
+            public Vector3 placeGameTransform;
             public int index;
         }
 
@@ -300,11 +335,11 @@ public class MapEditorController : MonoBehaviour
             OBJECT_LIST = 1,
         }
 
-        private List<CustomTileMapStructData> blockList = new List<CustomTileMapStructData>();
-        private List<CustomTileMapStructData> objectList = new List<CustomTileMapStructData>();
-        public CustomTileMapStructData spawnPosition = new CustomTileMapStructData();
-        public CustomTileMapStructData spawnEnemyPosition = new CustomTileMapStructData();
-        public List<CustomTileMapStructData> enemyGuideLineList = new List<CustomTileMapStructData>();  // 적 이동 경로
+        [SerializeField] private List<CustomTileMapStructData> blockList = new List<CustomTileMapStructData>();
+        [SerializeField] private List<CustomTileMapStructData> objectList = new List<CustomTileMapStructData>();
+        [SerializeField] public CustomTileMapStructData spawnPosition = new CustomTileMapStructData();
+        [SerializeField] public CustomTileMapStructData spawnEnemyPosition = new CustomTileMapStructData();
+        [SerializeField] public List<CustomTileMapStructData> enemyGuideLineList = new List<CustomTileMapStructData>();  // 적 이동 경로
 
         public List<CustomTileMapStructData> GetCustomTileMapList(CustomTileMapListEnum customTileMapListEnum) 
         {
@@ -340,6 +375,7 @@ public class MapEditorController : MonoBehaviour
 
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.placeGameTransform = gameobject.transform.position;
             customTileMapStructData.index = index;
 
             blockList.Add(customTileMapStructData);
@@ -366,6 +402,7 @@ public class MapEditorController : MonoBehaviour
 
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.placeGameTransform = gameobject.transform.position;
             customTileMapStructData.index = index;
 
             objectList.Add(customTileMapStructData);
@@ -378,6 +415,7 @@ public class MapEditorController : MonoBehaviour
 
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.placeGameTransform = gameobject.transform.position;
             customTileMapStructData.index = index;
 
             if(spawnPosition.placeGameObject == null)
@@ -399,6 +437,7 @@ public class MapEditorController : MonoBehaviour
 
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.placeGameTransform = gameobject.transform.position;
             customTileMapStructData.index = index;
 
             if (spawnEnemyPosition.placeGameObject == null)
@@ -421,6 +460,7 @@ public class MapEditorController : MonoBehaviour
 
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.placeGameTransform = gameobject.transform.position;
             customTileMapStructData.index = index;
 
             enemyGuideLineList.Add(customTileMapStructData);
