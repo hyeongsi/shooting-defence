@@ -128,7 +128,7 @@ public class Weapon_Gun : MonoBehaviour
     {
         burstCount = weaponInfo.bulletsPerShot; // 점사 카운트(최초 사격 시 3점사면 3으로 초기화)
         StartCoroutine(Co_Shooting());
-        SoundManager.instance.PlaySound("Fire", shootingSound, 0.4f);
+        SoundManager.instance.PlaySound("Fire", shootingSound, 0.3f);
     }
 
     void Weapon_Reload()
@@ -139,7 +139,7 @@ public class Weapon_Gun : MonoBehaviour
         }
 
         StartCoroutine(Co_Reloading());
-        SoundManager.instance.PlaySound("Reload", reloadSound, 0.7f);
+        SoundManager.instance.PlaySound("Reload", reloadSound, 0.5f);
     }
 
     IEnumerator Co_Shooting()
