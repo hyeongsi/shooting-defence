@@ -43,27 +43,6 @@ public class Enemy : MonoBehaviour
         } 
     }
 
-    public GameObject FindAttackObject()
-    {
-        // 여기에 목표물 탐지 코드 작성
-
-
-        switch(enemyStaticData.attackType)
-        {
-            case (int)AttackType.PLAYER:
-                // 공격 범위에 플레이어 있는지 검사하고 탐지된 플레이어 오브젝트 리턴
-                break;
-            case (int)AttackType.TURRET:
-                // 공격 범위에 터렛 있는지 검사하고 탐지된 터렛 오브젝트 리턴
-                break;
-            default:
-                // 공격 범위에 플레이어든 터렛이든 탐지된 오브젝트 리턴
-                return null;
-        }
-
-        return null;
-    }
-
     public virtual Vector3 FindAWay()
     {
         // 맵 정보를 토대로 이동해야할 방향 구해서 이동하기 

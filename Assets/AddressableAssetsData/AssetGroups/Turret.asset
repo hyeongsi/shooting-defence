@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Turret
+  m_EditorClassIdentifier: 
+  m_GroupName: Turret
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 9c1be39893657004580d491d6a0e338d
+  m_SerializeEntries:
+  - m_GUID: 2c58418f9792eb940b74d3221f1d478f
+    m_Address: TempTurret1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 7073498492847597698, guid: 2c58418f9792eb940b74d3221f1d478f,
+      type: 3}
+    m_TargetAsset: {fileID: 7073498492847597698, guid: 2c58418f9792eb940b74d3221f1d478f,
+      type: 3}
+  - m_GUID: ed1730390bfe05b46a7c219595b30f2c
+    m_Address: TurretData
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 0e906e2dec284c04da74c1451ddcc7b7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 4fc90f317b4d61a489ccbad9422d42d5, type: 2}
+    - {fileID: 11400000, guid: df3f22dd770661b469a171b89f183d20, type: 2}

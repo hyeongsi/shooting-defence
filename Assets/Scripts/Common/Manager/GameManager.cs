@@ -1,88 +1,99 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     public delegate void PauseGameDelegate();
     public PauseGameDelegate pauseGameDelegate;
 
     public bool IsPause { get; private set; } = false;
-    private PlayState playState = PlayState.MAIN_MENU;
+    private PlayStates playState = PlayStates.MAIN_MENU;
+    private Scene nextScene;
 
-    #region EnumStorage
-    public enum PlayState
-    {
-        MAIN_MENU = 0,
-        SINGLE_PLAY = 1,
-        MULTY_PLAY = 2,
-        MAP_EDIT = 3,
-    }
+    #region Property
+    public PlayStates PlayeState { set { playState = value; }  get { return playState; } }
+    public Scene NextScene { set { nextScene = value; } get { return nextScene; } }
     #endregion
 
-    #region Singleton
-    private static GameManager instance = null;
-
-    private void Awake()
+    public void LoadMapEditorData()
     {
-        if (null == instance)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+        BlockManager.Instance.LoadAll();
+        BarricadeManager.Instance.LoadAll();
+        TurretManager.Instance.LoadAll();
+    }
 
-            InitGame();
+    public void LoadScene(PlayStates nextstate, int stage = -1)
+    {
+        if(stage < 0)
+        {
+            StartCoroutine(LoadAsyncSceneCourtine(nextstate));
         }
         else
         {
-            Destroy(gameObject);
+            StartCoroutine(LoadAsyncSceneCourtine(nextstate));
         }
     }
 
-    public static GameManager Instance { get { return instance; } }
-    #endregion
-
-    public void InitGame()
+    public void LoadInGameData(Stage stage)
     {
-        // 게임 시작 시, 게임에 필요한 데이터 모두 로딩 작업, (블럭, 타워, 몬스터, 플레이어, ui 등)
-        TurretManager.Instance.LoadTurretData();
-        EnemyManager.Instance.LoadEnemyData();
+        // 스테이지의 정보에 따라 필요로 하는 정보 로딩,
+        // 터렛, 적, 블럭, 바리게이트, 스테이지 등등
     }
-
-    public void LoadMapData() 
+    public void SwitchIsPause()
     {
-        switch(playState)
-        {
-            case PlayState.SINGLE_PLAY:
-                // 캠페인 맵 모두 로딩하도록
-                break;
-            case PlayState.MULTY_PLAY:
-                // 들어갈 방 선택하면 해당 방 데이터 통신해서 받도록 구현
-                break;
-            default:
-                return;
-        }
+        if (IsPause)
+            ContinueGame();
+        else
+            PauseGame();
     }
-
     public void PauseGame()
     {
         IsPause = true;
         pauseGameDelegate?.Invoke();
-
-        //pauseGameDelegate 에 esc 메뉴 관련해서 함수 등록하기
     }
-
     public void ContinueGame()
     {
         IsPause = false;
 
         // esc 메뉴 치우는 함수 등록하기
     }
-
     public void ExitGame()
     {
-        playState = PlayState.MAIN_MENU;
+        playState = PlayStates.MAIN_MENU;
 
         // 메인 메뉴로 씬 이동
     }
 
+    IEnumerator LoadAsyncSceneCourtine(PlayStates next)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Additive);
+
+        while(!operation.isDone) 
+        {
+            yield return null;
+        }
+
+        operation = SceneManager.UnloadSceneAsync(((int)playState));
+        while(!operation.isDone)
+        {
+            yield return null;
+        }
+
+        playState = next;
+
+        UI_Scene_Loading loadingUI = UIManager.Instance.SceneUIData.ui_scene as UI_Scene_Loading;
+        loadingUI.LoadScene();
+    }
+
+    #region EnumStorage
+    public enum PlayStates
+    {
+        MAIN_MENU = 0,
+        IN_GAME = 1,
+        MAP_EDIT = 2,
+    }
+    #endregion
 }
