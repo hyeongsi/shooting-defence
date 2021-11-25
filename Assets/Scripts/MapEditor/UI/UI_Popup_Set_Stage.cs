@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 
+[System.Serializable]
 public class UI_Popup_Set_Stage : UI_Popup
 {
     public UI_Popup_Set_Wave setWaveUI;
@@ -16,11 +17,13 @@ public class UI_Popup_Set_Stage : UI_Popup
 
     public Dropdown spawnEnemyListDropDown;
 
+    private List<SpawnEnemyInfo> spawnEnemyList;        // 스테이지 별 소환 몹 리스트
+
     [Space]
     [Header("spawn")]
-    public InputField waitTimeBeforeSpawnInputField;
-    public InputField spawnDelayInputField;
-    public InputField spawnCountInputField;
+    public InputField waitTimeBeforeSpawnInputField;    // 스테이지 시작 전 시간
+    public InputField spawnDelayInputField;             // 몹 소환 딜레이
+    public InputField spawnCountInputField;             // 몹 소환 수량 
 
     [Space]
     [Header("enemy stat")]
@@ -40,8 +43,6 @@ public class UI_Popup_Set_Stage : UI_Popup
 
     [Space]
     public InputField selectEnemyInputField;
-
-    private List<SpawnEnemyInfo> spawnEnemyList;
 
     public override void Init()
     {

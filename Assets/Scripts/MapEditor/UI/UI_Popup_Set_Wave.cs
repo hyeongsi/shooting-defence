@@ -9,7 +9,8 @@ public class UI_Popup_Set_Wave : UI_Popup
     [SerializeField]
     private InputField editWaveCountInputField;
     [SerializeField]
-    private InputField waveCountInputField;
+    private InputField waveCountInputField; // 스테이지 수 인풋필드
+    private int waveCount = 1;              // 스테이지 수
 
     public const string INIT_STRING = "1";
     public const int INIT_WAVE_COUNT = 1;
@@ -42,6 +43,7 @@ public class UI_Popup_Set_Wave : UI_Popup
         }
 
         waveCountInputField.text = editWaveCountInputField.text;
+        waveCount = Int32.Parse(waveCountInputField.text);
         MapEditorController.Instance.SetSpawnEnemyInfoList(waveCountInputFieldValue);
     }
 

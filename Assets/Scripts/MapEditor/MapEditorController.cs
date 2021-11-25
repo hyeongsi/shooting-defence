@@ -6,6 +6,7 @@ using Ookii.Dialogs;
 using System.Windows.Forms;
 using System.IO;
 
+[System.Serializable]
 public class SpawnEnemyInfo
 {
     public List<int> spawnEnemyList = new List<int>();
@@ -29,7 +30,7 @@ public class MapEditorController : MonoBehaviour
     private int yValue;
 
     private List<SpawnEnemyInfo> spawnEnemyInfoList = new List<SpawnEnemyInfo>();   // 스테이지, 스폰정보 저장
-
+    
     public delegate void SetSelectEnemyIndexDelegate();
     public SetSelectEnemyIndexDelegate setSelectEnemyIndexDelegate;
 
@@ -297,7 +298,9 @@ public class MapEditorController : MonoBehaviour
 
     public void SaveGameData()
     {
-        if(saveFileDialog.ShowDialog() == DialogResult.OK)
+        customTileMap.spawnEnemyInfoList = spawnEnemyInfoList;
+
+        if (saveFileDialog.ShowDialog() == DialogResult.OK)
         {
             string toJsonData = JsonUtility.ToJson(customTileMap);
             File.WriteAllText(saveFileDialog.FileName, toJsonData);
@@ -318,6 +321,10 @@ public class MapEditorController : MonoBehaviour
         spawnObjectAngle += 90;
     }
 
+
+    //==============================================================================
+
+
     [System.Serializable]
     public class CustomTileMap
     {
@@ -335,13 +342,18 @@ public class MapEditorController : MonoBehaviour
             OBJECT_LIST = 1,
         }
 
-        [SerializeField] private List<CustomTileMapStructData> blockList = new List<CustomTileMapStructData>();
-        [SerializeField] private List<CustomTileMapStructData> objectList = new List<CustomTileMapStructData>();
-        [SerializeField] public CustomTileMapStructData spawnPosition = new CustomTileMapStructData();
-        [SerializeField] public CustomTileMapStructData spawnEnemyPosition = new CustomTileMapStructData();
-        [SerializeField] public List<CustomTileMapStructData> enemyGuideLineList = new List<CustomTileMapStructData>();  // 적 이동 경로
+        [SerializeField] private List<CustomTileMapStructData> blockList = new List<CustomTileMapStructData>();              // 스폰 블록 리스트
+        [SerializeField] private List<CustomTileMapStructData> objectList = new List<CustomTileMapStructData>();             // 스폰 오브젝트 리스트
+        [SerializeField] public CustomTileMapStructData spawnPosition = new CustomTileMapStructData();                       // 플레이어 스폰 장소
+        [SerializeField] public CustomTileMapStructData spawnEnemyPosition = new CustomTileMapStructData();                  // 적 스폰 장소
+        [SerializeField] public List<CustomTileMapStructData> enemyGuideLineList = new List<CustomTileMapStructData>();      // 적 이동 경로
 
-        public List<CustomTileMapStructData> GetCustomTileMapList(CustomTileMapListEnum customTileMapListEnum) 
+        // ====================
+
+        [SerializeField]
+        public List<SpawnEnemyInfo> spawnEnemyInfoList;
+
+        public List<CustomTileMapStructData> GetCustomTileMapList(CustomTileMapListEnum customTileMapListEnum)
         {
             switch (customTileMapListEnum)
             {
@@ -364,7 +376,7 @@ public class MapEditorController : MonoBehaviour
             Array blockEnumArray = System.Enum.GetValues(typeof(BlockManager.BlockName));
             foreach (BlockManager.BlockName block in blockEnumArray)
             {
-                if((int)block == index)
+                if ((int)block == index)
                 {
                     isIncludeIndexRange = true;
                 }
@@ -418,7 +430,7 @@ public class MapEditorController : MonoBehaviour
             customTileMapStructData.placeGameTransform = gameobject.transform.position;
             customTileMapStructData.index = index;
 
-            if(spawnPosition.placeGameObject == null)
+            if (spawnPosition.placeGameObject == null)
             {
                 spawnPosition = customTileMapStructData;
             }
@@ -478,9 +490,9 @@ public class MapEditorController : MonoBehaviour
             if (gameobject == null)
                 return false;
 
-            for(int i = 0; i < objectList.Count; i ++)
+            for (int i = 0; i < objectList.Count; i++)
             {
-                if(objectList[i].placeGameObject == gameobject)
+                if (objectList[i].placeGameObject == gameobject)
                 {
                     objectList.RemoveAt(i);
                     return true;
@@ -489,5 +501,23 @@ public class MapEditorController : MonoBehaviour
             return false;
         }
         #endregion
+
+        public void CreateCustomMap()
+        {
+            for (int i = 0; i < blockList.Count; i++)
+            {
+                GameObject generateBlockGameObject = BlockManager.Instance.GetBlock((BlockManager.BlockName)blockList[i].index);
+                Transform newTransform = Instantiate(generateBlockGameObject.transform, blockList[i].placeGameTransform, Quaternion.identity);  // 블럭 생성
+            }
+            for (int i = 0; i < objectList.Count; i++)
+            {
+                GameObject generateBlockGameObject = ObjManager.Instance.GetObject((ObjManager.ObjName)objectList[i].index);
+                Transform newTransform = Instantiate(generateBlockGameObject.transform, objectList[i].placeGameTransform, Quaternion.identity);  // 오브젝트 생성
+            }
+
+            // spawnPosition 해당 위치로 캐릭터 생성
+            // spawnEnemyPositin 적 생성 위치로 나중에 사용할 것
+            // enemyGuideLineList 적 이동 경로로 나중에 사용할 것
+        }
     }
 }
