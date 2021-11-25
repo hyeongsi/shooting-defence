@@ -1242,6 +1242,36 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3875882840698054061
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6317672260353647714}
+  m_Layer: 0
+  m_Name: MuzzleFlashPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6317672260353647714
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875882840698054061}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.148, z: 1.819}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8648667314074233393}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4089750405191859364
 GameObject:
   m_ObjectHideFlags: 0
@@ -2471,6 +2501,7 @@ Transform:
   - {fileID: 6393101475113915766}
   - {fileID: 363107544517364423}
   - {fileID: 4870975551279111369}
+  - {fileID: 6317672260353647714}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2486,15 +2517,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a56639f86489d4787d6c9737640529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gripTransform: {fileID: 363107544517364423}
+  handGuardTransform: {fileID: 4870975551279111369}
   bulletText: {fileID: 0}
   reloadText: {fileID: 0}
-  hitEffect: {fileID: 5434133978062749643, guid: b88542ba983bfa14ea3c6597696a6e2d,
-    type: 3}
   muzzleFlash: {fileID: 2609729125799659476, guid: d62234dc7943f364f9e967db92746e8a,
     type: 3}
-  bulletTrail: {fileID: 5361146263939502726, guid: 2497b84da266f624cb9a8cd793fe5347,
-    type: 3}
-  muzzleFlashPosition: {fileID: 0}
+  muzzleFlashPosition: {fileID: 6317672260353647714}
+  shootingSound: {fileID: 8300000, guid: 1b145bcffd767854fb0c71c37678ebaa, type: 3}
+  reloadSound: {fileID: 8300000, guid: cef0fa03af5b747f0abe82cde0b2bccc, type: 3}
   weaponInfo: {fileID: 11400000, guid: 493f0d1a973aedb41999a1acc69520d5, type: 2}
   isShooting: 0
   isReadyToShoot: 1

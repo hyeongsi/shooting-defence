@@ -4401,13 +4401,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a56639f86489d4787d6c9737640529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gripTransform: {fileID: 6689470600557788440}
+  handGuardTransform: {fileID: 441283302366312763}
   bulletText: {fileID: 0}
   reloadText: {fileID: 0}
-  hitEffect: {fileID: 0}
-  muzzleFlash: {fileID: 0}
-  bulletTrail: {fileID: 0}
-  muzzleFlashPosition: {fileID: 0}
-  weaponInfo: {fileID: 0}
+  muzzleFlash: {fileID: 2609729125799659476, guid: d62234dc7943f364f9e967db92746e8a,
+    type: 3}
+  muzzleFlashPosition: {fileID: 7623363638973438739}
+  shootingSound: {fileID: 8300000, guid: 65201ddabb4144f6a8fb9480120b7656, type: 3}
+  reloadSound: {fileID: 8300000, guid: cef0fa03af5b747f0abe82cde0b2bccc, type: 3}
+  weaponInfo: {fileID: 11400000, guid: b614b8f3a284e8946a1333a5a7a821fa, type: 2}
   isShooting: 0
   isReadyToShoot: 1
   isburstShot: 0

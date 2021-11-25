@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//오브젝트 풀링으로 바꿔야함
-
-
 public class BulletProjectile : MonoBehaviour
 {
     [SerializeField] ParticleSystem hitEffect;
@@ -23,7 +20,7 @@ public class BulletProjectile : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(bulletDir * bulletSpeed * Time.deltaTime, Space.World);
+        transform.Translate(bulletDir * bulletSpeed * Time.deltaTime, Space.World); // 총알 이동
     }
 
     private void OnTriggerEnter(Collider other)
@@ -49,6 +46,6 @@ public class BulletProjectile : MonoBehaviour
 
     void Weapon_HitEffect()
     {
-        Instantiate(hitEffect, transform.position, Quaternion.LookRotation(-transform.forward));
+        Instantiate(hitEffect, transform.position, Quaternion.LookRotation(-transform.forward));    // 피격 이펙트 생성
     }
 }

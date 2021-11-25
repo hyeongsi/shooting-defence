@@ -6,11 +6,13 @@ using UnityEngine.UI;
 public class Weapon_Gun : MonoBehaviour
 {
     Player_Manager playerManager;
-
     Camera camera;
     Cinemachine.CinemachineImpulseSource impulseSource;
 
     Animator animator;
+
+    public Transform gripTransform;      // 권총손잡이 위치
+    public Transform handGuardTransform; // 총열 덮개 위치
 
     [Header("UI")]
     [SerializeField] Text bulletText;
@@ -104,6 +106,30 @@ public class Weapon_Gun : MonoBehaviour
         Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward)); // 총알 생성
     }
 
+    void FiringPallet()
+    {
+        Vector3 bulletDir = playerManager.GetMousePosition();
+        bullet.bulletDir = bulletDir;
+
+        Vector3[] randomDir = new Vector3[5];
+
+        for (int i = 0; i < randomDir.Length; i++)
+        {
+            randomDir[i] = new Vector3(Random.Range(0.2f, 1f), 0, 0);
+        }
+
+        // 총구 화염 생성
+        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward + randomDir[0]));
+
+        // 총알 생성
+        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+    }
+
     // 만약에 사용한다면 레이저 무기에 사용할 수도 있어서 남겨 놓음
     void HitScan()
     {
@@ -191,13 +217,9 @@ public class Weapon_Gun : MonoBehaviour
         animator.SetTrigger("Shoot");
         playerManager.animator.CrossFade("Firing Rifle", 0f);
 
-        while (burstCount > 0)
-        {
-            burstCount--;
-            Debug.Log("산탄" + burstCount);
-            FiringBullet();
-            yield return new WaitForSeconds(weaponInfo.burstFireDelay);
-        }
+        FiringPallet();
+
+        yield return new WaitForSeconds(weaponInfo.nextShotDelay);
 
         isburstShot = true;
     }
