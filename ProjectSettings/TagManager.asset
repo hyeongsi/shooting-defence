@@ -33,7 +33,7 @@ TagManager:
   - 
   - 
   - 
-  - Enemy
+  - AimPoint
   - Player
   - Ground
   - Obstacle

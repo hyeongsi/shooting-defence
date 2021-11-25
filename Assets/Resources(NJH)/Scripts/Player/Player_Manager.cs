@@ -8,6 +8,7 @@ public class Player_Manager : MonoBehaviour
     Player_Locomotion playerLocomotion;
     Player_Animation playerAnimation;
     [SerializeField] Player_CameraFunction cameraFunction;
+    [SerializeField] LayerMask checkThisLayer;
 
     public Animator animator;
     public Camera camera;
@@ -17,14 +18,12 @@ public class Player_Manager : MonoBehaviour
     public float horizontal;
     public float vertical;
 
-    [Header("마우스 입력")]
-    public Cinemachine.AxisState xAxis;
-    public Cinemachine.AxisState yAxis;
-
     [Header("플레이어 상태")]
     public bool sprintFlag;
     public bool aimFlag;
     public bool moveFlag;
+    public bool reloadFlag;
+    public bool disableFlag;
     public bool isGrounded;
     public bool isBehind;
     public bool rotateLock;
@@ -32,20 +31,28 @@ public class Player_Manager : MonoBehaviour
     [Header("UI")]
     public Text bulletText;
     public Text reloadText;
-    public Text staminaText;
-    public Image aimPointImage;
-    public Image disableAimPointImage;
+    public Slider hpBar;
+    public Slider staminaBar;
+    public Sprite aimPointSprite;
+    public Sprite disableAimPointSprite;
 
+    public GameObject targetGuide;
 
-    public Vector3 moveDirection;
+    Vector3 moveDirection;
 
     private void Start()
     {
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+
+        targetGuide.SetActive(false);
+
+        checkThisLayer = 1 << LayerMask.NameToLayer("Ground");
 
         playerLocomotion = GetComponent<Player_Locomotion>();
         playerAnimation = GetComponent<Player_Animation>();
+
+        hpBar.maxValue = playerLocomotion.hp;
+        staminaBar.maxValue = playerLocomotion.stamina;
 
         cameraFunction.Initialize();
         playerLocomotion.Initialize();
@@ -54,13 +61,20 @@ public class Player_Manager : MonoBehaviour
 
     private void Update()
     {
-        staminaText.text = playerLocomotion.stamina.ToString();
-
-        xAxis.Update(Time.fixedDeltaTime);
-        yAxis.Update(Time.fixedDeltaTime);
+        if(disableFlag == true || reloadFlag == true)
+        {
+            targetGuide.GetComponent<SpriteRenderer>().sprite = disableAimPointSprite;
+        }
+        else
+        {
+            targetGuide.GetComponent<SpriteRenderer>().sprite = aimPointSprite;
+        }
 
         sprintFlag = Input.GetButton("Sprint") && aimFlag == false && weapon.isShooting == false;
         aimFlag = cameraFunction.aimCamFlag;
+
+        hpBar.value = playerLocomotion.hp;
+        staminaBar.value = playerLocomotion.stamina;
 
         playerLocomotion.UpdateFunction();
         playerAnimation.UpdateFunction();
@@ -71,16 +85,28 @@ public class Player_Manager : MonoBehaviour
     {
         playerLocomotion.FixedUpdateFunction();
     }
-    public void SetDirection()
+    public Vector3 GetDirection()
     {
-        moveDirection = camera.transform.forward * vertical;
-        moveDirection += camera.transform.right * horizontal;
-        moveDirection.y = 0f;   // 먼저 0으로 만들고 정규화 함
-        moveDirection.Normalize();
+        moveDirection = new Vector3(horizontal, 0, vertical);
+        return moveDirection.normalized;
     }
 
-    public void takeDamage()
+    public Vector3 GetMousePosition()
     {
-        
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+        Vector3 lookDir = Vector3.zero;
+
+        targetGuide.SetActive(false);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, checkThisLayer))
+        {
+            targetGuide.SetActive(true);
+            targetGuide.transform.position = new Vector3(hit.point.x, hit.point.y + 0.8f, hit.point.z);
+            lookDir = hit.point - transform.position;
+            lookDir = new Vector3(lookDir.x, transform.position.y, lookDir.z);
+        }
+
+        return lookDir.normalized;
     }
 }

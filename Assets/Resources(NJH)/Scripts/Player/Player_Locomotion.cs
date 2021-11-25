@@ -9,26 +9,22 @@ public class Player_Locomotion : MonoBehaviour
 
     CharacterController characterController;
     [SerializeField] Transform groundChecker;
-    [SerializeField] Transform behindChecker;
-    [SerializeField] Transform aimingTarget;
-    
+    [SerializeField] Transform behindChecker;    
     [SerializeField] LayerMask groundLayer;
 
     [Header("플레이어 값")]
+    public float hp = 100f;
+    public float stamina = 100;
     public float moveSpeed;
     public float sprintSpeed;
-    public float aimMoveSpeed;
-    public float jumpHeight;
     public float gravity = -9.81f;
     public float groundCheckDistance = 0.2f;
-    public float stamina;
     public float waitForChargeStamina;
     public float waitForChargeEmptyStamina;
     public float smoothingSpeed = 15f;
 
-    public bool chargeStaminaFlag;
-    public bool useStaminaFlag;
-    public bool chargeStaminaDelayFlag;
+    bool useStaminaFlag;
+    bool chargeStaminaDelayFlag;
 
     Vector3 velocity;
 
@@ -41,7 +37,6 @@ public class Player_Locomotion : MonoBehaviour
 
     public void FixedUpdateFunction()
     {
-        CheckBehind();
         CheckGround();
         Loco_Move();
     }
@@ -49,7 +44,6 @@ public class Player_Locomotion : MonoBehaviour
     public void UpdateFunction()
     {
         Loco_Rotate();
-        Loco_Jump();
         Loco_UseWeapon();
         Loco_Stamina();
     }
@@ -71,58 +65,52 @@ public class Player_Locomotion : MonoBehaviour
         characterController.Move(velocity * Time.deltaTime);
     }
 
-    void CheckBehind()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    //void CheckBehind()
+    //{
+    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            // 캐릭터를 기준으로 레이캐스트 맞은 위치를 로컬좌표로 변환
-            Vector3 inverseTransform = behindChecker.InverseTransformPoint(hit.point);
-            if (inverseTransform.z > 0) // 0보다 크면 앞에 있음
-            {
-                playerManager.isBehind = false;
-                playerManager.disableAimPointImage.gameObject.SetActive(false);
-                playerManager.aimPointImage.gameObject.SetActive(true);
-
-            }
-            else // 0보다 작으면 뒤에 있음
-            {
-                playerManager.isBehind = true;
-                playerManager.disableAimPointImage.gameObject.SetActive(true);
-                playerManager.aimPointImage.gameObject.SetActive(false);
-            }
-        }
-    }
+    //    if (Physics.Raycast(ray, out RaycastHit hit))
+    //    {
+    //        // 캐릭터를 기준으로 레이캐스트 맞은 위치를 로컬좌표로 변환
+    //        Vector3 inverseTransform = behindChecker.InverseTransformPoint(hit.point);
+    //        if (inverseTransform.z > 0) // 0보다 크면 앞에 있음
+    //        {
+    //            playerManager.isBehind = false;
+    //            playerManager.disableAimPointImage.gameObject.SetActive(false);
+    //            playerManager.aimPointImage.gameObject.SetActive(true);
+    //        }
+    //        else // 0보다 작으면 뒤에 있음
+    //        {
+    //            playerManager.isBehind = true;
+    //            playerManager.disableAimPointImage.gameObject.SetActive(true);
+    //            playerManager.aimPointImage.gameObject.SetActive(false);
+    //        }
+    //    }
+    //}
 
     void Loco_Rotate()
     {
-        float mouseX = playerManager.xAxis.Value;
-        float mouseY = playerManager.yAxis.Value;
+        Quaternion characterRotation;
+        characterRotation = Quaternion.LookRotation(playerManager.GetMousePosition());
+        characterRotation.x = 0;
+        characterRotation.z = 0;
 
-        aimingTarget.eulerAngles = new Vector3(mouseY, mouseX, 0f);
+        transform.rotation = characterRotation;
 
-        Quaternion mouseRotate = Quaternion.Euler(0f, mouseX, 0f);
-        transform.rotation = Quaternion.Slerp(transform.rotation, mouseRotate, smoothingSpeed * Time.fixedDeltaTime);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(playerManager.GetMousePosition()), 15f);
+        //transform.forward = playerManager.GetMousePosition();
     }
 
     void Loco_Move()
     {
-        playerManager.SetDirection();
-
         float speed = moveSpeed;
-        playerManager.moveFlag = false;
+
+        playerManager.moveFlag = playerManager.GetDirection().magnitude > 0 ? true : false;
 
         playerManager.horizontal = Input.GetAxisRaw("Horizontal");
         playerManager.vertical = Input.GetAxisRaw("Vertical");
 
-        if (playerManager.aimFlag == true)
-        {
-            speed = aimMoveSpeed;
-            playerManager.horizontal *= 0.5f;
-            playerManager.vertical *= 0.5f;
-        }
-        else if (playerManager.sprintFlag == true && playerManager.vertical > 0 && stamina > 0)
+        if (playerManager.sprintFlag == true && stamina > 0)
         {
             speed = sprintSpeed;
             playerManager.horizontal *= 2f;
@@ -130,27 +118,13 @@ public class Player_Locomotion : MonoBehaviour
         }
 
         useStaminaFlag = playerManager.sprintFlag 
-                         && playerManager.moveDirection.magnitude > 0f
-                         && playerManager.vertical > 0
+                         && playerManager.moveFlag == true
                          ? true : false;
 
         // 이동
-        if (playerManager.moveDirection.magnitude > 0f)
+        if(playerManager.moveFlag == true)
         {
-            playerManager.moveFlag = true;
-            characterController.Move(playerManager.moveDirection * speed * Time.deltaTime);
-        }
-    }
-
-    void Loco_Jump()
-    {
-        if (Input.GetButtonDown("Jump"))
-        {
-            if (playerManager.isGrounded == true)
-            {
-                animator.CrossFade("Player_JumpLoop", 0.25f);
-                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            }
+            characterController.Move(playerManager.GetDirection() * speed * Time.deltaTime);
         }
     }
 
@@ -218,5 +192,17 @@ public class Player_Locomotion : MonoBehaviour
             return;
         }
         playerManager.weapon.WeaponKeyInput();
+    }
+
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+
+        animator.CrossFade("Hit", 0f);
+
+        if (hp <= 0)
+        {
+
+        }
     }
 }

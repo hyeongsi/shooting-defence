@@ -11,6 +11,7 @@ public class Player_Animation : MonoBehaviour
     [SerializeField] Rig rigLayer_WeaponFire;
     [SerializeField] Rig rigLayer_WeaponSprint;
     [SerializeField] Rig rigLayer_WeaponAim;
+    [SerializeField] Rig rigLayer_WeaponReload;
 
     Animator animator;
 
@@ -70,6 +71,16 @@ public class Player_Animation : MonoBehaviour
         else
         {
             rigLayer_WeaponSprint.weight -= Time.deltaTime * transitionSpeed;
+        }
+
+        // 재장전
+        if(playerManager.reloadFlag == true)
+        {
+            rigLayer_WeaponReload.weight += transitionSpeed * Time.deltaTime;
+        }
+        else
+        {
+            rigLayer_WeaponReload.weight -= transitionSpeed * Time.deltaTime;
         }
 
         // 사격
