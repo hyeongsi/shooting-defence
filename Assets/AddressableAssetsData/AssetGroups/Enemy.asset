@@ -23,21 +23,29 @@ MonoBehaviour:
     m_SerializedLabels: []
     m_MainAsset: {fileID: 4900000, guid: c726cd00cae875e489fd7979a4827f1f, type: 3}
     m_TargetAsset: {fileID: 4900000, guid: c726cd00cae875e489fd7979a4827f1f, type: 3}
-  - m_GUID: b8294688fe4660141b1de89183e42f40
-    m_Address: zombie1
+  - m_GUID: 71268720098564b4abfa9a0a601097a4
+    m_Address: zom2
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 548136458905125879, guid: b8294688fe4660141b1de89183e42f40,
+    m_MainAsset: {fileID: 3824940389990966383, guid: 71268720098564b4abfa9a0a601097a4,
       type: 3}
-    m_TargetAsset: {fileID: 548136458905125879, guid: b8294688fe4660141b1de89183e42f40,
+    m_TargetAsset: {fileID: 3824940389990966383, guid: 71268720098564b4abfa9a0a601097a4,
       type: 3}
-  - m_GUID: fcbc8c56f76fe0749aa36e78e604ae8c
-    m_Address: zombie2
+  - m_GUID: a5389e74bf377c24c99079f02d4f3ddd
+    m_Address: zom3
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 548136458905125879, guid: fcbc8c56f76fe0749aa36e78e604ae8c,
+    m_MainAsset: {fileID: 1888469227283002504, guid: a5389e74bf377c24c99079f02d4f3ddd,
       type: 3}
-    m_TargetAsset: {fileID: 548136458905125879, guid: fcbc8c56f76fe0749aa36e78e604ae8c,
+    m_TargetAsset: {fileID: 1888469227283002504, guid: a5389e74bf377c24c99079f02d4f3ddd,
+      type: 3}
+  - m_GUID: 8ee150bbf6b520146abf47e8226c562b
+    m_Address: zom1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 5574121839003908498, guid: 8ee150bbf6b520146abf47e8226c562b,
+      type: 3}
+    m_TargetAsset: {fileID: 5574121839003908498, guid: 8ee150bbf6b520146abf47e8226c562b,
       type: 3}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0e906e2dec284c04da74c1451ddcc7b7, type: 2}

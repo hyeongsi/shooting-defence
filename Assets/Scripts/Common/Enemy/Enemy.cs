@@ -10,7 +10,6 @@ public class Enemy : MonoBehaviour
 
     Transform targetPoint;
     int checkPointNumber = 0;
-    float moveSpeed = 4f;
 
     bool moveFlag = true;
 
@@ -50,7 +49,7 @@ public class Enemy : MonoBehaviour
     public virtual void Move()
     {
         Vector3 moveDirection = targetPoint.position - transform.position;
-        transform.Translate(moveDirection.normalized * moveSpeed * Time.deltaTime, Space.World);
+        transform.Translate(moveDirection.normalized * enemyStaticData.moveSpeed * Time.deltaTime, Space.World);
 
         transform.forward = moveDirection;
 

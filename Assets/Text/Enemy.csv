@@ -1,3 +1,4 @@
-no,name,hp,attackDamage,attackRange,attackDelay,moveSpeed
-0,zombie1,100,10,10,30,100
-1,zombie2,50,30,50,50,70
+no,name,hp,moveSpeed
+0,zom1,100,2
+1,zom2,50,4
+2,zom3,70,5

@@ -28,9 +28,6 @@ public class UI_Popup_Set_Stage : UI_Popup
     [Space]
     [Header("enemy stat")]
     public InputField enemyHPInputField;
-    public InputField enemyDamageInputField;
-    public InputField enemyAttackDelayInputField;
-    public InputField enemyAttackRangeInputField;
     public InputField enemyMoveSpeedInputField;
 
     [Space]
@@ -213,9 +210,6 @@ public class UI_Popup_Set_Stage : UI_Popup
             return;
 
         enemyHPInputField.text = enemyStaticData.maxHp.ToString();
-        enemyDamageInputField.text = enemyStaticData.attackDamage.ToString();
-        enemyAttackDelayInputField.text = enemyStaticData.attackDelay.ToString();
-        enemyAttackRangeInputField.text = enemyStaticData.attackRange.ToString();
         enemyMoveSpeedInputField.text = enemyStaticData.moveSpeed.ToString();
     }
 
@@ -236,9 +230,6 @@ public class UI_Popup_Set_Stage : UI_Popup
         spawnEnemyListDropDown.captionText.text = MapEditorController.Instance.SelectEnemyIndex.ToString();
 
         enemySpawnListHPInputField.text = enemyHPInputField.text;
-        enemySpawnListDamageInputField.text = enemyDamageInputField.text;
-        enemySpawnListAttackDelayInputField.text = enemyAttackDelayInputField.text;
-        enemySpawnListAttackRangeInputField.text = enemyAttackRangeInputField.text;
         enemySpawnListMoveSpeedInputField.text = enemyMoveSpeedInputField.text;
     }
 
@@ -314,9 +305,6 @@ public class UI_Popup_Set_Stage : UI_Popup
         EnemyStaticData enemyStaticData = EnemyManager.Instance.GetEnemyStaticData((EnemyManager.EnemyName)spawnEnemyList[waveCountDropDown.value].spawnEnemyList[spawnEnemyListDropDown.value]);
 
         enemySpawnListHPInputField.text = enemyStaticData.maxHp.ToString();
-        enemySpawnListDamageInputField.text = enemyStaticData.attackDamage.ToString();
-        enemySpawnListAttackDelayInputField.text = enemyStaticData.attackDelay.ToString();
-        enemySpawnListAttackRangeInputField.text = enemyStaticData.attackRange.ToString();
         enemySpawnListMoveSpeedInputField.text = enemyStaticData.moveSpeed.ToString();
     }
 

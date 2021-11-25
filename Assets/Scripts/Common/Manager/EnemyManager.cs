@@ -57,9 +57,6 @@ public class EnemyManager : Singleton<EnemyManager>
                     {
                         newEnemyStaticData = new EnemyStaticData(
                            int.Parse(csvString[i][(int)EnemyCsvColumn.HP]) * CORRECTION_VALUE,
-                           int.Parse(csvString[i][(int)EnemyCsvColumn.ATTACK_DAMAGE]) * CORRECTION_VALUE,
-                           int.Parse(csvString[i][(int)EnemyCsvColumn.ATTACK_RANGE]) * CORRECTION_VALUE,
-                           int.Parse(csvString[i][(int)EnemyCsvColumn.ATTACK_DELAY]) * CORRECTION_VALUE,
                            int.Parse(csvString[i][(int)EnemyCsvColumn.MOVE_SPEED]) * CORRECTION_VALUE);
 
                         enemyStaticDataDictionary.Add(int.Parse(csvString[i][(int)EnemyCsvColumn.INDEX]), newEnemyStaticData);
@@ -179,8 +176,9 @@ public class EnemyManager : Singleton<EnemyManager>
 
     public enum EnemyName
     {
-        zombie1 = 0,
-        zombie2 = 1,
+        zom1 = 0,
+        zom2 = 1,
+        zom3 = 2,
     }
 
     private enum EnemyCsvColumn
@@ -198,17 +196,11 @@ public class EnemyManager : Singleton<EnemyManager>
 public class EnemyStaticData
 {
     public float maxHp = 0.0f;
-    public float attackDamage = 0.0f;
-    public float attackRange = 0.0f;
-    public float attackDelay = 0.0f;
     public float moveSpeed = 0.0f;
 
-    public EnemyStaticData(float maxHp, float attackDamage, float attackRange, float attackDelay, float moveSpeed)
+    public EnemyStaticData(float maxHp, float moveSpeed)
     {
         this.maxHp = maxHp;
-        this.attackDamage = attackDamage;
-        this.attackRange = attackRange;
-        this.attackDelay = attackDelay;
         this.moveSpeed = moveSpeed;
     }
 }

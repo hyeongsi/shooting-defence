@@ -19,7 +19,7 @@ public class MapEditorController : MonoBehaviour
 {
     private static MapEditorController instance = null;
     private BlockManager.BlockName selectBlockIndex = BlockManager.BlockName.Block1_Gray;
-    private EnemyManager.EnemyName selectEnemyIndex = EnemyManager.EnemyName.zombie1;
+    private EnemyManager.EnemyName selectEnemyIndex = EnemyManager.EnemyName.zom1;
     private ObjManager.ObjName selectObjectIndex = ObjManager.ObjName.Water_Tower;
     private bool isSelectingObject = false;
     [HideInInspector]

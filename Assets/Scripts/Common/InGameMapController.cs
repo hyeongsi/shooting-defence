@@ -6,9 +6,10 @@ using Cinemachine;
 
 public class InGameMapController : MonoBehaviour
 {
-    //public GameObject player;
-    public Transform playerPrefab;
-    public CinemachineVirtualCamera cvm;
+    public GameObject player;
+    public CharacterController cc;
+    //public Transform playerPrefab;
+    //public CinemachineVirtualCamera cvm;
     MapEditorController.CustomTileMap customTileMap = new MapEditorController.CustomTileMap();
 
     void Start()
@@ -27,11 +28,22 @@ public class InGameMapController : MonoBehaviour
         // 적 스폰지점
         customTileMap.CreateCustomMap();
 
-        Transform newPlayer = Instantiate(playerPrefab, customTileMap.spawnPosition.placeGameTransform, Quaternion.identity);
+        //Transform newPlayer = Instantiate(playerPrefab, customTileMap.spawnPosition.placeGameTransform, Quaternion.identity);
 
-        cvm.Follow = newPlayer;
-        cvm.LookAt = newPlayer;
-        //player.transform.position = customTileMap.spawnPosition.placeGameTransform;
+        //cvm.Follow = newPlayer;
+        //cvm.LookAt = newPlayer;
+        //player.transform.GetComponent<Player_Manager>().SetMoveDirection(customTileMap.spawnPosition.placeGameTransform);
+        cc.enabled = false;
+        player.transform.position = customTileMap.spawnPosition.placeGameTransform;
+        cc.enabled = true;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            LoadCustomMap("test4");
+        }
     }
 
 }

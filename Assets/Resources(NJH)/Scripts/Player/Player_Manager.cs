@@ -85,6 +85,7 @@ public class Player_Manager : MonoBehaviour
     {
         playerLocomotion.FixedUpdateFunction();
     }
+
     public Vector3 GetDirection()
     {
         moveDirection = new Vector3(horizontal, 0, vertical);
