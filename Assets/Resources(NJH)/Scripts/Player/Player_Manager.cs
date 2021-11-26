@@ -7,7 +7,7 @@ public class Player_Manager : MonoBehaviour
 {
     Player_Locomotion playerLocomotion;
     Player_Animation playerAnimation;
-    [SerializeField] Player_CameraFunction cameraFunction;
+    //[SerializeField] Player_CameraFunction cameraFunction;
     [SerializeField] LayerMask checkThisLayer;
 
     public Animator animator;
@@ -21,6 +21,7 @@ public class Player_Manager : MonoBehaviour
     [Header("플레이어 상태")]
     public bool sprintFlag;
     public bool aimFlag;
+    public bool shootingFlag;
     public bool moveFlag;
     public bool reloadFlag;
     public bool disableFlag;
@@ -51,10 +52,12 @@ public class Player_Manager : MonoBehaviour
         playerLocomotion = GetComponent<Player_Locomotion>();
         playerAnimation = GetComponent<Player_Animation>();
 
+        weapon = GetComponentInChildren<Weapon_Gun>();
+
         hpBar.maxValue = playerLocomotion.hp;
         staminaBar.maxValue = playerLocomotion.stamina;
 
-        cameraFunction.Initialize();
+        //cameraFunction.Initialize();
         playerLocomotion.Initialize();
         playerAnimation.Initialize();
     }
@@ -70,15 +73,15 @@ public class Player_Manager : MonoBehaviour
             targetGuide.GetComponent<SpriteRenderer>().sprite = aimPointSprite;
         }
 
-        sprintFlag = Input.GetButton("Sprint") && aimFlag == false && weapon.isShooting == false;
-        aimFlag = cameraFunction.aimCamFlag;
+        sprintFlag = Input.GetButton("Sprint") && aimFlag == false && shootingFlag == false;
+        //aimFlag = cameraFunction.aimCamFlag;
 
         hpBar.value = playerLocomotion.hp;
         staminaBar.value = playerLocomotion.stamina;
 
         playerLocomotion.UpdateFunction();
         playerAnimation.UpdateFunction();
-        cameraFunction.CameraUpdtate();
+        //cameraFunction.CameraUpdtate();
     }
 
     private void FixedUpdate()
