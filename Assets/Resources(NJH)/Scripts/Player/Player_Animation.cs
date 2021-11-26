@@ -84,7 +84,7 @@ public class Player_Animation : MonoBehaviour
         }
 
         // 사격
-        if (playerManager.weapon.isShooting == true)
+        if (playerManager.isShooting == true)
         {
             rigLayer_WeaponFire.weight += Time.deltaTime * transitionSpeed;
         }

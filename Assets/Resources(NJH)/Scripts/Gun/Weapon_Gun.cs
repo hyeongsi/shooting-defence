@@ -42,6 +42,8 @@ public class Weapon_Gun : MonoBehaviour
 
     private void Start()
     {
+        camera = Camera.main;
+
         // 총기 및 총알 정보 설정
         bullet = weaponInfo.bullet.GetComponent<BulletProjectile>();
         bullet.SetBulletInfo(weaponInfo.bulletSpeed, weaponInfo.damage);
@@ -50,7 +52,6 @@ public class Weapon_Gun : MonoBehaviour
 
         // 플레이어에서 가져오는 것들
         playerManager = GetComponentInParent<Player_Manager>();
-        camera = playerManager.camera;
         bulletText = playerManager.bulletText;
         reloadText = playerManager.reloadText;
 
@@ -85,6 +86,11 @@ public class Weapon_Gun : MonoBehaviour
             if (maxBullet <= 0) { 
                 reloadText.text = "재장전";
                 playerManager.disableFlag = true;
+
+                if(isReadyToShoot && isShooting)
+                {
+                    Weapon_Reload();
+                }
             }
             else {
                 reloadText.text = "탄약 적음";
@@ -150,10 +156,17 @@ public class Weapon_Gun : MonoBehaviour
     }
 
     // 격발
+    Coroutine co_HoldPose;
     void Weapon_Shoot()
     {
+        if(co_HoldPose != null)
+        {
+            StopCoroutine(co_HoldPose);
+        }
+
         burstCount = weaponInfo.bulletsPerShot; // 점사 카운트(최초 사격 시 3점사면 3으로 초기화)
         StartCoroutine(Co_Shooting());
+        co_HoldPose = StartCoroutine(Co_HoldShootingPose());
         SoundManager.instance.PlaySound("Fire", shootingSound, 0.3f);
     }
 
@@ -230,5 +243,12 @@ public class Weapon_Gun : MonoBehaviour
         yield return new WaitForSeconds(weaponInfo.reloadTime);
         maxBullet = weaponInfo.magazineSize;
         isReloading = playerManager.reloadFlag = false;
+    }
+
+    IEnumerator Co_HoldShootingPose()
+    {
+        playerManager.isShooting = true;
+        yield return new WaitForSeconds(1.5f);
+        playerManager.isShooting = false;
     }
 }

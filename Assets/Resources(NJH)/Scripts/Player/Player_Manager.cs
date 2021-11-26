@@ -10,8 +10,8 @@ public class Player_Manager : MonoBehaviour
     [SerializeField] Player_CameraFunction cameraFunction;
     [SerializeField] LayerMask checkThisLayer;
 
+    Camera camera;
     public Animator animator;
-    public Camera camera;
     public Weapon_Gun weapon;
 
     [Header("방향 입력")]
@@ -24,6 +24,7 @@ public class Player_Manager : MonoBehaviour
     public bool moveFlag;
     public bool reloadFlag;
     public bool disableFlag;
+    public bool isShooting;
     public bool isGrounded;
     public bool isBehind;
     public bool rotateLock;
@@ -48,8 +49,10 @@ public class Player_Manager : MonoBehaviour
 
         checkThisLayer = 1 << LayerMask.NameToLayer("Ground");
 
+        camera = Camera.main;
         playerLocomotion = GetComponent<Player_Locomotion>();
         playerAnimation = GetComponent<Player_Animation>();
+        weapon = GetComponentInChildren<Weapon_Gun>();
 
         hpBar.maxValue = playerLocomotion.hp;
         staminaBar.maxValue = playerLocomotion.stamina;
@@ -70,7 +73,7 @@ public class Player_Manager : MonoBehaviour
             targetGuide.GetComponent<SpriteRenderer>().sprite = aimPointSprite;
         }
 
-        sprintFlag = Input.GetButton("Sprint") && aimFlag == false && weapon.isShooting == false;
+        sprintFlag = Input.GetButton("Sprint") && aimFlag == false && isShooting == false;
         aimFlag = cameraFunction.aimCamFlag;
 
         hpBar.value = playerLocomotion.hp;
