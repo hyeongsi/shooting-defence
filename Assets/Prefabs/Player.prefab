@@ -513,7 +513,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   animator: {fileID: 2894693719038955464}
-  camera: {fileID: 0}
   weapon: {fileID: 7100995398663477009}
   horizontal: 0
   vertical: 0
@@ -522,6 +521,7 @@ MonoBehaviour:
   moveFlag: 0
   reloadFlag: 0
   disableFlag: 0
+  isShooting: 0
   isGrounded: 0
   isBehind: 0
   rotateLock: 0
@@ -3692,6 +3692,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8648667314074233398, guid: c97420231a439ea41b3762389a09ab65,
+        type: 3}
+      propertyPath: pumpSound
+      value: 
+      objectReference: {fileID: 8300000, guid: cef0fa03af5b747f0abe82cde0b2bccc, type: 3}
+    - target: {fileID: 8648667314074233398, guid: c97420231a439ea41b3762389a09ab65,
+        type: 3}
+      propertyPath: reloadSound
+      value: 
+      objectReference: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c97420231a439ea41b3762389a09ab65, type: 3}
 --- !u!4 &7100995398663477014 stripped

@@ -26,6 +26,7 @@ public class Weapon_Gun : MonoBehaviour
     [Header("Weapon SFX")]
     [SerializeField] AudioClip shootingSound;
     [SerializeField] AudioClip reloadSound;
+    [SerializeField] AudioClip pumpSound;
 
     [Header("Weapon Information")]
     [SerializeField] WeaponInfo weaponInfo;
@@ -62,6 +63,35 @@ public class Weapon_Gun : MonoBehaviour
     private void Update()
     {
         bulletText.text = maxBullet.ToString();
+
+        // 탄창의 모든 탄 소모 or 남은 탄 전체의 20퍼센트
+        if (maxBullet <= Mathf.Round(weaponInfo.magazineSize * 0.2f))
+        {
+            if (maxBullet <= 0)
+            {
+                reloadText.text = "재장전";
+                playerManager.disableFlag = true;
+
+                if (isReadyToShoot && isShooting)
+                {
+                    if (weaponInfo.weaponType == WeaponType.weaponTypeID.shotgun) // 샷건은 자동장전 X
+                    {
+                        return;
+                    }
+                    Weapon_Reload_Mag();
+                }
+            }
+            else
+            {
+                reloadText.text = "탄약 적음";
+            }
+            reloadText.gameObject.SetActive(true);
+        }
+        else
+        {
+            reloadText.gameObject.SetActive(false);
+            playerManager.disableFlag = false;
+        }
     }
 
     public void WeaponKeyInput()
@@ -76,67 +106,15 @@ public class Weapon_Gun : MonoBehaviour
             Weapon_Shoot(); 
         }
         // 재장전
-        if (Input.GetKeyDown(KeyCode.R)) {
-            Weapon_Reload();
-        }
-
-        // 탄창의 모든 탄 소모 or 남은 탄 전체의 20퍼센트
-        if (maxBullet <= Mathf.Round(weaponInfo.magazineSize * 0.2f))
-        {
-            if (maxBullet <= 0) { 
-                reloadText.text = "재장전";
-                playerManager.disableFlag = true;
-
-                if(isReadyToShoot && isShooting)
-                {
-                    Weapon_Reload();
-                }
+        if (Input.GetKey(KeyCode.R)) {
+            if(weaponInfo.weaponType == WeaponType.weaponTypeID.shotgun) // 샷건 장전
+            {
+                Weapon_Reaload_Shell();
             }
-            else {
-                reloadText.text = "탄약 적음";
-            }
-            reloadText.gameObject.SetActive(true);
-        }
-        else
-        {
-            reloadText.gameObject.SetActive(false);
-            playerManager.disableFlag = false;
+            Weapon_Reload_Mag();
         }
     }
 
-    void FiringBullet()
-    {
-        Vector3 bulletDir = playerManager.GetMousePosition();
-        bullet.bulletDir = bulletDir;
-        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward)); // 총구 화염 생성
-        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward)); // 총알 생성
-    }
-
-    void FiringPallet()
-    {
-        Vector3 bulletDir = playerManager.GetMousePosition();
-        bullet.bulletDir = bulletDir;
-
-        Vector3[] randomDir = new Vector3[5];
-
-        for (int i = 0; i < randomDir.Length; i++)
-        {
-            randomDir[i] = new Vector3(Random.Range(0.2f, 1f), 0, 0);
-        }
-
-        // 총구 화염 생성
-        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
-        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward + randomDir[0]));
-
-        // 총알 생성
-        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
-        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
-        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
-        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
-        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
-    }
-
-    // 만약에 사용한다면 레이저 무기에 사용할 수도 있어서 남겨 놓음
     void HitScan()
     {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -155,6 +133,7 @@ public class Weapon_Gun : MonoBehaviour
         }
     }
 
+    #region 사격
     // 격발
     Coroutine co_HoldPose;
     void Weapon_Shoot()
@@ -167,18 +146,11 @@ public class Weapon_Gun : MonoBehaviour
         burstCount = weaponInfo.bulletsPerShot; // 점사 카운트(최초 사격 시 3점사면 3으로 초기화)
         StartCoroutine(Co_Shooting());
         co_HoldPose = StartCoroutine(Co_HoldShootingPose());
-        SoundManager.instance.PlaySound("Fire", shootingSound, 0.3f);
-    }
 
-    void Weapon_Reload()
-    {
-        if(isReloading || maxBullet == weaponInfo.magazineSize)
+        if(weaponInfo.weaponType == WeaponType.weaponTypeID.shotgun)
         {
-            return;
+            SoundManager.instance.PlaySound("Fire", pumpSound, 0.3f);
         }
-
-        StartCoroutine(Co_Reloading());
-        SoundManager.instance.PlaySound("Reload", reloadSound, 0.5f);
     }
 
     IEnumerator Co_Shooting()
@@ -237,6 +209,70 @@ public class Weapon_Gun : MonoBehaviour
         isburstShot = true;
     }
 
+    void FiringBullet()
+    {
+        Vector3 bulletDir = playerManager.GetMousePosition();
+        Vector3 randomDir = new Vector3(Random.Range(-0.1f, 0.1f), 0, Random.Range(-0.1f, 0.1f));
+        bullet.bulletDir = bulletDir + randomDir;
+
+        // 사격 소리 재생
+        SoundManager.instance.PlaySound("Fire", shootingSound, 0.3f);
+
+        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward)); // 총구 화염 생성
+        Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward)); // 총알 생성
+    }
+
+    void FiringPallet()
+    {
+        Vector3 bulletDir = playerManager.GetMousePosition();   // 마우스 있는 쪽으로 직진방향
+
+        Vector3[] randomDir = new Vector3[weaponInfo.bulletsPerShot];
+        BulletProjectile[] pallets = new BulletProjectile[weaponInfo.bulletsPerShot];
+
+        for (int i = 0; i < randomDir.Length; i++)
+        {
+            pallets[i] = bullet;
+
+            randomDir[i] = new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f));
+            pallets[i].bulletDir = bulletDir + randomDir[i];
+
+            // 총알 생성
+            Instantiate(pallets[i], muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+        }
+
+        // 사격 소리 재생
+        SoundManager.instance.PlaySound("Fire", shootingSound, 0.3f);
+
+        // 총구 화염 생성
+        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+        Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
+    }
+    #endregion
+
+
+    #region 장전
+    void Weapon_Reload_Mag()
+    {
+        if(isReloading || maxBullet == weaponInfo.magazineSize)
+        {
+            return;
+        }
+
+        StartCoroutine(Co_Reloading());
+        SoundManager.instance.PlaySound("Reload", reloadSound, 0.5f);
+    }
+
+    void Weapon_Reaload_Shell()
+    {
+        if (isReloading || maxBullet == weaponInfo.magazineSize)
+        {
+            return;
+        }
+
+        StartCoroutine(Co_Reloading_Shell());
+        SoundManager.instance.PlaySound("Reload", reloadSound, 0.5f);
+    }
+
     IEnumerator Co_Reloading()
     {
         isReloading = playerManager.reloadFlag = true;
@@ -244,6 +280,15 @@ public class Weapon_Gun : MonoBehaviour
         maxBullet = weaponInfo.magazineSize;
         isReloading = playerManager.reloadFlag = false;
     }
+
+    IEnumerator Co_Reloading_Shell()
+    {
+        isReloading = playerManager.reloadFlag = true;
+        yield return new WaitForSeconds(weaponInfo.reloadTime);
+        maxBullet += 1;
+        isReloading = playerManager.reloadFlag = false;
+    }
+    #endregion
 
     IEnumerator Co_HoldShootingPose()
     {

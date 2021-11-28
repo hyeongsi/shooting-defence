@@ -15,8 +15,8 @@ public class Enemy : MonoBehaviour
 
     Animator animator;
 
-    protected float hp;
-    protected float speed;
+    protected float hp = 100;   // 임시
+    protected float speed = 4;  // 임시
     EnemyStaticData enemyStaticData;
 
     public float HP { get { return hp; }  set { hp = value; } }

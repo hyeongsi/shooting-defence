@@ -186,10 +186,7 @@ public class EnemyManager : Singleton<EnemyManager>
         INDEX = 0,
         NAME = 1,
         HP = 2,
-        ATTACK_DAMAGE = 3,
-        ATTACK_RANGE = 4,
-        ATTACK_DELAY = 5,
-        MOVE_SPEED = 6,
+        MOVE_SPEED = 3,
     }
 }
 

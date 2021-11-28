@@ -20,7 +20,7 @@ public class BulletProjectile : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(bulletDir * bulletSpeed * Time.deltaTime, Space.World); // 총알 이동
+        transform.Translate(bulletDir.normalized * bulletSpeed * Time.deltaTime, Space.World); // 총알 이동
     }
 
     private void OnTriggerEnter(Collider other)
