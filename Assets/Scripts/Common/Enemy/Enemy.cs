@@ -15,15 +15,21 @@ public class Enemy : MonoBehaviour
 
     Animator animator;
 
-    protected float hp = 150; // 임시
+    protected float hp;
+    protected float speed;
     EnemyStaticData enemyStaticData;
 
     public float HP { get { return hp; }  set { hp = value; } }
+    public float SPEED { get { return speed; } set { speed = value; } }
 
     public virtual void Init(EnemyStaticData enemyStaticData)
     {
         this.enemyStaticData = enemyStaticData;
+
+        Debug.Log("에너미 데이터 " + enemyStaticData);
+
         hp = enemyStaticData.maxHp;
+        speed = enemyStaticData.moveSpeed;
     }
 
     public virtual void TakeDamage(float damage)    // 피격
@@ -35,7 +41,6 @@ public class Enemy : MonoBehaviour
         {
             moveFlag = false;
 
-            CapsuleCollider collider;
             gameObject.GetComponent<CapsuleCollider>().enabled = false;
 
             animator.applyRootMotion = true;
@@ -49,7 +54,7 @@ public class Enemy : MonoBehaviour
     public virtual void Move()
     {
         Vector3 moveDirection = targetPoint.position - transform.position;
-        transform.Translate(moveDirection.normalized * enemyStaticData.moveSpeed * Time.deltaTime, Space.World);
+        transform.Translate(moveDirection.normalized * speed * Time.deltaTime, Space.World);
 
         transform.forward = moveDirection;
 
@@ -82,7 +87,6 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         targetPoint = CheckPoint.checkPoint[checkPointNumber];
-        Debug.Log(targetPoint);
     }
 
     private void Update()
