@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4396563, g: 0.48004222, b: 0.52496916, a: 1}
+  m_IndirectSpecularColor: {r: 0.43965623, g: 0.48004222, b: 0.5249687, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -12499,7 +12499,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 998962358}
-  m_LocalRotation: {x: 0.1608018, y: 0.82242614, z: -0.2837271, w: 0.4661084}
+  m_LocalRotation: {x: 0.16080178, y: 0.82242614, z: -0.28372714, w: 0.46610832}
   m_LocalPosition: {x: -40.71, y: 20.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -28030,6 +28030,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dummy 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1888469227283002504, guid: a5389e74bf377c24c99079f02d4f3ddd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1888469227283002610, guid: a5389e74bf377c24c99079f02d4f3ddd,
         type: 3}
       propertyPath: m_RootOrder
@@ -28273,6 +28278,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dummy 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3824940389990966383, guid: 71268720098564b4abfa9a0a601097a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71268720098564b4abfa9a0a601097a4, type: 3}
 --- !u!4 &4369019827886017072 stripped
@@ -28347,6 +28357,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Dummy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574121839003908498, guid: 8ee150bbf6b520146abf47e8226c562b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ee150bbf6b520146abf47e8226c562b, type: 3}

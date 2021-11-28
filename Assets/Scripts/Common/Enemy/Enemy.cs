@@ -48,6 +48,11 @@ public class Enemy : MonoBehaviour
 
     public virtual void Move()
     {
+        if(enemyStaticData == null)
+        {
+            enemyStaticData = new EnemyStaticData(HP, 3);
+        }
+
         Vector3 moveDirection = targetPoint.position - transform.position;
         transform.Translate(moveDirection.normalized * enemyStaticData.moveSpeed * Time.deltaTime, Space.World);
 
