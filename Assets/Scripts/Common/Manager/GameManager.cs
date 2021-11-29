@@ -37,11 +37,6 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public void LoadInGameData(Stage stage)
-    {
-        // 스테이지의 정보에 따라 필요로 하는 정보 로딩,
-        // 터렛, 적, 블럭, 바리게이트, 스테이지 등등
-    }
     public void SwitchIsPause()
     {
         if (IsPause)

@@ -6,11 +6,11 @@ public class CheckPoint : MonoBehaviour
 {
     public static Transform[] checkPoint;
 
-    private void Awake()
+    public void SetCheckPoint()
     {
         checkPoint = new Transform[transform.childCount];
 
-        for(int i = 0; i < checkPoint.Length; i++)
+        for (int i = 0; i < checkPoint.Length; i++)
         {
             checkPoint[i] = transform.GetChild(i);
         }

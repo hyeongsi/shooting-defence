@@ -9,10 +9,14 @@ using System.IO;
 [System.Serializable]
 public class SpawnEnemyInfo
 {
-    public List<int> spawnEnemyList = new List<int>();
-    public List<float> waitTimeBeforeSpawnList = new List<float>();
-    public List<float> spawnDelayList = new List<float>();
-    public List<int> spawnCountList = new List<int>();
+    [Tooltip("소환될 적 리스트")]
+    public List<int> spawnEnemyList = new List<int>();                  // 소환될 적 리스트
+    [Tooltip("스폰 전 대기시간")]
+    public List<float> waitTimeBeforeSpawnList = new List<float>();     // 스폰 전 대기시간
+    [Tooltip("스폰 딜레이")]
+    public List<float> spawnDelayList = new List<float>();              // 스폰 딜레이
+    [Tooltip("소환될 적의 수")]
+    public List<int> spawnCountList = new List<int>();                  // 소환될 적의 수
 }
 
 public class MapEditorController : MonoBehaviour

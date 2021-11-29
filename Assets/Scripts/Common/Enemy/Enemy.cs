@@ -64,7 +64,10 @@ public class Enemy : MonoBehaviour
         transform.forward = moveDirection;
 
         animator.SetBool("isMove", true);
-        
+
+        if (CheckPoint.checkPoint.Length <= 0)
+            return;
+
         if(Vector3.Distance(transform.position, targetPoint.position) <= 0.1f)
         {
             checkPointNumber++;

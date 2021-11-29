@@ -8,9 +8,10 @@ public class InGameMapController : MonoBehaviour
 {
     public GameObject player;
     public CharacterController cc;
-    //public Transform playerPrefab;
-    //public CinemachineVirtualCamera cvm;
     MapEditorController.CustomTileMap customTileMap = new MapEditorController.CustomTileMap();
+
+    public CheckPoint checkPoint;   // 적 체크포인트 설정 부모 오브젝트
+    public EnemySpawner enemySpawner;   // 적 스포너
 
     void Start()
     {
@@ -26,16 +27,46 @@ public class InGameMapController : MonoBehaviour
 
         // 체크포인트 등록, (적 이동 경로)
         // 적 스폰지점
+
         customTileMap.CreateCustomMap();
-
-        //Transform newPlayer = Instantiate(playerPrefab, customTileMap.spawnPosition.placeGameTransform, Quaternion.identity);
-
-        //cvm.Follow = newPlayer;
-        //cvm.LookAt = newPlayer;
-        //player.transform.GetComponent<Player_Manager>().SetMoveDirection(customTileMap.spawnPosition.placeGameTransform);
         cc.enabled = false;
         player.transform.position = customTileMap.spawnPosition.placeGameTransform;
         cc.enabled = true;
+
+        CreateCheckPointChildObject();  // 체크포인트 위치 맵 정보에 따라 새로 지정
+        checkPoint.SetCheckPoint();     // 체크포인트 위치 등록함
+
+        enemySpawner.Init(customTileMap.spawnEnemyPosition.placeGameTransform, customTileMap.spawnEnemyInfoList);
+    }   
+
+    public void CreateCheckPointChildObject()
+    {
+        if (checkPoint == null)
+            return;
+
+        // 체크포인트 자식 삭제
+        Transform[] checkPointChildTransform = new Transform[checkPoint.transform.childCount];
+        if (checkPointChildTransform.Length > 0)
+        {
+            for (int i = 0; i < checkPoint.transform.childCount; i++)
+            {
+                checkPointChildTransform[i] = checkPoint.transform.GetChild(i);
+            }
+
+            int childCount = checkPoint.transform.childCount;
+            for(int i = 0; i < childCount; i++)
+            {
+                Destroy(checkPointChildTransform[i].gameObject);
+            }
+        }
+
+        // 체크포인트 자식 등록
+        for(int i = 0; i < customTileMap.enemyGuideLineList.Count; i++)
+        {
+            GameObject newCheckPoint = new GameObject();
+            newCheckPoint.transform.position = customTileMap.enemyGuideLineList[i].placeGameTransform;
+            newCheckPoint.transform.parent = checkPoint.transform;
+        }
     }
 
     private void Update()
@@ -43,6 +74,9 @@ public class InGameMapController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha0))
         {
             LoadCustomMap("test4");
+        }else if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            enemySpawner.StartStage(0);
         }
     }
 
