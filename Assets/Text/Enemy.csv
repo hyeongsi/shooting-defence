@@ -1,4 +1,4 @@
 no,name,hp,moveSpeed
-0,zom1,100,2
-1,zom2,50,4
-2,zom3,70,5
+0,zom1,1000,20
+1,zom2,500,40
+2,zom3,700,50

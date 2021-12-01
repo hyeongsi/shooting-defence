@@ -351,7 +351,7 @@ public class MapEditorController : MonoBehaviour
         [SerializeField] public CustomTileMapStructData spawnPosition = new CustomTileMapStructData();                       // 플레이어 스폰 장소
         [SerializeField] public CustomTileMapStructData spawnEnemyPosition = new CustomTileMapStructData();                  // 적 스폰 장소
         [SerializeField] public List<CustomTileMapStructData> enemyGuideLineList = new List<CustomTileMapStructData>();      // 적 이동 경로
-
+        private GameObject parentGameObject;
         // ====================
 
         [SerializeField]
@@ -506,22 +506,28 @@ public class MapEditorController : MonoBehaviour
         }
         #endregion
 
-        public void CreateCustomMap()
+        public void CreateCustomMap()   // 맵 생성
         {
+            if(parentGameObject == null)
+            {
+                parentGameObject = new GameObject();
+            }else
+            {
+                DestroyImmediate(parentGameObject);
+            }
+            
             for (int i = 0; i < blockList.Count; i++)
             {
                 GameObject generateBlockGameObject = BlockManager.Instance.GetBlock((BlockManager.BlockName)blockList[i].index);
                 Transform newTransform = Instantiate(generateBlockGameObject.transform, blockList[i].placeGameTransform, Quaternion.identity);  // 블럭 생성
+                newTransform.parent = parentGameObject.transform;
             }
             for (int i = 0; i < objectList.Count; i++)
             {
                 GameObject generateBlockGameObject = ObjManager.Instance.GetObject((ObjManager.ObjName)objectList[i].index);
                 Transform newTransform = Instantiate(generateBlockGameObject.transform, objectList[i].placeGameTransform, Quaternion.identity);  // 오브젝트 생성
+                newTransform.parent = parentGameObject.transform;
             }
-
-            // spawnPosition 해당 위치로 캐릭터 생성
-            // spawnEnemyPositin 적 생성 위치로 나중에 사용할 것
-            // enemyGuideLineList 적 이동 경로로 나중에 사용할 것
         }
     }
 }

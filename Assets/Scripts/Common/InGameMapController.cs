@@ -56,7 +56,7 @@ public class InGameMapController : MonoBehaviour
             int childCount = checkPoint.transform.childCount;
             for(int i = 0; i < childCount; i++)
             {
-                Destroy(checkPointChildTransform[i].gameObject);
+                DestroyImmediate(checkPointChildTransform[i].gameObject);
             }
         }
 
@@ -73,7 +73,7 @@ public class InGameMapController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Alpha0))
         {
-            LoadCustomMap("test4");
+            LoadCustomMap("test3");
         }else if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             enemySpawner.StartStage(0);

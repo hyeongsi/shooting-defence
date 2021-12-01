@@ -3710,7 +3710,7 @@ GameObject:
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &297375937
 Transform:
   m_ObjectHideFlags: 0
@@ -5344,6 +5344,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &398556399
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6188,7 +6190,7 @@ GameObject:
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &468619913
 Transform:
   m_ObjectHideFlags: 0
@@ -6962,6 +6964,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &538401322
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7078,7 +7082,7 @@ GameObject:
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &563938034
 Transform:
   m_ObjectHideFlags: 0
@@ -7447,6 +7451,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &598558834
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8128,6 +8134,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &641598013
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9602,6 +9610,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &764420714
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10041,6 +10051,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &807882424
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11441,6 +11453,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &905716914
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14353,6 +14367,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &1147773533
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14562,6 +14578,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &1156951099
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15437,7 +15455,7 @@ GameObject:
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1224570412
 Transform:
   m_ObjectHideFlags: 0
@@ -15786,6 +15804,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &1258901983
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18378,6 +18398,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &1427545298
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -25141,6 +25163,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &1946424472
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27113,6 +27137,8 @@ MonoBehaviour:
   explosionEffect: {fileID: 4569280403261113932, guid: f4f9e910442ed1f49a1748ba2835d857,
     type: 3}
   explosionSound: {fileID: 8300000, guid: 7bef0064f8567430cac22499c6b93d4f, type: 3}
+  targetPoint: {fileID: 0}
+  speed: 4
 --- !u!136 &2081736110
 CapsuleCollider:
   m_ObjectHideFlags: 0

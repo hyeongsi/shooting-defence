@@ -148,7 +148,7 @@ public class EnemyManager : Singleton<EnemyManager>
         return null;
     }
 
-    public GameObject InstantiateEnemy(EnemyName enemyName)
+    public GameObject InstantiateEnemy(EnemyName enemyName, Vector3 spawnPosition, Transform parentTransform)
     {
         loadAsyncOperationHandle = default;
         loadEnemyStaticData = null;
@@ -165,7 +165,10 @@ public class EnemyManager : Singleton<EnemyManager>
                     return null;
 
                 tempInstantiateGameObject = Instantiate(loadAsyncOperationHandle.Result);
-                tempInstantiateGameObject.GetComponent<Enemy>().Init(loadEnemyStaticData);
+                Enemy newEnemy = tempInstantiateGameObject.GetComponent<Enemy>();
+                newEnemy.Init(loadEnemyStaticData);
+                newEnemy.transform.position = spawnPosition;
+                newEnemy.transform.parent = parentTransform;
 
                 return tempInstantiateGameObject;
             }  

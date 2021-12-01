@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] ParticleSystem explosionEffect;
     [SerializeField] AudioClip explosionSound;
 
-    Transform targetPoint;
+    public Transform targetPoint;
     int checkPointNumber = 0;
 
     bool moveFlag = true;
@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
     Animator animator;
 
     protected float hp = 100;   // 임시
-    protected float speed = 4;  // 임시
+    public float speed = 4;  // 임시
     EnemyStaticData enemyStaticData;
 
     public float HP { get { return hp; }  set { hp = value; } }

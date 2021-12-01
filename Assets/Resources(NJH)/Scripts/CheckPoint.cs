@@ -10,7 +10,7 @@ public class CheckPoint : MonoBehaviour
     {
         checkPoint = new Transform[transform.childCount];
 
-        for (int i = 0; i < checkPoint.Length; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
             checkPoint[i] = transform.GetChild(i);
         }
