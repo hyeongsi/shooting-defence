@@ -29,14 +29,18 @@ MonoBehaviour:
     m_Address: Water_Tower
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 1519351171880811264, guid: b15a7ca4982e91c42a84388fb537ea2e,
+      type: 3}
+    m_TargetAsset: {fileID: 1519351171880811264, guid: b15a7ca4982e91c42a84388fb537ea2e,
+      type: 3}
   - m_GUID: 7eeb5ec30b2b02e4da3242a404ed56f1
     m_Address: Enemy_Spawner
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 4888827445681397449, guid: 7eeb5ec30b2b02e4da3242a404ed56f1,
+      type: 3}
+    m_TargetAsset: {fileID: 4888827445681397449, guid: 7eeb5ec30b2b02e4da3242a404ed56f1,
+      type: 3}
   - m_GUID: 49889fc6a4eb61946981eacb336dfe04
     m_Address: Player_Spawner
     m_ReadOnly: 0
@@ -53,21 +57,21 @@ MonoBehaviour:
       type: 3}
     m_TargetAsset: {fileID: 1659628260621666041, guid: 61a03cee6a5e99540be2916a4f390238,
       type: 3}
-  - m_GUID: b5fbcd71c826527498adb4cd08fab0ea
-    m_Address: Apartment
+  - m_GUID: 2d061336523595a4986839f5291c51d8
+    m_Address: Fence
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 4962933494187590481, guid: b5fbcd71c826527498adb4cd08fab0ea,
+    m_MainAsset: {fileID: 2900971264436025948, guid: 2d061336523595a4986839f5291c51d8,
       type: 3}
-    m_TargetAsset: {fileID: 4962933494187590481, guid: b5fbcd71c826527498adb4cd08fab0ea,
+    m_TargetAsset: {fileID: 2900971264436025948, guid: 2d061336523595a4986839f5291c51d8,
       type: 3}
   - m_GUID: 1f7768b6b70d6954ab7ac74343d5d202
     m_Address: Market
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 3277832143561626895, guid: 1f7768b6b70d6954ab7ac74343d5d202,
+    m_MainAsset: {fileID: 5658864160638222500, guid: 1f7768b6b70d6954ab7ac74343d5d202,
       type: 3}
-    m_TargetAsset: {fileID: 3277832143561626895, guid: 1f7768b6b70d6954ab7ac74343d5d202,
+    m_TargetAsset: {fileID: 5658864160638222500, guid: 1f7768b6b70d6954ab7ac74343d5d202,
       type: 3}
   - m_GUID: ef3a0e1cfce49974fb9fd1083c90640f
     m_Address: OfficeOld_Large
@@ -89,9 +93,9 @@ MonoBehaviour:
     m_Address: Shop
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 3709506614388574039, guid: b759046940b2faa41b23d1b0cfbac125,
+    m_MainAsset: {fileID: 4337340241699333953, guid: b759046940b2faa41b23d1b0cfbac125,
       type: 3}
-    m_TargetAsset: {fileID: 3709506614388574039, guid: b759046940b2faa41b23d1b0cfbac125,
+    m_TargetAsset: {fileID: 4337340241699333953, guid: b759046940b2faa41b23d1b0cfbac125,
       type: 3}
   - m_GUID: d7c85de8bf8bbf3498fae512a55edd18
     m_Address: PoliceVehicle
@@ -165,13 +169,13 @@ MonoBehaviour:
       type: 3}
     m_TargetAsset: {fileID: 8150601252989919245, guid: 675476c78aad57143b886fa977715442,
       type: 3}
-  - m_GUID: 2d061336523595a4986839f5291c51d8
-    m_Address: Fence
+  - m_GUID: b5fbcd71c826527498adb4cd08fab0ea
+    m_Address: Apartment
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 1639629506204396389, guid: 2d061336523595a4986839f5291c51d8,
+    m_MainAsset: {fileID: 2940220201028839072, guid: b5fbcd71c826527498adb4cd08fab0ea,
       type: 3}
-    m_TargetAsset: {fileID: 1639629506204396389, guid: 2d061336523595a4986839f5291c51d8,
+    m_TargetAsset: {fileID: 2940220201028839072, guid: b5fbcd71c826527498adb4cd08fab0ea,
       type: 3}
   - m_GUID: 0b8268d8addffa24fb5ae40ed9107c2c
     m_Address: QuestionBox
@@ -185,8 +189,10 @@ MonoBehaviour:
     m_Address: Barrier
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 517375669440538307, guid: 24eb151414ab7294db1b2b98640a7b9b,
+      type: 3}
+    m_TargetAsset: {fileID: 517375669440538307, guid: 24eb151414ab7294db1b2b98640a7b9b,
+      type: 3}
   - m_GUID: dbe618a226add9844ad67ef6c3b5e256
     m_Address: Cone
     m_ReadOnly: 0

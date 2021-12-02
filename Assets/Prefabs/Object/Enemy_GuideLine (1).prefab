@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1665283982085003377}
   - component: {fileID: 1690200483918966055}
   - component: {fileID: 1683791198629629333}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Enemy_GuideLine (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
