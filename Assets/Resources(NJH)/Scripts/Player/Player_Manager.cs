@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Player_Manager : MonoBehaviour
@@ -46,7 +44,7 @@ public class Player_Manager : MonoBehaviour
 
         targetGuide.SetActive(false);
 
-        checkThisLayer = 1 << LayerMask.NameToLayer("Ground");
+        checkThisLayer = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Block"));
 
         playerLocomotion = GetComponent<Player_Locomotion>();
         playerAnimation = GetComponent<Player_Animation>();
@@ -104,9 +102,9 @@ public class Player_Manager : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, checkThisLayer))
         {
             targetGuide.SetActive(true);
-            targetGuide.transform.position = new Vector3(hit.point.x, hit.point.y + 0.8f, hit.point.z);
-            lookDir = hit.point - transform.position;
-            lookDir = new Vector3(lookDir.x, transform.position.y, lookDir.z);
+            targetGuide.transform.position = new Vector3(hit.point.x, hit.point.y + 0.8f, hit.point.z); // 조준점 위치
+            lookDir = hit.point - transform.position;                                                   // 플레이어가 바라보는 방향(조준점 위치 - 자신의 위치)
+            lookDir = new Vector3(lookDir.x, 0, lookDir.z);
         }
 
         return lookDir.normalized;
