@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class UI_Scene_Loading : UI_Scene
 {
     [SerializeField]
-    Image progressBar;
+    public Slider progressBar;
 
     private void Start()
     {
@@ -17,36 +17,38 @@ public class UI_Scene_Loading : UI_Scene
 
     private void OnEnable()
     {
-        progressBar.fillAmount = 0f;
+        progressBar.value = 0f;
     }
 
-    public void LoadScene()
+    public void LoadScene(string stageName)
     {
-        StartCoroutine(LoadSceneProcess());
+        StartCoroutine(LoadSceneProcess(stageName));
     }
 
-    IEnumerator LoadSceneProcess()
+    IEnumerator LoadSceneProcess(string stageName)
     {
-        if(GameManager.Instance.PlayeState == GameManager.PlayStates.IN_GAME)
+        GameManager.Instance.stageName = stageName;
+        AsyncOperation op = SceneManager.LoadSceneAsync((int)GameManager.Instance.PlayeState, LoadSceneMode.Additive);     // LoadSceneAsync() 로 불러오면 비동기로 씬 로딩 이동할건지 설정하는 옵션
+        op.allowSceneActivation = false;
+        
+        while (!op.isDone)
         {
-            //EnemyManager.Instance.LoadEnemyData();
-            //yield return null;
-            //TurretManager.Instance.LoadTurretData();
-            //yield return null;
-
+            yield return null;
+            if(progressBar.value < 1f)
+            {
+                progressBar.value = Mathf.MoveTowards(progressBar.value, 1f, Time.deltaTime);
+            }
+            else
+            {
+                yield return 2f;
+                op.allowSceneActivation = true;
+            }
         }
 
-        AsyncOperation op = SceneManager.LoadSceneAsync((int)GameManager.Instance.PlayeState, LoadSceneMode.Additive);     // LoadSceneAsync() 로 불러오면 비동기로 씬 로딩 이동할건지 설정하는 옵션
-
+        op = SceneManager.UnloadSceneAsync("Loading");
         while (!op.isDone)
         {
             yield return null;
         }
-
-        //op = SceneManager.UnloadSceneAsync("Loading");
-        //while (!op.isDone)
-        //{
-        //    yield return null;
-        //}
     }
 }

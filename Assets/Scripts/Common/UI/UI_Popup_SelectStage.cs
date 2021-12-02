@@ -12,6 +12,10 @@ public class UI_Popup_SelectStage : UI_Popup
 
     public void StartStage(int stageIndex)
     {
+        BlockManager.Instance.LoadAll();
+        EnemyManager.Instance.LoadAll();
+        ObjManager.Instance.LoadAll();
+
         GameManager.Instance.LoadScene(GameManager.PlayStates.IN_GAME, stageIndex);
     }
 }

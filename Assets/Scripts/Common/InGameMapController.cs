@@ -15,18 +15,22 @@ public class InGameMapController : MonoBehaviour
 
     void Start()
     {
-        BlockManager.Instance.LoadAll();
-        EnemyManager.Instance.LoadAll();
-        ObjManager.Instance.LoadAll();
+        StartCoroutine(LoadCustomMap(GameManager.Instance.stageName));
     }
 
-    public void LoadCustomMap(string mapName)
+    public IEnumerator LoadCustomMap(string mapName)
     {
+        while(!(BlockManager.Instance.isLoadAll && EnemyManager.Instance.isLoadAll  && EnemyManager.Instance.isLoadStaticData && ObjManager.Instance.isLoadAll))
+        {
+            yield return null;
+        }
+
+        if(mapName == null)
+        {
+            mapName = "test3";
+        }
         TextAsset text = Resources.Load(mapName) as TextAsset;
         customTileMap = JsonUtility.FromJson<MapEditorController.CustomTileMap>(text.ToString());
-
-        // 체크포인트 등록, (적 이동 경로)
-        // 적 스폰지점
 
         customTileMap.CreateCustomMap();
         cc.enabled = false;
@@ -37,7 +41,8 @@ public class InGameMapController : MonoBehaviour
         checkPoint.SetCheckPoint();     // 체크포인트 위치 등록함
 
         enemySpawner.Init(customTileMap.spawnEnemyPosition.placeGameTransform, customTileMap.spawnEnemyInfoList);
-    }   
+        yield return null;
+    }
 
     public void CreateCheckPointChildObject()
     {
@@ -73,7 +78,7 @@ public class InGameMapController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Alpha0))
         {
-            LoadCustomMap("test3");
+            StartCoroutine(LoadCustomMap("test3"));
         }else if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             enemySpawner.StartStage(0);

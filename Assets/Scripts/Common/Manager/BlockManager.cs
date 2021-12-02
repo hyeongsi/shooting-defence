@@ -10,6 +10,8 @@ public class BlockManager : Singleton<BlockManager>
     private AsyncOperationHandle<GameObject> loadAsyncOperationHandle;
     private Dictionary<int, AsyncOperationHandle<GameObject>> blockDictionary = new Dictionary<int, AsyncOperationHandle<GameObject>>();
 
+    public bool isLoadAll = false;
+
     private void Awake()
     {
         if (false == instance)
@@ -42,6 +44,11 @@ public class BlockManager : Singleton<BlockManager>
                 {
                     blockDictionary.Add((int)blockName, asyncOperationHandle);
                     Debug.Log(blockName.ToString()+ " Block 로드 완료");
+
+                    if (Enum.GetValues(typeof(BlockName)).Length == blockDictionary.Count)
+                    {
+                        isLoadAll = true;
+                    }
                 };
         }
         else

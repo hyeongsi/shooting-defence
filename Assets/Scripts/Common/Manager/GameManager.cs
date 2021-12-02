@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager>
     public bool IsPause { get; private set; } = false;
     private PlayStates playState = PlayStates.MAIN_MENU;
     private Scene nextScene;
+    public string stageName;
 
     #region Property
     public PlayStates PlayeState { set { playState = value; }  get { return playState; } }
@@ -29,11 +30,19 @@ public class GameManager : Singleton<GameManager>
     {
         if(stage < 0)
         {
-            StartCoroutine(LoadAsyncSceneCourtine(nextstate));
+            StartCoroutine(LoadAsyncSceneCourtine(nextstate,"test3"));
         }
         else
         {
-            StartCoroutine(LoadAsyncSceneCourtine(nextstate));
+            switch ((StageName)stage)
+            {
+                case StageName.test3:
+                    StartCoroutine(LoadAsyncSceneCourtine(nextstate, ((StageName)stage).ToString()));
+                    break;
+                default:
+                    StartCoroutine(LoadAsyncSceneCourtine(nextstate, "test3"));
+                    break;
+            }
         }
     }
 
@@ -62,7 +71,7 @@ public class GameManager : Singleton<GameManager>
         // 메인 메뉴로 씬 이동
     }
 
-    IEnumerator LoadAsyncSceneCourtine(PlayStates next)
+    IEnumerator LoadAsyncSceneCourtine(PlayStates next, string stageName)
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Additive);
 
@@ -79,8 +88,10 @@ public class GameManager : Singleton<GameManager>
 
         playState = next;
 
-        UI_Scene_Loading loadingUI = UIManager.Instance.SceneUIData.ui_scene as UI_Scene_Loading;
-        loadingUI.LoadScene();
+        UI_Scene_Loading loadingUI = null;
+        loadingUI = UIManager.Instance.SceneUIData.ui_scene as UI_Scene_Loading;
+
+        loadingUI.LoadScene(stageName);
     }
 
     #region EnumStorage
@@ -89,6 +100,11 @@ public class GameManager : Singleton<GameManager>
         MAIN_MENU = 0,
         IN_GAME = 1,
         MAP_EDIT = 2,
+    }
+
+    public enum StageName
+    {
+        test3 = 0,
     }
     #endregion
 }

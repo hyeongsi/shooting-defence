@@ -7,8 +7,10 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class ObjManager : Singleton<ObjManager>
 {
-    private AsyncOperationHandle<GameObject> loadAsyncOperationHandle;
+    public AsyncOperationHandle<GameObject> loadAsyncOperationHandle;
     private Dictionary<int, AsyncOperationHandle<GameObject>> objectDictionary = new Dictionary<int, AsyncOperationHandle<GameObject>>();
+
+    public bool isLoadAll = false;
 
     private void Awake()
     {
@@ -42,6 +44,11 @@ public class ObjManager : Singleton<ObjManager>
                 {
                     objectDictionary.Add((int)objectName, asyncOperationHandle);
                     Debug.Log(objectName.ToString() + " Object 로드 완료");
+
+                    if(Enum.GetValues(typeof(ObjName)).Length == objectDictionary.Count)
+                    {
+                        isLoadAll = true;
+                    }
                 };
         }
         else

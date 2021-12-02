@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -8,12 +9,15 @@ public class EnemyManager : Singleton<EnemyManager>
 {
     private GameObject tempInstantiateGameObject;
 
-    private AsyncOperationHandle<GameObject> loadAsyncOperationHandle;
+    public AsyncOperationHandle<GameObject> loadAsyncOperationHandle;
     private Dictionary<int, AsyncOperationHandle<GameObject>> enemyDictionary = new Dictionary<int, AsyncOperationHandle<GameObject>>();
 
     private AsyncOperationHandle<TextAsset> enemyStaticDataAsyncOperationHandle;
     private EnemyStaticData loadEnemyStaticData;
     private Dictionary<int, EnemyStaticData> enemyStaticDataDictionary = new Dictionary<int, EnemyStaticData>();
+
+    public bool isLoadAll = false;
+    public bool isLoadStaticData = false;
 
     private void Awake()
     {
@@ -61,6 +65,8 @@ public class EnemyManager : Singleton<EnemyManager>
 
                         enemyStaticDataDictionary.Add(int.Parse(csvString[i][(int)EnemyCsvColumn.INDEX]), newEnemyStaticData);
                     }
+
+                    isLoadStaticData = true;
                 }
                 catch
                 {
@@ -81,6 +87,11 @@ public class EnemyManager : Singleton<EnemyManager>
                 {
                     enemyDictionary.Add((int)enemyName, asyncOperationHandle);
                     Debug.Log(enemyName.ToString() + " Enemy 로드 완료");
+
+                    if (Enum.GetValues(typeof(EnemyName)).Length == enemyDictionary.Count)
+                    {
+                        isLoadAll = true;
+                    }
                 };
         }
         else

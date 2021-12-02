@@ -5,6 +5,7 @@ using UnityEngine;
 using Ookii.Dialogs;
 using System.Windows.Forms;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class SpawnEnemyInfo
@@ -528,6 +529,8 @@ public class MapEditorController : MonoBehaviour
                 Transform newTransform = Instantiate(generateBlockGameObject.transform, objectList[i].placeGameTransform, Quaternion.identity);  // 오브젝트 생성
                 newTransform.parent = parentGameObject.transform;
             }
+
+            SceneManager.MoveGameObjectToScene(parentGameObject, SceneManager.GetSceneByBuildIndex(1));
         }
     }
 }

@@ -10,7 +10,6 @@ public class Player_Manager : MonoBehaviour
     [SerializeField] Player_CameraFunction cameraFunction;
     [SerializeField] LayerMask checkThisLayer;
 
-    Camera camera;
     public Animator animator;
     public Weapon_Gun weapon;
 
@@ -49,7 +48,6 @@ public class Player_Manager : MonoBehaviour
 
         checkThisLayer = 1 << LayerMask.NameToLayer("Ground");
 
-        camera = Camera.main;
         playerLocomotion = GetComponent<Player_Locomotion>();
         playerAnimation = GetComponent<Player_Animation>();
         weapon = GetComponentInChildren<Weapon_Gun>();
@@ -97,7 +95,7 @@ public class Player_Manager : MonoBehaviour
 
     public Vector3 GetMousePosition()
     {
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         Vector3 lookDir = Vector3.zero;
 
