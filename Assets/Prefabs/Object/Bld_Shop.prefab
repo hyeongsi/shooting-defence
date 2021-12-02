@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7142627120882883443}
   m_Layer: 31
-  m_Name: Shop
+  m_Name: Bld_Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
