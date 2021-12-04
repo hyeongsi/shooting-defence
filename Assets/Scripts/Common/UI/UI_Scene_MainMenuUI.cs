@@ -1,22 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class UI_Scene_MainMenuUI : UI_Scene
+public class UI_Scene_MainMenuUI :MonoBehaviour
 {
+    public Canvas stageCanvas;
+
     private void Start()
     {
-        Init();
-        ShowSceneUI();
+        Cursor.visible = true;
     }
 
-    public void StartGame()
+    public void OpenStageCanvas()
     {
-        UIManager.Instance.ShowPopupUI(UIManager.MainMenuPopUpUI.SelectStage_Canvas.ToString());
+        stageCanvas.gameObject.SetActive(true);
     }
 
     public void ExitGame()
     {
+
+#if UNITY_EDITOR 
+        UnityEditor.EditorApplication.isPlaying=false; 
+#else 
         Application.Quit();
+#endif
     }
 }

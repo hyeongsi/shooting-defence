@@ -27,7 +27,7 @@ public class BulletProjectile : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            Debug.Log("hit");
+            //Debug.Log("hit");
 
             Weapon_HitEffect();
 
