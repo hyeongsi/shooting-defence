@@ -422,7 +422,7 @@ public class MapEditorController : MonoBehaviour
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
             customTileMapStructData.placeGameTransform = gameobject.transform.position;
-            customTileMapStructData.placeGameRotation = gameobject.transform.rotation.eulerAngles;
+            customTileMapStructData.placeGameRotation = gameobject.transform.eulerAngles;
             customTileMapStructData.index = index;
 
             objectList.Add(customTileMapStructData);

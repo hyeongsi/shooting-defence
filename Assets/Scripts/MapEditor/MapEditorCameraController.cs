@@ -72,6 +72,7 @@ public class MapEditorCameraController : MonoBehaviour
         {
             MapEditorController.Instance.previewObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));
             MapEditorController.Instance.previewObject.transform.position = spawnPosition;
+            MapEditorController.Instance.previewObject.transform.rotation = Quaternion.Euler(0, MapEditorController.Instance.SpawnObjectAngle, 0);
             MapEditorController.Instance.previewObject.layer = LayerMask.NameToLayer("Default");
         }
         else
