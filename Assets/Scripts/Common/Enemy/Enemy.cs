@@ -77,7 +77,7 @@ public class Enemy : MonoBehaviour
                 // 라이프 감소
                 Instantiate(explosionEffect, transform.position, Quaternion.LookRotation(Vector3.up));  // 폭발 이펙트 실행
                 SoundManager.instance.PlaySound("Enemy Explosion", explosionSound, 1f);
-                Destroy(gameObject);
+                DestroyImmediate(gameObject);
             }
             else
             {

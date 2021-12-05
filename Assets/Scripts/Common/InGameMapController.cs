@@ -12,6 +12,7 @@ public class InGameMapController : MonoBehaviour
 
     public CheckPoint checkPoint;   // 적 체크포인트 설정 부모 오브젝트
     public EnemySpawner enemySpawner;   // 적 스포너
+    public Text waveHelpText;   // 웨이브 안내 텍스트
 
     void Start()
     {
@@ -76,12 +77,25 @@ public class InGameMapController : MonoBehaviour
 
     private void Update()
     {
+        const int INIT_STAGE = 0;
+
         if(Input.GetKeyDown(KeyCode.Alpha0))
         {
             StartCoroutine(LoadCustomMap("test3"));
-        }else if (Input.GetKeyDown(KeyCode.Alpha9))
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha9))
         {
-            enemySpawner.StartStage(0);
+            enemySpawner.StartStage(INIT_STAGE);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            enemySpawner.StartStage(INIT_STAGE);
+            waveHelpText.text = "";
         }
     }
 

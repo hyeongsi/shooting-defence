@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
     public List<SpawnEnemyInfo> spawnEnemyInfoList; // 스테이지에서 스폰될 적 정보들
     public IEnumerator myCoroutine;
-    public bool isWorking = false;
+    public Text waveHelpText;   // 웨이브 안내 텍스트
 
     public void Init(Vector3 position, List<SpawnEnemyInfo> spawnEnemyInfoList)
     {
@@ -14,14 +15,10 @@ public class EnemySpawner : MonoBehaviour
         this.spawnEnemyInfoList = spawnEnemyInfoList;
     }
 
-    public bool StartStage(int stage)
+    public void StartStage(int stage)
     {
-        if (isWorking)
-            return false;
-
         myCoroutine = SpawnEnemy(stage);
         StartCoroutine(myCoroutine);
-        return true;
     }
 
     public IEnumerator SpawnEnemy(int stage)
@@ -30,12 +27,16 @@ public class EnemySpawner : MonoBehaviour
 
         if(spawnEnemyInfoList.Count <= stage)
         {
-            Debug.Log("해당 스테이지가 존재하지 않음");
+            waveHelpText.text = "스테이지가 존재하지 않습니다.\n\n 잠시 후 게임이 종료됩니다.";
+            yield return new WaitForSeconds(3f);
+            GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
             yield break;
         }
         if(spawnEnemyInfoList[stage].spawnEnemyList.Count <= 0)
         {
-            Debug.Log("해당 스테이지에 소환될 몹 없음");
+            waveHelpText.text = "스테이지에 소환될 적들의 정보가 없습니다.\n\n 잠시 후 게임이 종료됩니다.";
+            yield return new WaitForSeconds(3f);
+            GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
             yield break;
         }
 
@@ -54,6 +55,38 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        isWorking = false;
+        while (transform.childCount != 0)
+        {
+            if (gameObject == null)
+                yield break;
+            yield return null;
+        }
+
+        if (spawnEnemyInfoList.Count <= (stage+1))
+        {
+            waveHelpText.text = "스테이지 클리어\n\n 잠시 후 게임이 종료됩니다.";
+            yield return new WaitForSeconds(3f);
+            GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
+            // 클리어 관련 정보 저장하던지, 추가로 처리 필요
+            yield break;
+        }
+        if (spawnEnemyInfoList[(stage + 1)].spawnEnemyList.Count <= 0)
+        {
+            waveHelpText.text = "스테이지 클리어\n\n 잠시 후 게임이 종료됩니다.";
+            yield return new WaitForSeconds(3f);
+            GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
+            // 클리어 관련 정보 저장하던지, 추가로 처리 필요
+            yield break;
+        }
+
+        for (int i = 10; i > 0; i--)
+        {
+            waveHelpText.text = i.ToString() + "초 후에 새로운 웨이브가 시작됩니다.";
+            yield return new WaitForSeconds(1f);
+        }
+        waveHelpText.text = "";
+        myCoroutine = SpawnEnemy(++stage);
+        StartCoroutine(myCoroutine);
+        yield break;
     }
 }

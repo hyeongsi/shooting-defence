@@ -338,6 +338,7 @@ public class MapEditorController : MonoBehaviour
         {
             public GameObject placeGameObject;
             public Vector3 placeGameTransform;
+            public Vector3 placeGameRotation; 
             public int index;
         }
 
@@ -393,6 +394,7 @@ public class MapEditorController : MonoBehaviour
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
             customTileMapStructData.placeGameTransform = gameobject.transform.position;
+            customTileMapStructData.placeGameRotation = gameobject.transform.rotation.eulerAngles;
             customTileMapStructData.index = index;
 
             blockList.Add(customTileMapStructData);
@@ -420,6 +422,7 @@ public class MapEditorController : MonoBehaviour
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
             customTileMapStructData.placeGameTransform = gameobject.transform.position;
+            customTileMapStructData.placeGameRotation = gameobject.transform.rotation.eulerAngles;
             customTileMapStructData.index = index;
 
             objectList.Add(customTileMapStructData);
@@ -433,6 +436,7 @@ public class MapEditorController : MonoBehaviour
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
             customTileMapStructData.placeGameTransform = gameobject.transform.position;
+            customTileMapStructData.placeGameRotation = gameobject.transform.rotation.eulerAngles;
             customTileMapStructData.index = index;
 
             if (spawnPosition.placeGameObject == null)
@@ -455,6 +459,7 @@ public class MapEditorController : MonoBehaviour
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
             customTileMapStructData.placeGameTransform = gameobject.transform.position;
+            customTileMapStructData.placeGameRotation = gameobject.transform.rotation.eulerAngles;
             customTileMapStructData.index = index;
 
             if (spawnEnemyPosition.placeGameObject == null)
@@ -478,6 +483,7 @@ public class MapEditorController : MonoBehaviour
             CustomTileMapStructData customTileMapStructData;
             customTileMapStructData.placeGameObject = gameobject;
             customTileMapStructData.placeGameTransform = gameobject.transform.position;
+            customTileMapStructData.placeGameRotation = gameobject.transform.rotation.eulerAngles;
             customTileMapStructData.index = index;
 
             enemyGuideLineList.Add(customTileMapStructData);
@@ -520,13 +526,13 @@ public class MapEditorController : MonoBehaviour
             for (int i = 0; i < blockList.Count; i++)
             {
                 GameObject generateBlockGameObject = BlockManager.Instance.GetBlock((BlockManager.BlockName)blockList[i].index);
-                Transform newTransform = Instantiate(generateBlockGameObject.transform, blockList[i].placeGameTransform, Quaternion.identity);  // 블럭 생성
+                Transform newTransform = Instantiate(generateBlockGameObject.transform, blockList[i].placeGameTransform, Quaternion.Euler(blockList[i].placeGameRotation));  // 블럭 생성
                 newTransform.parent = parentGameObject.transform;
             }
             for (int i = 0; i < objectList.Count; i++)
             {
                 GameObject generateBlockGameObject = ObjManager.Instance.GetObject((ObjManager.ObjName)objectList[i].index);
-                Transform newTransform = Instantiate(generateBlockGameObject.transform, objectList[i].placeGameTransform, Quaternion.identity);  // 오브젝트 생성
+                Transform newTransform = Instantiate(generateBlockGameObject.transform, objectList[i].placeGameTransform, Quaternion.Euler(blockList[i].placeGameRotation));  // 오브젝트 생성
                 newTransform.parent = parentGameObject.transform;
             }
 

@@ -91,12 +91,15 @@ public class Player_Locomotion : MonoBehaviour
     void Loco_Rotate()
     {
         Quaternion characterRotation;
-        characterRotation = Quaternion.LookRotation(playerManager.GetMousePosition());
-        characterRotation.x = 0;
-        characterRotation.z = 0;
+        if(playerManager.GetMousePosition() != Vector3.zero)
+        {
+            characterRotation = Quaternion.LookRotation(playerManager.GetMousePosition());
+            characterRotation.x = 0;
+            characterRotation.z = 0;
 
-        transform.rotation = characterRotation;
-
+            transform.rotation = characterRotation;
+        }
+        
         //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(playerManager.GetMousePosition()), 15f);
         //transform.forward = playerManager.GetMousePosition();
     }

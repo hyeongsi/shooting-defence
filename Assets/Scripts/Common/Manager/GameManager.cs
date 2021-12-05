@@ -28,9 +28,11 @@ public class GameManager : Singleton<GameManager>
 
     public void LoadScene(PlayStates nextstate, int stage = -1)
     {
-        if(stage < 0)
+        const string INIT_STAGE_NAME = "test3";
+
+        if (stage < 0)
         {
-            StartCoroutine(LoadAsyncSceneCourtine(nextstate,"test3"));
+            StartCoroutine(LoadAsyncSceneCourtine(nextstate, INIT_STAGE_NAME));
         }
         else
         {
@@ -40,7 +42,7 @@ public class GameManager : Singleton<GameManager>
                     StartCoroutine(LoadAsyncSceneCourtine(nextstate, ((StageName)stage).ToString()));
                     break;
                 default:
-                    StartCoroutine(LoadAsyncSceneCourtine(nextstate, "test3"));
+                    StartCoroutine(LoadAsyncSceneCourtine(nextstate, INIT_STAGE_NAME));
                     break;
             }
         }

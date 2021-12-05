@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_Popup_SelectStage : UI_Popup
+public class UI_Popup_SelectStage : MonoBehaviour
 {
-    public override void Init()
+    static int initCount = 0;
+    private void Start()
     {
-        base.Init();
-        gameObject.SetActive(false);
+        initCount++;
+        if (initCount >= 2)
+        {
+            return;
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     public void StartStage(int stageIndex)
