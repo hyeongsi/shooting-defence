@@ -21,217 +21,195 @@ MonoBehaviour:
     m_Address: Apt_Door_Corner1
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 6685281679640429169, guid: 949653a57abc3a14d93e0807a1b9dc7b,
-      type: 3}
-    m_TargetAsset: {fileID: 6685281679640429169, guid: 949653a57abc3a14d93e0807a1b9dc7b,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: b15a7ca4982e91c42a84388fb537ea2e
     m_Address: Water_Tower
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 1519351171880811264, guid: b15a7ca4982e91c42a84388fb537ea2e,
-      type: 3}
-    m_TargetAsset: {fileID: 1519351171880811264, guid: b15a7ca4982e91c42a84388fb537ea2e,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 7eeb5ec30b2b02e4da3242a404ed56f1
     m_Address: Enemy_Spawner
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 4888827445681397449, guid: 7eeb5ec30b2b02e4da3242a404ed56f1,
-      type: 3}
-    m_TargetAsset: {fileID: 4888827445681397449, guid: 7eeb5ec30b2b02e4da3242a404ed56f1,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 49889fc6a4eb61946981eacb336dfe04
     m_Address: Player_Spawner
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 5006522021196676379, guid: 49889fc6a4eb61946981eacb336dfe04,
-      type: 3}
-    m_TargetAsset: {fileID: 5006522021196676379, guid: 49889fc6a4eb61946981eacb336dfe04,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 61a03cee6a5e99540be2916a4f390238
     m_Address: Enemy_GuideLine
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 1659628260621666041, guid: 61a03cee6a5e99540be2916a4f390238,
-      type: 3}
-    m_TargetAsset: {fileID: 1659628260621666041, guid: 61a03cee6a5e99540be2916a4f390238,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 2d061336523595a4986839f5291c51d8
     m_Address: Fence
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 2900971264436025948, guid: 2d061336523595a4986839f5291c51d8,
-      type: 3}
-    m_TargetAsset: {fileID: 2900971264436025948, guid: 2d061336523595a4986839f5291c51d8,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 1f7768b6b70d6954ab7ac74343d5d202
     m_Address: Market
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 5658864160638222500, guid: 1f7768b6b70d6954ab7ac74343d5d202,
-      type: 3}
-    m_TargetAsset: {fileID: 5658864160638222500, guid: 1f7768b6b70d6954ab7ac74343d5d202,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: ef3a0e1cfce49974fb9fd1083c90640f
     m_Address: OfficeOld_Large
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 9011954501982115908, guid: ef3a0e1cfce49974fb9fd1083c90640f,
-      type: 3}
-    m_TargetAsset: {fileID: 9011954501982115908, guid: ef3a0e1cfce49974fb9fd1083c90640f,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: dfb572dd86a615c44a79ba08d0246405
     m_Address: OfficeOld_Small
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 3838101236295281224, guid: dfb572dd86a615c44a79ba08d0246405,
-      type: 3}
-    m_TargetAsset: {fileID: 3838101236295281224, guid: dfb572dd86a615c44a79ba08d0246405,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: b759046940b2faa41b23d1b0cfbac125
     m_Address: Shop
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 4337340241699333953, guid: b759046940b2faa41b23d1b0cfbac125,
-      type: 3}
-    m_TargetAsset: {fileID: 4337340241699333953, guid: b759046940b2faa41b23d1b0cfbac125,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: d7c85de8bf8bbf3498fae512a55edd18
     m_Address: PoliceVehicle
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 1118890757814365129, guid: d7c85de8bf8bbf3498fae512a55edd18,
-      type: 3}
-    m_TargetAsset: {fileID: 1118890757814365129, guid: d7c85de8bf8bbf3498fae512a55edd18,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: ada6e945513eabf4096662c321baff26
     m_Address: Sedan
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 883304721794439246, guid: ada6e945513eabf4096662c321baff26,
-      type: 3}
-    m_TargetAsset: {fileID: 883304721794439246, guid: ada6e945513eabf4096662c321baff26,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: e855eddea55d1fb46a5eb891bc1e1c6d
     m_Address: Taxi
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 6676897933362402780, guid: e855eddea55d1fb46a5eb891bc1e1c6d,
-      type: 3}
-    m_TargetAsset: {fileID: 6676897933362402780, guid: e855eddea55d1fb46a5eb891bc1e1c6d,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: e708fb9b4bf132242a0f4ef18d76c3cc
     m_Address: Grass
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 206053921885115559, guid: e708fb9b4bf132242a0f4ef18d76c3cc,
-      type: 3}
-    m_TargetAsset: {fileID: 206053921885115559, guid: e708fb9b4bf132242a0f4ef18d76c3cc,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 409c1ace0e519104eab396def6ccc1f1
     m_Address: GrassPath_Straight
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 3198091368969521841, guid: 409c1ace0e519104eab396def6ccc1f1,
-      type: 3}
-    m_TargetAsset: {fileID: 3198091368969521841, guid: 409c1ace0e519104eab396def6ccc1f1,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: f07f7918359d25b45a6bcbd5b0663882
     m_Address: GrassPath_T
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 3841517034134137249, guid: f07f7918359d25b45a6bcbd5b0663882,
-      type: 3}
-    m_TargetAsset: {fileID: 3841517034134137249, guid: f07f7918359d25b45a6bcbd5b0663882,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 6731ea03820b36a46855558f0d6aabe2
     m_Address: Tree_01
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 5360860542758613439, guid: 6731ea03820b36a46855558f0d6aabe2,
-      type: 3}
-    m_TargetAsset: {fileID: 5360860542758613439, guid: 6731ea03820b36a46855558f0d6aabe2,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 30ad41b4cf12542459054e6e766cbbf8
     m_Address: Tree_02
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 1442815042463532048, guid: 30ad41b4cf12542459054e6e766cbbf8,
-      type: 3}
-    m_TargetAsset: {fileID: 1442815042463532048, guid: 30ad41b4cf12542459054e6e766cbbf8,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 675476c78aad57143b886fa977715442
     m_Address: Tree_03
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 8150601252989919245, guid: 675476c78aad57143b886fa977715442,
-      type: 3}
-    m_TargetAsset: {fileID: 8150601252989919245, guid: 675476c78aad57143b886fa977715442,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: b5fbcd71c826527498adb4cd08fab0ea
     m_Address: Apartment
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 2940220201028839072, guid: b5fbcd71c826527498adb4cd08fab0ea,
-      type: 3}
-    m_TargetAsset: {fileID: 2940220201028839072, guid: b5fbcd71c826527498adb4cd08fab0ea,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 0b8268d8addffa24fb5ae40ed9107c2c
     m_Address: QuestionBox
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 3256637814699710505, guid: 0b8268d8addffa24fb5ae40ed9107c2c,
-      type: 3}
-    m_TargetAsset: {fileID: 3256637814699710505, guid: 0b8268d8addffa24fb5ae40ed9107c2c,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 24eb151414ab7294db1b2b98640a7b9b
     m_Address: Barrier
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 517375669440538307, guid: 24eb151414ab7294db1b2b98640a7b9b,
-      type: 3}
-    m_TargetAsset: {fileID: 517375669440538307, guid: 24eb151414ab7294db1b2b98640a7b9b,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: dbe618a226add9844ad67ef6c3b5e256
     m_Address: Cone
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 7791055891739641543, guid: dbe618a226add9844ad67ef6c3b5e256,
-      type: 3}
-    m_TargetAsset: {fileID: 7791055891739641543, guid: dbe618a226add9844ad67ef6c3b5e256,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 0f4234bc6a170db49913b88a7224c990
     m_Address: LightPole
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 7867048647265613301, guid: 0f4234bc6a170db49913b88a7224c990,
-      type: 3}
-    m_TargetAsset: {fileID: 7867048647265613301, guid: 0f4234bc6a170db49913b88a7224c990,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 42ccfb3109079764b8f11a7f8602e6b6
     m_Address: ParkBench
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 4217264137077214669, guid: 42ccfb3109079764b8f11a7f8602e6b6,
-      type: 3}
-    m_TargetAsset: {fileID: 4217264137077214669, guid: 42ccfb3109079764b8f11a7f8602e6b6,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 8e5106244e1b91943a7f1121538585c8
     m_Address: PicnicTable
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 8221224366671153786, guid: 8e5106244e1b91943a7f1121538585c8,
-      type: 3}
-    m_TargetAsset: {fileID: 8221224366671153786, guid: 8e5106244e1b91943a7f1121538585c8,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 56e12368f7f69bd439c57479e67708a6
     m_Address: Skip
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 8895865501892463337, guid: 56e12368f7f69bd439c57479e67708a6,
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 07da4b4946552434da46f46f4ca34193
+    m_Address: Path_Corner
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 7190455313881179555, guid: 07da4b4946552434da46f46f4ca34193,
       type: 3}
-    m_TargetAsset: {fileID: 8895865501892463337, guid: 56e12368f7f69bd439c57479e67708a6,
+    m_TargetAsset: {fileID: 7190455313881179555, guid: 07da4b4946552434da46f46f4ca34193,
+      type: 3}
+  - m_GUID: 4a3bbd80a6f8b8840bf8e78461b5f386
+    m_Address: Path_Junction
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 2562230390027509610, guid: 4a3bbd80a6f8b8840bf8e78461b5f386,
+      type: 3}
+    m_TargetAsset: {fileID: 2562230390027509610, guid: 4a3bbd80a6f8b8840bf8e78461b5f386,
+      type: 3}
+  - m_GUID: db226547b7f07364887f918bae327014
+    m_Address: Path_Straight
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 8929273594368444270, guid: db226547b7f07364887f918bae327014,
+      type: 3}
+    m_TargetAsset: {fileID: 8929273594368444270, guid: db226547b7f07364887f918bae327014,
+      type: 3}
+  - m_GUID: 0910067a99beab2489fb77a8d6a01a6d
+    m_Address: Path_T
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 674235306462702531, guid: 0910067a99beab2489fb77a8d6a01a6d,
+      type: 3}
+    m_TargetAsset: {fileID: 674235306462702531, guid: 0910067a99beab2489fb77a8d6a01a6d,
       type: 3}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0e906e2dec284c04da74c1451ddcc7b7, type: 2}

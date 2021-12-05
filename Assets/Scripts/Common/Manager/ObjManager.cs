@@ -122,5 +122,9 @@ public class ObjManager : Singleton<ObjManager>
         ParkBench = 24,
         PicnicTable = 25,
         Skip = 26,
+        Path_Corner = 27,
+        Path_Junction = 28,
+        Path_Straight = 29,
+        Path_T = 30,
     }
 }
