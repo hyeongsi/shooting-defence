@@ -101,7 +101,8 @@ public class GameManager : Singleton<GameManager>
     {
         MAIN_MENU = 0,
         IN_GAME = 1,
-        MAP_EDIT = 2,
+        LOADING_SCENE = 2,
+        MAP_EDIT = 3,
     }
 
     public enum StageName
