@@ -535,8 +535,8 @@ public class MapEditorController : MonoBehaviour
             {
                 GameObject generateBlockGameObject = ObjManager.Instance.GetObject((ObjManager.ObjName)objectList[i].index);
                 Transform newTransform = Instantiate(generateBlockGameObject.transform);  // 오브젝트 생성
-                newTransform.transform.position = blockList[i].placeGameTransform;
-                newTransform.rotation = Quaternion.Euler(0, blockList[i].placeGameRotation.y, 0);
+                newTransform.transform.position = objectList[i].placeGameTransform;
+                newTransform.rotation = Quaternion.Euler(0, objectList[i].placeGameRotation.y, 0);
                 newTransform.parent = parentGameObject.transform;
             }
 

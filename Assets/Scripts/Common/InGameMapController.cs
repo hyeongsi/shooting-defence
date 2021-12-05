@@ -16,7 +16,7 @@ public class InGameMapController : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(LoadCustomMap(GameManager.Instance.stageName));
+        StartCoroutine(LoadCustomMap(GameManager.Instance.stageName.ToString()));
     }
 
     public IEnumerator LoadCustomMap(string mapName)
