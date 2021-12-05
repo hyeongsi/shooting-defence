@@ -17,6 +17,11 @@ public class UI_Scene_MainMenuUI :MonoBehaviour
         stageCanvas.gameObject.SetActive(true);
     }
 
+    public void OpenMapEditor()
+    {
+        GameManager.Instance.LoadScene(GameManager.PlayStates.MAP_EDIT, -1);
+    }
+
     public void ExitGame()
     {
 

@@ -297,7 +297,7 @@ public class MapEditorController : MonoBehaviour
 
     public void ExitGame()
     {
-        UnityEngine.Application.Quit();
+        GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
     }
     #endregion
 
@@ -526,13 +526,17 @@ public class MapEditorController : MonoBehaviour
             for (int i = 0; i < blockList.Count; i++)
             {
                 GameObject generateBlockGameObject = BlockManager.Instance.GetBlock((BlockManager.BlockName)blockList[i].index);
-                Transform newTransform = Instantiate(generateBlockGameObject.transform, blockList[i].placeGameTransform, Quaternion.Euler(blockList[i].placeGameRotation));  // 블럭 생성
+                Transform newTransform = Instantiate(generateBlockGameObject.transform);  // 블럭 생성
+                newTransform.transform.position = blockList[i].placeGameTransform;
+                newTransform.rotation = Quaternion.Euler(0, blockList[i].placeGameRotation.y, 0);
                 newTransform.parent = parentGameObject.transform;
             }
             for (int i = 0; i < objectList.Count; i++)
             {
                 GameObject generateBlockGameObject = ObjManager.Instance.GetObject((ObjManager.ObjName)objectList[i].index);
-                Transform newTransform = Instantiate(generateBlockGameObject.transform, objectList[i].placeGameTransform, Quaternion.Euler(blockList[i].placeGameRotation));  // 오브젝트 생성
+                Transform newTransform = Instantiate(generateBlockGameObject.transform);  // 오브젝트 생성
+                newTransform.transform.position = blockList[i].placeGameTransform;
+                newTransform.rotation = Quaternion.Euler(0, blockList[i].placeGameRotation.y, 0);
                 newTransform.parent = parentGameObject.transform;
             }
 
