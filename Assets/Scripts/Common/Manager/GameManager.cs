@@ -28,7 +28,7 @@ public class GameManager : Singleton<GameManager>
 
     public void LoadScene(PlayStates nextstate, int stage = -1)
     {
-        const string INIT_STAGE_NAME = "test3";
+        const string INIT_STAGE_NAME = "TestStage_2";
 
         if (stage < 0)
         {
@@ -38,7 +38,7 @@ public class GameManager : Singleton<GameManager>
         {
             switch ((StageName)stage)
             {
-                case StageName.test3:
+                case StageName.TestStage_2:
                     StartCoroutine(LoadAsyncSceneCourtine(nextstate, ((StageName)stage).ToString()));
                     break;
                 default:
@@ -106,7 +106,7 @@ public class GameManager : Singleton<GameManager>
 
     public enum StageName
     {
-        test3 = 0,
+        TestStage_2 = 0,
     }
     #endregion
 }
