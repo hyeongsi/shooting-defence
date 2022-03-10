@@ -21,7 +21,7 @@ public class InGameMapController : MonoBehaviour
 
     public IEnumerator LoadCustomMap(string mapName)
     {
-        while(!(BlockManager.Instance.isLoadAll && EnemyManager.Instance.isLoadAll  && EnemyManager.Instance.isLoadStaticData && ObjManager.Instance.isLoadAll))
+        while (!(BlockManager.Instance.isLoadAll && EnemyManager.Instance.isLoadAll  && EnemyManager.Instance.isLoadStaticData && ObjManager.Instance.isLoadAll))
         {
             yield return null;
         }
@@ -78,24 +78,38 @@ public class InGameMapController : MonoBehaviour
     private void Update()
     {
         const int INIT_STAGE = 0;
+        bool checkPlayState = false;
 
         if(Input.GetKeyDown(KeyCode.Alpha0))
         {
+            checkPlayState = true;
+            BlockManager.Instance.LoadAll();
+            EnemyManager.Instance.LoadAll();
+            ObjManager.Instance.LoadAll();
             StartCoroutine(LoadCustomMap("test3"));
         }
         else if (Input.GetKeyDown(KeyCode.Alpha9))
         {
+            checkPlayState = true;
             enemySpawner.StartStage(INIT_STAGE);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha8))
         {
+            checkPlayState = true;
             GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            checkPlayState = true;
+            
             enemySpawner.StartStage(INIT_STAGE);
             waveHelpText.text = "";
+        }
+
+        if(checkPlayState == true)
+        {
+            GameManager.Instance.PlayeState = GameManager.PlayStates.IN_GAME;
         }
     }
 

@@ -12,19 +12,12 @@ public class GameManager : Singleton<GameManager>
     public bool IsPause { get; private set; } = false;
     private PlayStates playState = PlayStates.MAIN_MENU;
     private Scene nextScene;
-    public string stageName;
+    public string stageName = "test3";
 
     #region Property
     public PlayStates PlayeState { set { playState = value; }  get { return playState; } }
     public Scene NextScene { set { nextScene = value; } get { return nextScene; } }
     #endregion
-
-    public void LoadMapEditorData()
-    {
-        BlockManager.Instance.LoadAll();
-        BarricadeManager.Instance.LoadAll();
-        TurretManager.Instance.LoadAll();
-    }
 
     public void LoadScene(PlayStates nextstate, int stage = -1)
     {
