@@ -62,7 +62,7 @@ public class Weapon_Gun : MonoBehaviour
 
     private void Update()
     {
-        bulletText.text = maxBullet.ToString();
+        bulletText.text = maxBullet.ToString() + " / " + weaponInfo.magazineSize;
 
         // 탄창의 모든 탄 소모 or 남은 탄 전체의 20퍼센트
         if (maxBullet <= Mathf.Round(weaponInfo.magazineSize * 0.2f))
