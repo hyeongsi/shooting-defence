@@ -126,5 +126,6 @@ public class ObjManager : Singleton<ObjManager>
         Path_Junction = 28,
         Path_Straight = 29,
         Path_T = 30,
+        Turret_Spawner = 31,
     }
 }

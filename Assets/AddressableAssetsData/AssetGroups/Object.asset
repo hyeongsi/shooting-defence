@@ -183,26 +183,20 @@ MonoBehaviour:
     m_Address: Path_Corner
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 7190455313881179555, guid: 07da4b4946552434da46f46f4ca34193,
-      type: 3}
-    m_TargetAsset: {fileID: 7190455313881179555, guid: 07da4b4946552434da46f46f4ca34193,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 4a3bbd80a6f8b8840bf8e78461b5f386
     m_Address: Path_Junction
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 2562230390027509610, guid: 4a3bbd80a6f8b8840bf8e78461b5f386,
-      type: 3}
-    m_TargetAsset: {fileID: 2562230390027509610, guid: 4a3bbd80a6f8b8840bf8e78461b5f386,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: db226547b7f07364887f918bae327014
     m_Address: Path_Straight
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 8929273594368444270, guid: db226547b7f07364887f918bae327014,
-      type: 3}
-    m_TargetAsset: {fileID: 8929273594368444270, guid: db226547b7f07364887f918bae327014,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 0910067a99beab2489fb77a8d6a01a6d
     m_Address: Path_T
     m_ReadOnly: 0
@@ -211,6 +205,12 @@ MonoBehaviour:
       type: 3}
     m_TargetAsset: {fileID: 674235306462702531, guid: 0910067a99beab2489fb77a8d6a01a6d,
       type: 3}
+  - m_GUID: 12788054040638d44bf9e2d7f32c3a80
+    m_Address: Turret_Spawner
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0e906e2dec284c04da74c1451ddcc7b7, type: 2}
   m_SchemaSet:

@@ -61,7 +61,7 @@ public class EnemySpawner : MonoBehaviour
                 yield break;
             yield return null;
         }
-
+        
         if (spawnEnemyInfoList.Count <= (stage+1))
         {
             waveHelpText.text = "스테이지 클리어\n\n 잠시 후 게임이 종료됩니다.";

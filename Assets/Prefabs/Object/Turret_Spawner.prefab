@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5003170062233232275}
   - component: {fileID: 4973766459382175429}
   - component: {fileID: 4984523195897575031}
-  - component: {fileID: 3967355604680835847}
+  - component: {fileID: -8527681245880847047}
   m_Layer: 0
-  m_Name: Player_Spawner
+  m_Name: Turret_Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 41680dad0f0243748b4e228f49a2e3c4, type: 2}
+  - {fileID: 2100000, guid: 8ceb77f8aa6b86e41a6be98edfd89dcb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,7 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &3967355604680835847
+--- !u!65 &-8527681245880847047
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -91,6 +91,7 @@ public class MapEditorCameraController : MonoBehaviour
                 spawnObject.transform.position = spawnPosition;
                 spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
                 MapEditorController.Instance.GetCustomTileMap.SetPlayerSpawner(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+                spawnObject.layer = LayerMask.NameToLayer("Object");
             }
             else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Enemy_Spawner) // 적 스포너
             {
@@ -98,6 +99,7 @@ public class MapEditorCameraController : MonoBehaviour
                 spawnObject.transform.position = spawnPosition;
                 spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
                 MapEditorController.Instance.GetCustomTileMap.SetEnemySpawner(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+                spawnObject.layer = LayerMask.NameToLayer("Object");
             }
             else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Enemy_GuideLine) // 적 이동경로
             {
@@ -105,6 +107,15 @@ public class MapEditorCameraController : MonoBehaviour
                 spawnObject.transform.position = spawnPosition;
                 spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
                 MapEditorController.Instance.GetCustomTileMap.AddEnemyGuideLine(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+                spawnObject.layer = LayerMask.NameToLayer("Object");
+            }
+            else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Turret_Spawner) // 터렛 스폰위치
+            {
+                GameObject spawnObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));
+                spawnObject.transform.position = spawnPosition;
+                spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
+                MapEditorController.Instance.GetCustomTileMap.AddSpawnTurret(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+                spawnObject.layer = LayerMask.NameToLayer("Object");
             }
             else
             {
@@ -121,7 +132,26 @@ public class MapEditorCameraController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            MapEditorController.Instance.GetCustomTileMap.DeleteObjectList(hitObject.transform.gameObject);
+            if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Player_Spawner) // 플레이어 스포너 일 경우
+            {
+                MapEditorController.Instance.GetCustomTileMap.DeletePlayerSpawner(hitObject.transform.gameObject);
+            }
+            else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Enemy_Spawner) // 적 스포너
+            {
+                MapEditorController.Instance.GetCustomTileMap.DeleteEnemySpawner(hitObject.transform.gameObject);
+            }
+            else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Enemy_GuideLine) // 적 이동경로
+            {
+                MapEditorController.Instance.GetCustomTileMap.DeleteEnemyGuideLine(hitObject.transform.gameObject);
+            }
+            else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Turret_Spawner) // 터렛 스폰위치
+            {
+                MapEditorController.Instance.GetCustomTileMap.DeleteSpawnTurret(hitObject.transform.gameObject);
+            }
+            else
+            {
+                MapEditorController.Instance.GetCustomTileMap.DeleteObjectList(hitObject.transform.gameObject);
+            }
             Destroy(hitObject.transform.gameObject);
         }  
     }

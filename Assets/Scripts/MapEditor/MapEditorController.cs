@@ -353,6 +353,7 @@ public class MapEditorController : MonoBehaviour
         [SerializeField] public CustomTileMapStructData spawnPosition = new CustomTileMapStructData();                       // 플레이어 스폰 장소
         [SerializeField] public CustomTileMapStructData spawnEnemyPosition = new CustomTileMapStructData();                  // 적 스폰 장소
         [SerializeField] public List<CustomTileMapStructData> enemyGuideLineList = new List<CustomTileMapStructData>();      // 적 이동 경로
+        [SerializeField] public List<CustomTileMapStructData> spawnTurretList = new List<CustomTileMapStructData>();         // 터렛 스폰 장소
         private GameObject parentGameObject;
         // ====================
 
@@ -490,11 +491,74 @@ public class MapEditorController : MonoBehaviour
 
             return true;
         }
+
+        public bool AddSpawnTurret(GameObject gameobject, int index)
+        {
+            if (gameobject == null)
+                return false;
+
+            CustomTileMapStructData customTileMapStructData;
+            customTileMapStructData.placeGameObject = gameobject;
+            customTileMapStructData.placeGameTransform = gameobject.transform.position;
+            customTileMapStructData.placeGameRotation = gameobject.transform.rotation.eulerAngles;
+            customTileMapStructData.index = index;
+
+            spawnTurretList.Add(customTileMapStructData);
+
+            return true;
+        }
+        
         #endregion
         #region DeleteCustomTileMapListData
         public void ClearBlockList()
         {
             blockList.Clear();
+        }
+        public bool DeletePlayerSpawner(GameObject gameobject)
+        {
+            if (gameobject == null)
+                return false;
+
+            spawnPosition = new CustomTileMapStructData();
+            return true;
+        }
+        public bool DeleteEnemySpawner(GameObject gameobject)
+        {
+            if (gameobject == null)
+                return false;
+
+            spawnEnemyPosition = new CustomTileMapStructData();
+            return true;
+        }
+        public bool DeleteEnemyGuideLine(GameObject gameobject)
+        {
+            if (gameobject == null)
+                return false;
+
+            for (int i = 0; i < enemyGuideLineList.Count; i++)
+            {
+                if (enemyGuideLineList[i].placeGameObject == gameobject)
+                {
+                    enemyGuideLineList.RemoveAt(i);
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool DeleteSpawnTurret(GameObject gameobject)
+        {
+            if (gameobject == null)
+                return false;
+
+            for (int i = 0; i < spawnTurretList.Count; i++)
+            {
+                if (spawnTurretList[i].placeGameObject == gameobject)
+                {
+                    spawnTurretList.RemoveAt(i);
+                    return true;
+                }
+            }
+            return false;
         }
         public bool DeleteObjectList(GameObject gameobject)
         {
@@ -533,14 +597,30 @@ public class MapEditorController : MonoBehaviour
             }
             for (int i = 0; i < objectList.Count; i++)
             {
-                GameObject generateBlockGameObject = ObjManager.Instance.GetObject((ObjManager.ObjName)objectList[i].index);
-                Transform newTransform = Instantiate(generateBlockGameObject.transform);  // 오브젝트 생성
-                newTransform.transform.position = objectList[i].placeGameTransform;
-                newTransform.rotation = Quaternion.Euler(0, objectList[i].placeGameRotation.y, 0);
-                newTransform.parent = parentGameObject.transform;
+                if(objectList[i].index != (int)ObjManager.ObjName.Turret_Spawner)   // 터렛 스포너가 아닌 오브젝트들은 그냥 생성
+                {
+                    GameObject generateGameObject = ObjManager.Instance.GetObject((ObjManager.ObjName)objectList[i].index);
+                    Transform newTransform = Instantiate(generateGameObject.transform);  // 오브젝트 생성
+                    newTransform.transform.position = objectList[i].placeGameTransform;
+                    newTransform.rotation = Quaternion.Euler(0, objectList[i].placeGameRotation.y, 0);
+                    newTransform.parent = parentGameObject.transform;
+                }
+                else // 생성할 오브젝트가 터렛 오브젝트라면 터렛스폰 대체 오브젝트 생성
+                {
+                    GameObject turretSpawnSpot = Resources.Load("turretSpawnSpot") as GameObject;
+                    Transform newTransform = Instantiate(turretSpawnSpot.transform);
+                    newTransform.transform.position = objectList[i].placeGameTransform;
+                    newTransform.rotation = Quaternion.Euler(0, objectList[i].placeGameRotation.y, 0);
+                    newTransform.parent = parentGameObject.transform;
+                }
             }
 
             SceneManager.MoveGameObjectToScene(parentGameObject, SceneManager.GetSceneByBuildIndex(1));
+        }
+
+        public void CreateTurretSpawner()
+        {
+            //ObjName
         }
     }
 }
