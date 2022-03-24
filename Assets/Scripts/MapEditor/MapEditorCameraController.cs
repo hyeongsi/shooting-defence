@@ -11,6 +11,8 @@ public class MapEditorCameraController : MonoBehaviour
     private float vertical = 0.0f;
     private float mouseScrollDeltaY = 0.0f;
 
+    private const string GENERATE_OBJECTS_PARENT_NAME = "mapObjectsParent";
+
     private void Start()
     {
         originPos = transform.position;
@@ -85,12 +87,19 @@ public class MapEditorCameraController : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            if(MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Player_Spawner) // 플레이어 스포너 일 경우
+            GameObject generateMapParent = GameObject.Find(GENERATE_OBJECTS_PARENT_NAME);
+            if(generateMapParent == null)
+            {
+                generateMapParent = new GameObject(GENERATE_OBJECTS_PARENT_NAME);
+            }
+
+            if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Player_Spawner) // 플레이어 스포너 일 경우
             {
                 GameObject spawnObject = Instantiate(ObjManager.Instance.GetObject(MapEditorController.Instance.SelectObjectIndex));
                 spawnObject.transform.position = spawnPosition;
                 spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
                 MapEditorController.Instance.GetCustomTileMap.SetPlayerSpawner(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+                spawnObject.transform.parent = generateMapParent.transform;
                 spawnObject.layer = LayerMask.NameToLayer("Object");
             }
             else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Enemy_Spawner) // 적 스포너
@@ -99,6 +108,7 @@ public class MapEditorCameraController : MonoBehaviour
                 spawnObject.transform.position = spawnPosition;
                 spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
                 MapEditorController.Instance.GetCustomTileMap.SetEnemySpawner(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+                spawnObject.transform.parent = generateMapParent.transform;
                 spawnObject.layer = LayerMask.NameToLayer("Object");
             }
             else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Enemy_GuideLine) // 적 이동경로
@@ -107,6 +117,7 @@ public class MapEditorCameraController : MonoBehaviour
                 spawnObject.transform.position = spawnPosition;
                 spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
                 MapEditorController.Instance.GetCustomTileMap.AddEnemyGuideLine(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+                spawnObject.transform.parent = generateMapParent.transform;
                 spawnObject.layer = LayerMask.NameToLayer("Object");
             }
             else if (MapEditorController.Instance.SelectObjectIndex == ObjManager.ObjName.Turret_Spawner) // 터렛 스폰위치
@@ -115,6 +126,7 @@ public class MapEditorCameraController : MonoBehaviour
                 spawnObject.transform.position = spawnPosition;
                 spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
                 MapEditorController.Instance.GetCustomTileMap.AddSpawnTurret(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+                spawnObject.transform.parent = generateMapParent.transform;
                 spawnObject.layer = LayerMask.NameToLayer("Object");
             }
             else
@@ -123,6 +135,7 @@ public class MapEditorCameraController : MonoBehaviour
                 spawnObject.transform.position = spawnPosition;
                 spawnObject.transform.eulerAngles = new Vector3(0, MapEditorController.Instance.SpawnObjectAngle, 0);
                 MapEditorController.Instance.GetCustomTileMap.AddObjectList(spawnObject, (int)MapEditorController.Instance.SelectObjectIndex);
+                spawnObject.transform.parent = generateMapParent.transform;
                 spawnObject.layer = LayerMask.NameToLayer("Object");
             }
         }

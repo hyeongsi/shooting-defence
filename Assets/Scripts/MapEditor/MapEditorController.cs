@@ -318,6 +318,8 @@ public class MapEditorController : MonoBehaviour
         {
             string readJsonString = File.ReadAllText(openFileDialog.FileName);
             customTileMap = JsonUtility.FromJson<CustomTileMap>(readJsonString);
+
+            customTileMap.CreateCustomMapInMapEditor();
         }
     }
 
@@ -616,6 +618,89 @@ public class MapEditorController : MonoBehaviour
             }
 
             SceneManager.MoveGameObjectToScene(parentGameObject, SceneManager.GetSceneByBuildIndex(1));
+        }
+
+        public void CreateCustomMapInMapEditor()   // 맵에디터에서 맵 생성
+        {
+            const string GENERATE_MAP_PARENT_NAME = "Generated Map";
+            const string GENERATE_OBJECTS_PARENT_NAME = "mapObjectsParent";
+
+            GameObject generateMapParent = GameObject.Find(GENERATE_MAP_PARENT_NAME);
+            GameObject generateObjectsParent = GameObject.Find(GENERATE_OBJECTS_PARENT_NAME);
+
+            if(generateMapParent == null)
+                generateMapParent = new GameObject(GENERATE_MAP_PARENT_NAME);
+            else
+            {
+                DestroyImmediate(generateMapParent);
+                generateMapParent = new GameObject(GENERATE_MAP_PARENT_NAME);
+            }
+                
+            if (generateObjectsParent == null)
+                generateObjectsParent = new GameObject(GENERATE_OBJECTS_PARENT_NAME);
+            else
+            {
+                DestroyImmediate(generateObjectsParent);
+                generateObjectsParent = new GameObject(GENERATE_OBJECTS_PARENT_NAME);
+            }
+                
+            for (int i = 0; i < blockList.Count; i++)
+            {
+                GameObject generateBlockGameObject = BlockManager.Instance.GetBlock((BlockManager.BlockName)blockList[i].index);
+                Transform newTransform = Instantiate(generateBlockGameObject.transform);  // 블럭 생성
+                newTransform.transform.position = blockList[i].placeGameTransform;
+                newTransform.rotation = Quaternion.Euler(0, blockList[i].placeGameRotation.y, 0);
+                newTransform.parent = generateMapParent.transform;
+            }
+            for (int i = 0; i < objectList.Count; i++)
+            {
+                if (objectList[i].index != (int)ObjManager.ObjName.Turret_Spawner)   // 터렛 스포너가 아닌 오브젝트들은 그냥 생성
+                {
+                    GameObject generateGameObject = ObjManager.Instance.GetObject((ObjManager.ObjName)objectList[i].index);
+                    Transform newTransform = Instantiate(generateGameObject.transform);  // 오브젝트 생성
+                    newTransform.transform.position = objectList[i].placeGameTransform;
+                    newTransform.rotation = Quaternion.Euler(0, objectList[i].placeGameRotation.y, 0);
+                    newTransform.parent = generateObjectsParent.transform;
+                }
+                else // 생성할 오브젝트가 터렛 오브젝트라면 터렛스폰 대체 오브젝트 생성
+                {
+                    GameObject turretSpawnSpot = Resources.Load("turretSpawnSpot") as GameObject;
+                    Transform newTransform = Instantiate(turretSpawnSpot.transform);
+                    newTransform.transform.position = objectList[i].placeGameTransform;
+                    newTransform.rotation = Quaternion.Euler(0, objectList[i].placeGameRotation.y, 0);
+                    newTransform.parent = generateObjectsParent.transform;
+                }
+            }
+
+            // 플레이어 스폰 오브젝트 생성
+            GameObject spawnPositionObject = Instantiate(ObjManager.Instance.GetObject(ObjManager.ObjName.Player_Spawner));
+            spawnPositionObject.transform.position = spawnPosition.placeGameTransform;
+            spawnPositionObject.transform.rotation = Quaternion.Euler(0, spawnPosition.placeGameRotation.y, 0);
+            spawnPositionObject.transform.parent = generateObjectsParent.transform;
+
+            // 적 스폰 오브젝트 생성
+            GameObject spawnEnemyPositionObject = Instantiate(ObjManager.Instance.GetObject(ObjManager.ObjName.Enemy_Spawner));
+            spawnEnemyPositionObject.transform.position = spawnEnemyPosition.placeGameTransform;
+            spawnEnemyPositionObject.transform.rotation = Quaternion.Euler(0, spawnEnemyPosition.placeGameRotation.y, 0);
+            spawnEnemyPositionObject.transform.parent = generateObjectsParent.transform;
+
+            // 적 이동경로 오브젝트 생성
+            for (int i = 0; i < enemyGuideLineList.Count; i++)
+            {
+                GameObject spawnEnemyGuideLinePositionObject = Instantiate(ObjManager.Instance.GetObject(ObjManager.ObjName.Enemy_GuideLine));
+                spawnEnemyGuideLinePositionObject.transform.position = enemyGuideLineList[i].placeGameTransform;
+                spawnEnemyGuideLinePositionObject.transform.rotation = Quaternion.Euler(0, enemyGuideLineList[i].placeGameRotation.y, 0);
+                spawnEnemyGuideLinePositionObject.transform.parent = generateObjectsParent.transform;
+            }
+
+            // 터렛 오브젝트 생성
+            for (int i = 0; i < spawnTurretList.Count; i++)
+            {
+                GameObject spawnTurretPositionObject = Instantiate(ObjManager.Instance.GetObject(ObjManager.ObjName.Turret_Spawner));
+                spawnTurretPositionObject.transform.position = spawnTurretList[i].placeGameTransform;
+                spawnTurretPositionObject.transform.rotation = Quaternion.Euler(0, spawnTurretList[i].placeGameRotation.y, 0);
+                spawnTurretPositionObject.transform.parent = generateObjectsParent.transform;
+            }    
         }
 
         public void CreateTurretSpawner()
