@@ -13,10 +13,14 @@ public class InGameMapController : MonoBehaviour
     public CheckPoint checkPoint;   // 적 체크포인트 설정 부모 오브젝트
     public EnemySpawner enemySpawner;   // 적 스포너
     public Text waveHelpText;   // 웨이브 안내 텍스트
+    public Coroutine coroutine;
+
+    public const string NULL_MAP_NAME = "test3";
+    public const string INIT_MAP_NAME = "TestStage_3";
 
     void Start()
     {
-        StartCoroutine(LoadCustomMap(GameManager.Instance.stageName.ToString()));
+        coroutine = StartCoroutine(LoadCustomMap(GameManager.Instance.stageName.ToString()));
     }
 
     public IEnumerator LoadCustomMap(string mapName)
@@ -28,7 +32,7 @@ public class InGameMapController : MonoBehaviour
 
         if(mapName == null)
         {
-            mapName = "test3";
+            mapName = NULL_MAP_NAME;
         }
         TextAsset text = Resources.Load(mapName) as TextAsset;
         customTileMap = JsonUtility.FromJson<MapEditorController.CustomTileMap>(text.ToString());
@@ -82,11 +86,16 @@ public class InGameMapController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Alpha0))
         {
+            if(coroutine != null)
+            {
+                StopCoroutine(coroutine);
+            }
+            
             checkPlayState = true;
             BlockManager.Instance.LoadAll();
             EnemyManager.Instance.LoadAll();
             ObjManager.Instance.LoadAll();
-            StartCoroutine(LoadCustomMap("test3"));
+            coroutine = StartCoroutine(LoadCustomMap(INIT_MAP_NAME));
         }
         else if (Input.GetKeyDown(KeyCode.Alpha9))
         {

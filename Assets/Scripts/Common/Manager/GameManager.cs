@@ -12,7 +12,8 @@ public class GameManager : Singleton<GameManager>
     public bool IsPause { get; private set; } = false;
     private PlayStates playState = PlayStates.MAIN_MENU;
     private Scene nextScene;
-    public string stageName = "test3";
+    const string INIT_STAGE_NAME = "TestStage_2";
+    public string stageName = INIT_STAGE_NAME;
 
     #region Property
     public PlayStates PlayeState { set { playState = value; }  get { return playState; } }
@@ -21,8 +22,6 @@ public class GameManager : Singleton<GameManager>
 
     public void LoadScene(PlayStates nextstate, int stage = -1)
     {
-        const string INIT_STAGE_NAME = "TestStage_2";
-
         if (stage < 0)
         {
             StartCoroutine(LoadAsyncSceneCourtine(nextstate, INIT_STAGE_NAME));
