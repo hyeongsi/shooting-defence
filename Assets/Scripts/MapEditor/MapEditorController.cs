@@ -612,6 +612,7 @@ public class MapEditorController : MonoBehaviour
                 Transform newTransform = Instantiate(generateGameObject.transform);  // 터렛설치장소 생성
                 newTransform.transform.position = spawnTurretList[i].placeGameTransform;
                 newTransform.rotation = Quaternion.Euler(0, spawnTurretList[i].placeGameRotation.y, 0);
+                newTransform.parent = parentGameObject.transform;
             }
 
             SceneManager.MoveGameObjectToScene(parentGameObject, SceneManager.GetSceneByBuildIndex(1));

@@ -73,6 +73,11 @@ public class TurretManager : Singleton<TurretManager>
             };
     }
 
+    public int GetTurretSize()
+    {
+        return turretDictionary.Count;
+    }
+
     public void LoadTurret(TurretName turretName)  // 터렛 오브젝트 로딩
     {
         loadAsyncOperationHandle = default;
