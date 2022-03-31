@@ -94,6 +94,7 @@ public class InGameMapController : MonoBehaviour
             checkPlayState = true;
             BlockManager.Instance.LoadAll();
             EnemyManager.Instance.LoadAll();
+            TurretManager.Instance.LoadAll();
             ObjManager.Instance.LoadAll();
             coroutine = StartCoroutine(LoadCustomMap(INIT_MAP_NAME));
         }

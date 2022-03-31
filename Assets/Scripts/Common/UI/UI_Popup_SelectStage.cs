@@ -22,6 +22,7 @@ public class UI_Popup_SelectStage : MonoBehaviour
     {
         BlockManager.Instance.LoadAll();
         EnemyManager.Instance.LoadAll();
+        TurretManager.Instance.LoadAll();
         ObjManager.Instance.LoadAll();
 
         GameManager.Instance.LoadScene(GameManager.PlayStates.IN_GAME, stageIndex);

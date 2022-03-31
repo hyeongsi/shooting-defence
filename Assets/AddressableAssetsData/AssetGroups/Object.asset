@@ -201,11 +201,9 @@ MonoBehaviour:
     m_Address: Path_T
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 674235306462702531, guid: 0910067a99beab2489fb77a8d6a01a6d,
-      type: 3}
-    m_TargetAsset: {fileID: 674235306462702531, guid: 0910067a99beab2489fb77a8d6a01a6d,
-      type: 3}
-  - m_GUID: 12788054040638d44bf9e2d7f32c3a80
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 0d8a2ce20163d6f4c9ead6e0a37f4b97
     m_Address: Turret_Spawner
     m_ReadOnly: 0
     m_SerializedLabels: []

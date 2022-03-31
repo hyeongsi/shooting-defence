@@ -50,7 +50,7 @@ public class TurretManager : Singleton<TurretManager>
                 TurretStaticData newTurretStaticData;
                 string turretCsvString = asyncOperationHandle.Result.text;
                 List<string[]> csvString = FileManager.Instance.ConvertCsvToString(turretCsvString);
-
+                
                 try
                 {
                     for (int i = 0; i < csvString.Count; i++)
@@ -179,7 +179,8 @@ public class TurretManager : Singleton<TurretManager>
 
     public enum TurretName
     {
-        TempTurret1 = 0,
+        rifleTurret = 0,
+        sniperTurret = 1,
     }
 
     private enum TurretCsvColumn

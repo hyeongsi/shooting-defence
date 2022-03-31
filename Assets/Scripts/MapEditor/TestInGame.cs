@@ -10,6 +10,7 @@ public class TestInGame : MonoBehaviour
         {
             BlockManager.Instance.LoadAll();
             EnemyManager.Instance.LoadAll();
+            TurretManager.Instance.LoadAll();
             ObjManager.Instance.LoadAll();
 
             EnemyManager.Instance.LoadEnemyStaticData();
