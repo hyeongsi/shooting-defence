@@ -582,9 +582,11 @@ public class MapEditorController : MonoBehaviour
 
         public void CreateCustomMap()   // 맵 생성
         {
-            if(parentGameObject == null)
+            const string OBJECT_NAME = "Map_Objects";
+
+            if(GameObject.Find(OBJECT_NAME) == null)
             {
-                parentGameObject = new GameObject();
+                parentGameObject = new GameObject(OBJECT_NAME);
             }else
             {
                 DestroyImmediate(parentGameObject);

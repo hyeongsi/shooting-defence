@@ -85,6 +85,25 @@ public class Player_Manager : MonoBehaviour
         playerLocomotion.FixedUpdateFunction();
     }
 
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawSphere(transform.position, 0.3f);
+    //}
+
+    public GameObject GetTurretSpawnerCollision()
+    {
+        int mask = 0;
+        mask = 1 << (LayerMask.NameToLayer("TurretSpawner"));
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 0.3f, mask);
+
+        if (hitColliders.Length < 1)
+            return null;
+        else
+            return hitColliders[0].gameObject;
+    }
+
     public Vector3 GetDirection()
     {
         moveDirection = new Vector3(horizontal, 0, vertical);
