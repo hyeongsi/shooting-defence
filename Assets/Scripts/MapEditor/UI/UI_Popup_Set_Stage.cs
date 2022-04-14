@@ -33,9 +33,6 @@ public class UI_Popup_Set_Stage : UI_Popup
     [Space]
     [Header("enemy spawn list stat")]
     public InputField enemySpawnListHPInputField;
-    public InputField enemySpawnListDamageInputField;
-    public InputField enemySpawnListAttackDelayInputField;
-    public InputField enemySpawnListAttackRangeInputField;
     public InputField enemySpawnListMoveSpeedInputField;
 
     [Space]
@@ -99,9 +96,6 @@ public class UI_Popup_Set_Stage : UI_Popup
         spawnEnemyListDropDown.captionText.text = "";
 
         enemySpawnListHPInputField.text = "";
-        enemySpawnListDamageInputField.text = "";
-        enemySpawnListAttackDelayInputField.text = "";
-        enemySpawnListAttackRangeInputField.text = "";
         enemySpawnListMoveSpeedInputField.text = "";
     }
     public void InitSpawnEnemyDropDownData()
@@ -110,9 +104,6 @@ public class UI_Popup_Set_Stage : UI_Popup
         spawnEnemyListDropDown.captionText.text = "";
 
         enemySpawnListHPInputField.text = "";
-        enemySpawnListDamageInputField.text = "";
-        enemySpawnListAttackDelayInputField.text = "";
-        enemySpawnListAttackRangeInputField.text = "";
         enemySpawnListMoveSpeedInputField.text = "";
     }
 

@@ -8,11 +8,25 @@ public class TurretSpawner : MonoBehaviour
     public TurretSpawnUI turretSpawnUI;
     public bool isSpawn = false;
     public bool isEnter = false;
+    public bool isMapEditor = false;
 
     void Start()
     {
-        turretSpawnUI = GameObject.Find("TurretSpawnUI").GetComponent<TurretSpawnUI>();
-        playerManager = GameObject.Find("Player").GetComponent<Player_Manager>();
+        GameObject findTurretSpawnUiGameObject = GameObject.Find("TurretSpawnUI");
+        if(findTurretSpawnUiGameObject == null)
+        {
+            isMapEditor = true;
+            return;
+        }
+        turretSpawnUI = findTurretSpawnUiGameObject.GetComponent<TurretSpawnUI>();
+
+        GameObject findPlayerManagerGameObject = GameObject.Find("Player");
+        if (findPlayerManagerGameObject == null)
+        {
+            isMapEditor = true;
+            return;
+        }
+        playerManager = findPlayerManagerGameObject.GetComponent<Player_Manager>();
     }
 
     public GameObject SpawnTurret(TurretManager.TurretName turretName)
@@ -96,6 +110,9 @@ public class TurretSpawner : MonoBehaviour
     }
     void Update()
     {
+        if (isMapEditor == true)
+            return;
+
         if (isSpawn == true)
             return;
 

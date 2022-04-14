@@ -15,9 +15,10 @@ public class Enemy : MonoBehaviour
 
     Animator animator;
 
-    protected float hp = 100;   // 임시
+    public float hp = 100;   // 임시
     public float speed = 4;  // 임시
     EnemyStaticData enemyStaticData;
+    public bool isDie = false;
 
     public float HP { get { return hp; }  set { hp = value; } }
     public float SPEED { get { return speed; } set { speed = value; } }
@@ -45,6 +46,7 @@ public class Enemy : MonoBehaviour
 
             animator.applyRootMotion = true;
             animator.SetTrigger("Die");
+            isDie = true;
             Destroy(gameObject, 2.5f);
             // 삭제 말고, 캐싱해서 메모리 아끼자,
             // 비활성화 시켜놓고 돌려쓰자, 오브젝트풀링

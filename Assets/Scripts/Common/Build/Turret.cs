@@ -9,9 +9,8 @@ public class Turret : Barricade
     public Transform rotationGunBody;
     protected float fireRate = 0.0f;
 
-    protected Quaternion lookRotation;
     protected LayerMask enemyLayerMask;
-    protected Enemy target = null;
+    public Enemy target = null;
 
     #region property
     public float AttackDamage
@@ -39,6 +38,12 @@ public class Turret : Barricade
         hp = turretStaticData.maxHp;
     }
 
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawSphere(transform.position, turretStaticData.attackRange);
+    //}
+
     private void SearchEnemy()
     {
         Collider[] findEnemyCollider = Physics.OverlapSphere(transform.position, turretStaticData.attackRange, enemyLayerMask);
@@ -49,10 +54,11 @@ public class Turret : Barricade
             foreach(Collider enemyCollider in findEnemyCollider)
             {
                 float distance = Vector3.SqrMagnitude(transform.position - enemyCollider.transform.position);
-                if(shortestDistance > distance)
+                if(shortestDistance >= distance)
                 {
                     shortestDistance = distance;
                     target = enemyCollider.GetComponent<Enemy>();
+                    return;
                 }
             }
         }
@@ -60,7 +66,7 @@ public class Turret : Barricade
 
     private void RotationGunToEnemy()
     {
-        lookRotation = Quaternion.LookRotation(target.transform.position);
+        Quaternion lookRotation = Quaternion.LookRotation(target.transform.position);
         Vector3 rotationAngle = Quaternion.RotateTowards(
                 rotationGunBody.rotation,
                 lookRotation,
@@ -109,20 +115,25 @@ public class Turret : Barricade
         if (GameManager.Instance == null || GameManager.Instance.IsPause)
             return;
 
-        //if (gameObject.layer != (int)LayerNumbering.BLOCK)  // 타워 생성 전 상태 -> 종료
-        //    return;
-
         if (turretStaticData == null)
             return;
 
         if (target == null)
         {
+            rotationGunBody.Rotate(new Vector3(0, 45, 0) * Time.deltaTime);
             SearchEnemy();  // 가장 가까운 적을 찾음
         }
         else
         {
+            if (target.isDie == true)
+            {
+                target = null;
+                return;
+            }
+                
             RotationGunToEnemy();
             AttackEnemy();  // 적 존재하면 공격
+                
             if (!TargetDisatanceCheck()) // 사거리 벗어나면
                 target = null;
         }

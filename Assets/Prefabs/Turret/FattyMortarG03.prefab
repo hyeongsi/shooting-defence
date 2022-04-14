@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14d6c04daf390a64fb9fe6dc4bb14ead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationGunBody: {fileID: 0}
+  rotationGunBody: {fileID: 4940591295711036}
 --- !u!1 &1658705116820196
 GameObject:
   m_ObjectHideFlags: 0
