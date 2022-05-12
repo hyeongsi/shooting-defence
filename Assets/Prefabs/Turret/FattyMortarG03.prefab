@@ -267,6 +267,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationGunBody: {fileID: 4940591295711036}
+  target: {fileID: 0}
+  bullet: {fileID: 1627521441993660, guid: 2e3465a19d65703449c06197bb821f9f, type: 3}
+  myParticleSystem: {fileID: 198352920909028448}
 --- !u!1 &1658705116820196
 GameObject:
   m_ObjectHideFlags: 0

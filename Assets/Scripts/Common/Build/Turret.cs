@@ -12,6 +12,9 @@ public class Turret : Barricade
     protected LayerMask enemyLayerMask;
     public Enemy target = null;
 
+    public GameObject bullet;
+    public ParticleSystem myParticleSystem;
+
     #region property
     public float AttackDamage
     {
@@ -37,13 +40,6 @@ public class Turret : Barricade
 
         hp = turretStaticData.maxHp;
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawSphere(transform.position, turretStaticData.attackRange);
-    //}
-
     private void SearchEnemy()
     {
         Collider[] findEnemyCollider = Physics.OverlapSphere(transform.position, turretStaticData.attackRange, enemyLayerMask);
@@ -66,25 +62,27 @@ public class Turret : Barricade
 
     private void RotationGunToEnemy()
     {
-        Quaternion lookRotation = Quaternion.LookRotation(target.transform.position);
-        Vector3 rotationAngle = Quaternion.RotateTowards(
-                rotationGunBody.rotation,
-                lookRotation,
-                turretStaticData.spinSpeed * Time.deltaTime).eulerAngles;
-        rotationGunBody.rotation = Quaternion.Euler(0, rotationAngle.y, 0);
+        Vector3 lotationVector = target.transform.position - rotationGunBody.position;
+        rotationGunBody.rotation = Quaternion.Slerp(rotationGunBody.transform.rotation, Quaternion.LookRotation(lotationVector), turretStaticData.spinSpeed * Time.deltaTime);
     }
 
     private void AttackEnemy()
     {
-        Quaternion fireRotation = Quaternion.Euler(0, Quaternion.LookRotation(target.transform.position).eulerAngles.y, 0);
- 
+        Vector3 lotationVector = target.transform.position - rotationGunBody.position;
+        Quaternion fireRotation = Quaternion.LookRotation(lotationVector);
+
         if (Quaternion.Angle(rotationGunBody.rotation, fireRotation) < 5.0f)
         {
             fireRate -= Time.deltaTime;
             if(fireRate <= 0)
             {
                 fireRate = AttackDelay;
-                target.TakeDamage(AttackDamage);
+
+                GameObject createBullet = Instantiate(bullet, rotationGunBody.position, Quaternion.LookRotation(rotationGunBody.forward)); // 총알 생성
+                createBullet.GetComponent<TurretBullet>().SetEnemy(target);
+   
+                myParticleSystem.Play();
+                //target.TakeDamage(AttackDamage);
             }
         }
     }
@@ -120,7 +118,7 @@ public class Turret : Barricade
 
         if (target == null)
         {
-            rotationGunBody.Rotate(new Vector3(0, 45, 0) * Time.deltaTime);
+            //rotationGunBody.Rotate(new Vector3(0, 45, 0) * Time.deltaTime);
             SearchEnemy();  // 가장 가까운 적을 찾음
         }
         else

@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4485476488557288}
+  - component: {fileID: 5889437174717722656}
   m_Layer: 0
-  m_Name: Bullet00
+  m_Name: 03Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,6 +32,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5889437174717722656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627521441993660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53700f6221d11534bb119b52a939b9a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitEffect: {fileID: 7852816419501230086, guid: bdef20123340c80438d24fddabc04862,
+    type: 3}
+  bulletSpeed: 50
+  bulletDamage: 40
+  bulletDistance: 1000
+  distance: {x: 0, y: 0, z: 0}
+  spawnPosition: {x: 0, y: 0, z: 0}
+  enemy: {fileID: 0}
+  setEnemy: 0
 --- !u!1 &1819444565037150
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,7 +111,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1478d4a6c90a5d94ebda0d1f5d74d763, type: 2}
+  - {fileID: 2100000, guid: f19b49525b53f9f42913f55df9b11d5a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

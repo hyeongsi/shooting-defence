@@ -4862,7 +4862,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1437313607789798}
-  m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 1.1999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -4941,7 +4941,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1454602631919742}
-  m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 1.1999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5074,6 +5074,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationGunBody: {fileID: 4722236510932744}
+  target: {fileID: 0}
+  bullet: {fileID: 1627521441993660, guid: b040de16ce910184fb6564c9a45e149d, type: 3}
+  myParticleSystem: {fileID: 198190432169522098}
 --- !u!1 &1931211189434318
 GameObject:
   m_ObjectHideFlags: 0
