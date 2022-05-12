@@ -39,16 +39,27 @@ public class Weapon_Gun : MonoBehaviour
     public bool isburstShot;
     public bool isReloading;
 
+    [Header("Weapon Stat")]
+    public int damage;
+    public int magazineSize;
+    public float reloadTime;
+    public float fireRate;
+
     BulletProjectile bullet;
 
     private void Start()
     {
         camera = Camera.main;
 
+        damage = weaponInfo.damage;
+        magazineSize = weaponInfo.magazineSize;
+        reloadTime = weaponInfo.reloadTime;
+        fireRate = weaponInfo.nextShotDelay;
+
         // 총기 및 총알 정보 설정
         bullet = weaponInfo.bullet.GetComponent<BulletProjectile>();
-        bullet.SetBulletInfo(weaponInfo.bulletSpeed, weaponInfo.damage);
-        maxBullet = weaponInfo.magazineSize;
+        bullet.SetBulletInfo(weaponInfo.bulletSpeed, damage);
+        maxBullet = magazineSize;
         isReadyToShoot = true;
 
         // 플레이어에서 가져오는 것들
@@ -65,7 +76,7 @@ public class Weapon_Gun : MonoBehaviour
         bulletText.text = maxBullet.ToString();
 
         // 탄창의 모든 탄 소모 or 남은 탄 전체의 20퍼센트
-        if (maxBullet <= Mathf.Round(weaponInfo.magazineSize * 0.2f))
+        if (maxBullet <= Mathf.Round(magazineSize * 0.2f))
         {
             if (maxBullet <= 0)
             {
@@ -128,7 +139,7 @@ public class Weapon_Gun : MonoBehaviour
             if (hit.collider.gameObject.layer == 28)
             {
                 Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
-                enemy.TakeDamage(weaponInfo.damage);
+                enemy.TakeDamage(damage);
             }
         }
     }
@@ -166,7 +177,7 @@ public class Weapon_Gun : MonoBehaviour
             StartCoroutine(Co_NormalShot());
         }
 
-        yield return new WaitForSeconds(weaponInfo.nextShotDelay);
+        yield return new WaitForSeconds(fireRate);
 
         isReadyToShoot = true;
     }
@@ -204,7 +215,7 @@ public class Weapon_Gun : MonoBehaviour
 
         FiringPallet();
 
-        yield return new WaitForSeconds(weaponInfo.nextShotDelay);
+        yield return new WaitForSeconds(fireRate);
 
         isburstShot = true;
     }
@@ -253,7 +264,7 @@ public class Weapon_Gun : MonoBehaviour
     #region 장전
     void Weapon_Reload_Mag()
     {
-        if(isReloading || maxBullet == weaponInfo.magazineSize)
+        if(isReloading || maxBullet == magazineSize)
         {
             return;
         }
@@ -264,7 +275,7 @@ public class Weapon_Gun : MonoBehaviour
 
     void Weapon_Reaload_Shell()
     {
-        if (isReloading || maxBullet == weaponInfo.magazineSize)
+        if (isReloading || maxBullet == magazineSize)
         {
             return;
         }
@@ -276,15 +287,15 @@ public class Weapon_Gun : MonoBehaviour
     IEnumerator Co_Reloading()
     {
         isReloading = playerManager.reloadFlag = true;
-        yield return new WaitForSeconds(weaponInfo.reloadTime);
-        maxBullet = weaponInfo.magazineSize;
+        yield return new WaitForSeconds(reloadTime);
+        maxBullet = magazineSize;
         isReloading = playerManager.reloadFlag = false;
     }
 
     IEnumerator Co_Reloading_Shell()
     {
         isReloading = playerManager.reloadFlag = true;
-        yield return new WaitForSeconds(weaponInfo.reloadTime);
+        yield return new WaitForSeconds(reloadTime);
         maxBullet += 1;
         isReloading = playerManager.reloadFlag = false;
     }
