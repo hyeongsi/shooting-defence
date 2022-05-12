@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class TurretSpawner : MonoBehaviour
@@ -10,8 +11,20 @@ public class TurretSpawner : MonoBehaviour
     public bool isEnter = false;
     public bool isMapEditor = false;
 
+    public MoneyBox moneyBox;
+
+    private IEnumerator m_Coroutine;
+    public Text needMoneyText;
+
+    const int turret1 = 5;
+    const int turret2 = 10;
+
     void Start()
     {
+        moneyBox = GameObject.Find("MoneyBox").GetComponent<MoneyBox>();
+        needMoneyText = GameObject.Find("TurretSpawnUI").transform.Find("NeedMoney").GetComponent<Text>();
+        m_Coroutine = PrintNeedMoneyText();
+
         GameObject findTurretSpawnUiGameObject = GameObject.Find("TurretSpawnUI");
         if(findTurretSpawnUiGameObject == null)
         {
@@ -121,18 +134,44 @@ public class TurretSpawner : MonoBehaviour
             // 무식하게 터렛 추가하면 여기 버튼 추가해서 등록하면 됨
             if (Input.GetKeyUp(KeyCode.Alpha1))
             {
-                isEnter = false;
-                turretSpawnUI.DeleteUI();
-                CreateTurret(1);
+                if(moneyBox.money >= turret1)
+                {
+                    isEnter = false;
+                    turretSpawnUI.DeleteUI();
+                    CreateTurret(1);
+
+                    moneyBox.SetMoneyText(moneyBox.money - turret1);
+                }
+                else
+                {
+                    StopAllCoroutines();
+                    StartCoroutine("PrintNeedMoneyText");
+                }
                 
             }
             else if (Input.GetKeyUp(KeyCode.Alpha2))
             {
-                isEnter = false;
-                turretSpawnUI.DeleteUI();
-                CreateTurret(2);
-                
+                if (moneyBox.money >= turret2)
+                {
+                    isEnter = false;
+                    turretSpawnUI.DeleteUI();
+                    CreateTurret(2);
+
+                    moneyBox.SetMoneyText(moneyBox.money - turret2);
+                }
+                else
+                {
+                    StopAllCoroutines();
+                    StartCoroutine("PrintNeedMoneyText");
+                }
             }
         }
+    }
+
+    IEnumerator PrintNeedMoneyText()
+    {
+        needMoneyText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1.0f);
+        needMoneyText.gameObject.SetActive(false);
     }
 }

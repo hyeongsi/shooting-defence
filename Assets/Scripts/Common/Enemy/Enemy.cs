@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     public float speed = 4;  // 임시
     EnemyStaticData enemyStaticData;
     public bool isDie = false;
+    GameObject moneyBoxObject;
 
     public float HP { get { return hp; }  set { hp = value; } }
     public float SPEED { get { return speed; } set { speed = value; } }
@@ -28,6 +29,7 @@ public class Enemy : MonoBehaviour
         this.enemyStaticData = enemyStaticData;
 
         Debug.Log("에너미 데이터 " + enemyStaticData);
+        moneyBoxObject = GameObject.Find("MoneyBox");
 
         hp = enemyStaticData.maxHp;
         speed = enemyStaticData.moveSpeed;
@@ -47,6 +49,13 @@ public class Enemy : MonoBehaviour
             animator.applyRootMotion = true;
             animator.SetTrigger("Die");
             isDie = true;
+
+            if (moneyBoxObject != null)
+            {
+                MoneyBox moneyBox = moneyBoxObject.GetComponent<MoneyBox>();
+                moneyBox.SetMoneyText(moneyBox.money + Random.Range(1, 21));
+            }
+
             Destroy(gameObject, 2.5f);
             // 삭제 말고, 캐싱해서 메모리 아끼자,
             // 비활성화 시켜놓고 돌려쓰자, 오브젝트풀링

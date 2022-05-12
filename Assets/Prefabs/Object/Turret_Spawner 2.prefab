@@ -111,6 +111,8 @@ MonoBehaviour:
   turretSpawnUI: {fileID: 0}
   isSpawn: 0
   isEnter: 0
+  isMapEditor: 0
+  moneyBox: {fileID: 0}
 --- !u!54 &-5481616306941753917
 Rigidbody:
   m_ObjectHideFlags: 0
