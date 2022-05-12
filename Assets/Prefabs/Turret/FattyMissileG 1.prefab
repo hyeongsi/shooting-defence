@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1030241696419722}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.63, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4372667440553698}
@@ -4714,7 +4714,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4943,7 +4942,7 @@ Transform:
   m_GameObject: {fileID: 1321377731327022}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4894621298927726}
   - {fileID: 4395928933941270}
@@ -4962,11 +4961,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14d6c04daf390a64fb9fe6dc4bb14ead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationGunBody: {fileID: 0}
+  rotationGunBody: {fileID: 4894621298927726}
   target: {fileID: 0}
   bullet: {fileID: 1773485284122676, guid: 38fa2fca60b67a0459b54d66c1c683f1, type: 3}
-  myParticleSystem: {fileID: 198244899795999660, guid: 10eaa45fa57f43f40aaa343c36b8a80f,
-    type: 3}
+  myParticleSystem: {fileID: 198721031210008992}
 --- !u!1 &1366799779227582
 GameObject:
   m_ObjectHideFlags: 0

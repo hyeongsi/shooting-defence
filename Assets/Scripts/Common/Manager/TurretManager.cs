@@ -186,6 +186,8 @@ public class TurretManager : Singleton<TurretManager>
     {
         rifleTurret = 0,
         sniperTurret = 1,
+        singleTurret = 2,
+        doubleTurret = 3,
     }
 
     private enum TurretCsvColumn

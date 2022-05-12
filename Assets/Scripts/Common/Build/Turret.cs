@@ -81,7 +81,8 @@ public class Turret : Barricade
                 GameObject createBullet = Instantiate(bullet, rotationGunBody.position, Quaternion.LookRotation(rotationGunBody.forward)); // 총알 생성
                 createBullet.GetComponent<TurretBullet>().SetEnemy(target);
    
-                myParticleSystem.Play();
+                if(myParticleSystem != null)
+                    myParticleSystem.Play();
                 //target.TakeDamage(AttackDamage);
             }
         }

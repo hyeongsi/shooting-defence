@@ -18,6 +18,9 @@ public class TurretSpawner : MonoBehaviour
 
     const int turret1 = 5;
     const int turret2 = 10;
+    const int turret3 = 20;
+    const int turret4 = 30;
+    const int turret5 = 40;
 
     void Start()
     {
@@ -69,6 +72,12 @@ public class TurretSpawner : MonoBehaviour
                 break;
             case (int)TurretManager.TurretName.sniperTurret:
                 createTurretGameObject = SpawnTurret(TurretManager.TurretName.sniperTurret);
+                break;
+            case (int)TurretManager.TurretName.singleTurret:
+                createTurretGameObject = SpawnTurret(TurretManager.TurretName.singleTurret);
+                break;
+            case (int)TurretManager.TurretName.doubleTurret:
+                createTurretGameObject = SpawnTurret(TurretManager.TurretName.doubleTurret);
                 break;
             default:
                 isSpawn = false;
@@ -132,7 +141,7 @@ public class TurretSpawner : MonoBehaviour
         if (isEnter == true)
         {
             // 무식하게 터렛 추가하면 여기 버튼 추가해서 등록하면 됨
-            if (Input.GetKeyUp(KeyCode.Alpha1))
+            if (Input.GetKeyUp(KeyCode.Alpha1))     // 1
             {
                 if(moneyBox.money >= turret1)
                 {
@@ -149,7 +158,7 @@ public class TurretSpawner : MonoBehaviour
                 }
                 
             }
-            else if (Input.GetKeyUp(KeyCode.Alpha2))
+            else if (Input.GetKeyUp(KeyCode.Alpha2))    // 2
             {
                 if (moneyBox.money >= turret2)
                 {
@@ -158,6 +167,38 @@ public class TurretSpawner : MonoBehaviour
                     CreateTurret(2);
 
                     moneyBox.SetMoneyText(moneyBox.money - turret2);
+                }
+                else
+                {
+                    StopAllCoroutines();
+                    StartCoroutine("PrintNeedMoneyText");
+                }
+            }
+            else if (Input.GetKeyUp(KeyCode.Alpha3))    // 3
+            {
+                if (moneyBox.money >= turret3)
+                {
+                    isEnter = false;
+                    turretSpawnUI.DeleteUI();
+                    CreateTurret(3);
+
+                    moneyBox.SetMoneyText(moneyBox.money - turret3);
+                }
+                else
+                {
+                    StopAllCoroutines();
+                    StartCoroutine("PrintNeedMoneyText");
+                }
+            }
+            else if (Input.GetKeyUp(KeyCode.Alpha4))    // 4
+            {
+                if (moneyBox.money >= turret4)
+                {
+                    isEnter = false;
+                    turretSpawnUI.DeleteUI();
+                    CreateTurret(4);
+
+                    moneyBox.SetMoneyText(moneyBox.money - turret4);
                 }
                 else
                 {

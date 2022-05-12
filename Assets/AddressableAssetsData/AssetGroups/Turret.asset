@@ -21,24 +21,32 @@ MonoBehaviour:
     m_Address: rifleTurret
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 1875090778556656, guid: 7191a0df8b6695d449a0f18a361bc311,
-      type: 3}
-    m_TargetAsset: {fileID: 1875090778556656, guid: 7191a0df8b6695d449a0f18a361bc311,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: ed1730390bfe05b46a7c219595b30f2c
     m_Address: TurretData
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 4900000, guid: ed1730390bfe05b46a7c219595b30f2c, type: 3}
-    m_TargetAsset: {fileID: 4900000, guid: ed1730390bfe05b46a7c219595b30f2c, type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: dd051c58f58371942bbf8b79eb808c73
     m_Address: sniperTurret
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 1591110490357510, guid: dd051c58f58371942bbf8b79eb808c73,
-      type: 3}
-    m_TargetAsset: {fileID: 1591110490357510, guid: dd051c58f58371942bbf8b79eb808c73,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 2d904d9648d35be459f9026d8fb7aa05
+    m_Address: singleTurret
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 21b0a40ee0ecc3449aa7eb56899e69e3
+    m_Address: doubleTurret
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0e906e2dec284c04da74c1451ddcc7b7, type: 2}
   m_SchemaSet:

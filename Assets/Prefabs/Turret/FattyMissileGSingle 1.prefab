@@ -250,7 +250,7 @@ Transform:
   m_GameObject: {fileID: 1545943666229906}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4224523858383510}
   - {fileID: 4707919374964870}
@@ -269,11 +269,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14d6c04daf390a64fb9fe6dc4bb14ead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationGunBody: {fileID: 0}
+  rotationGunBody: {fileID: 4224523858383510}
   target: {fileID: 0}
   bullet: {fileID: 1773485284122676, guid: 38fa2fca60b67a0459b54d66c1c683f1, type: 3}
-  myParticleSystem: {fileID: 198244899795999660, guid: 10eaa45fa57f43f40aaa343c36b8a80f,
-    type: 3}
+  myParticleSystem: {fileID: 198736732735886972}
 --- !u!1 &1593263721353114
 GameObject:
   m_ObjectHideFlags: 0
