@@ -46,8 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 7852816419501230086, guid: bdef20123340c80438d24fddabc04862,
     type: 3}
-  bulletSpeed: 50
-  bulletDamage: 40
+  bulletSpeed: 40
+  bulletDamage: 20
   bulletDistance: 1000
   distance: {x: 0, y: 0, z: 0}
   spawnPosition: {x: 0, y: 0, z: 0}
