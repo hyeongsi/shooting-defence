@@ -1,5 +1,5 @@
 no,name,hp,attackDamage,attackRange,attackDelay,spinSpeed
-0,rifleTurret,10,10,10,5,10000
-1,sniperTurret,10,10,10,10,10000
-2,singleTurret,10,10,30,20,10000
-3,doubleTurret,10,10,30,40,10000
+0,rifleTurret,10,10,100,5,10000
+1,sniperTurret,10,10,100,10,10000
+2,singleTurret,10,10,300,20,10000
+3,doubleTurret,10,10,300,40,10000

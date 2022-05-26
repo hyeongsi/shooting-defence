@@ -590,6 +590,7 @@ public class MapEditorController : MonoBehaviour
             }else
             {
                 DestroyImmediate(parentGameObject);
+                parentGameObject = new GameObject(OBJECT_NAME);
             }
             
             for (int i = 0; i < blockList.Count; i++)
@@ -617,7 +618,8 @@ public class MapEditorController : MonoBehaviour
                 newTransform.parent = parentGameObject.transform;
             }
 
-            SceneManager.MoveGameObjectToScene(parentGameObject, SceneManager.GetSceneByBuildIndex(1));
+            if(SceneManager.GetActiveScene().buildIndex != 4)
+                SceneManager.MoveGameObjectToScene(parentGameObject, SceneManager.GetSceneByBuildIndex(1));
         }
 
         public void CreateCustomMapInMapEditor()   // 맵에디터에서 맵 생성

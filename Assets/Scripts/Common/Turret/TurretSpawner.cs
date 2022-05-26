@@ -8,7 +8,6 @@ public class TurretSpawner : MonoBehaviour
     public Player_Manager playerManager;
     public TurretSpawnUI turretSpawnUI;
     public bool isSpawn = false;
-    public bool isEnter = false;
     public bool isMapEditor = false;
 
     public MoneyBox moneyBox;
@@ -25,10 +24,10 @@ public class TurretSpawner : MonoBehaviour
     void Start()
     {
         moneyBox = GameObject.Find("MoneyBox").GetComponent<MoneyBox>();
-        needMoneyText = GameObject.Find("TurretSpawnUI").transform.Find("NeedMoney").GetComponent<Text>();
+        needMoneyText = GameObject.Find("ScreenUI").transform.Find("NeedMoney").GetComponent<Text>();
         m_Coroutine = PrintNeedMoneyText();
 
-        GameObject findTurretSpawnUiGameObject = GameObject.Find("TurretSpawnUI");
+        GameObject findTurretSpawnUiGameObject = GameObject.Find("ScreenUI");
         if(findTurretSpawnUiGameObject == null)
         {
             isMapEditor = true;
@@ -80,7 +79,6 @@ public class TurretSpawner : MonoBehaviour
                 createTurretGameObject = SpawnTurret(TurretManager.TurretName.doubleTurret);
                 break;
             default:
-                isSpawn = false;
                 break;
         }
 
@@ -113,12 +111,84 @@ public class TurretSpawner : MonoBehaviour
         if (turretSpawnUI == null)
             return;
 
-        isEnter = true;
+        if (isSpawn == true)
+            return;
+
+        if (!other.CompareTag("Player"))
+            return;
+
+        turretSpawnUI.PrintInitUI();
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (turretSpawnUI == null)
+            return;
 
         if (isSpawn == true)
             return;
 
-        turretSpawnUI.PrintInitUI();
+        if (!other.CompareTag("Player"))
+            return;
+
+        // 무식하게 터렛 추가하면 여기 버튼 추가해서 등록하면 됨
+        if (Input.GetKeyUp(KeyCode.Alpha1))     // 1
+        {
+            if (moneyBox.money >= turret1)
+            {
+                turretSpawnUI.DeleteUI();
+                CreateTurret(1);
+
+                moneyBox.SetMoneyText(moneyBox.money - turret1);
+            }
+            else
+            {
+                StartCoroutine("PrintNeedMoneyText");
+            }
+
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha2))    // 2
+        {
+            if (moneyBox.money >= turret2)
+            {
+                turretSpawnUI.DeleteUI();
+                CreateTurret(2);
+
+                moneyBox.SetMoneyText(moneyBox.money - turret2);
+            }
+            else
+            {
+                StartCoroutine("PrintNeedMoneyText");
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha3))    // 3
+        {
+            if (moneyBox.money >= turret3)
+            {
+                turretSpawnUI.DeleteUI();
+                CreateTurret(3);
+
+                moneyBox.SetMoneyText(moneyBox.money - turret3);
+            }
+            else
+            {
+                StartCoroutine("PrintNeedMoneyText");
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha4))    // 4
+        {
+            if (moneyBox.money >= turret4)
+            {
+                turretSpawnUI.DeleteUI();
+                CreateTurret(4);
+
+                moneyBox.SetMoneyText(moneyBox.money - turret4);
+            }
+            else
+            {
+                StartCoroutine("PrintNeedMoneyText");
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -126,87 +196,13 @@ public class TurretSpawner : MonoBehaviour
         if (turretSpawnUI == null)
             return;
 
-        isEnter = false;
-
-        turretSpawnUI.DeleteUI();
-    }
-    void Update()
-    {
-        if (isMapEditor == true)
-            return;
-
         if (isSpawn == true)
             return;
 
-        if (isEnter == true)
-        {
-            // 무식하게 터렛 추가하면 여기 버튼 추가해서 등록하면 됨
-            if (Input.GetKeyUp(KeyCode.Alpha1))     // 1
-            {
-                if(moneyBox.money >= turret1)
-                {
-                    isEnter = false;
-                    turretSpawnUI.DeleteUI();
-                    CreateTurret(1);
+        if (!other.CompareTag("Player"))
+            return;
 
-                    moneyBox.SetMoneyText(moneyBox.money - turret1);
-                }
-                else
-                {
-                    StopAllCoroutines();
-                    StartCoroutine("PrintNeedMoneyText");
-                }
-                
-            }
-            else if (Input.GetKeyUp(KeyCode.Alpha2))    // 2
-            {
-                if (moneyBox.money >= turret2)
-                {
-                    isEnter = false;
-                    turretSpawnUI.DeleteUI();
-                    CreateTurret(2);
-
-                    moneyBox.SetMoneyText(moneyBox.money - turret2);
-                }
-                else
-                {
-                    StopAllCoroutines();
-                    StartCoroutine("PrintNeedMoneyText");
-                }
-            }
-            else if (Input.GetKeyUp(KeyCode.Alpha3))    // 3
-            {
-                if (moneyBox.money >= turret3)
-                {
-                    isEnter = false;
-                    turretSpawnUI.DeleteUI();
-                    CreateTurret(3);
-
-                    moneyBox.SetMoneyText(moneyBox.money - turret3);
-                }
-                else
-                {
-                    StopAllCoroutines();
-                    StartCoroutine("PrintNeedMoneyText");
-                }
-            }
-            else if (Input.GetKeyUp(KeyCode.Alpha4))    // 4
-            {
-                if (moneyBox.money >= turret4)
-                {
-                    isEnter = false;
-                    turretSpawnUI.DeleteUI();
-                    CreateTurret(4);
-
-                    moneyBox.SetMoneyText(moneyBox.money - turret4);
-                }
-                else
-                {
-                    StopAllCoroutines();
-                    StartCoroutine("PrintNeedMoneyText");
-                }
-            }
-        }
+        turretSpawnUI.DeleteUI();
     }
 
     IEnumerator PrintNeedMoneyText()

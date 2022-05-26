@@ -19,7 +19,7 @@ public class Player_Manager : MonoBehaviour
     [Header("플레이어 설정값")]
     public GameObject[] weapon_Guns;
     public int skinSelectNumber;
-    public int gunSelectNumber;
+    public int gunSelectNumber = 0;
 
     [Header("플레이어 상태")]
     public bool sprintFlag;
