@@ -28,10 +28,13 @@ public class UpgradeSelection : MonoBehaviour
 
         for (int i = 0; i < button.Length; i++)
         {
-            randomIndex = Random.Range(0, 4);
+            randomIndex = Random.Range(0, 5);
+            
+
+
             button[i].image.sprite = optionImages[randomIndex];
             upgradeButtons[i].GetValues(playerManager, canvas, randomIndex);
-            upgradeButtons[i] = button[i].GetComponent<UpgradeButton>();
+            upgradeButtons[i] = button[i].GetComponent<UpgradeButton>();            
         }
     }
 }

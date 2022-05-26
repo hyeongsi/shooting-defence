@@ -9,6 +9,15 @@ public class UpgradeButton : MonoBehaviour
     GameObject canvas;
     int randomIndex;
 
+    GameObject playerLife;
+    Life life;
+
+    private void Awake()
+    {
+        playerLife = GameObject.Find("Life");
+        life = playerLife.GetComponent<Life>();
+    }
+
     public void GetValues(Player_Manager playerManager, GameObject canvas, int randomIndex)
     {
         this.playerManager = playerManager;
@@ -43,7 +52,7 @@ public class UpgradeButton : MonoBehaviour
             }
             else
             {
-                GetLifePoint();
+                life.LifeEarn();
             }
         }
         Cursor.visible = false;
@@ -69,11 +78,5 @@ public class UpgradeButton : MonoBehaviour
     void MagazineUpgrade()
     {
         weapon.magazineSize = (int)(weapon.magazineSize * 1.2f);
-    }
-
-    void GetLifePoint()
-    {
-        // 라이프가 가득 찼어도 나타나게 함
-
     }
 }

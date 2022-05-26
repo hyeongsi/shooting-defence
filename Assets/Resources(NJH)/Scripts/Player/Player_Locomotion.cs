@@ -196,14 +196,4 @@ public class Player_Locomotion : MonoBehaviour
         }
         playerManager.weapon.WeaponKeyInput();
     }
-
-    public void TakeDamage(float damage)
-    {
-        lifePoint -= 1;
-
-        if (lifePoint <= 0)
-        {
-
-        }
-    }
 }
