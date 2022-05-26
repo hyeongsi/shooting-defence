@@ -13,7 +13,7 @@ public class Player_Locomotion : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
 
     [Header("플레이어 값")]
-    public float hp = 100f;
+    public int lifePoint = 10;
     public float stamina = 100;
     public float moveSpeed;
     public float sprintSpeed;
@@ -199,11 +199,9 @@ public class Player_Locomotion : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        hp -= damage;
+        lifePoint -= 1;
 
-        animator.CrossFade("Hit", 0f);
-
-        if (hp <= 0)
+        if (lifePoint <= 0)
         {
 
         }
