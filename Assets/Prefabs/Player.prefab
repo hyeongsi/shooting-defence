@@ -453,7 +453,6 @@ GameObject:
   - component: {fileID: 1913450021389887849}
   - component: {fileID: 1913450021389887846}
   - component: {fileID: 1913450021389887848}
-  - component: {fileID: 1913450021389887850}
   m_Layer: 29
   m_Name: Player
   m_TagString: Player
@@ -576,14 +575,6 @@ MonoBehaviour:
   rigLayer_WeaponAim: {fileID: 1913450021847277398}
   rigLayer_WeaponReload: {fileID: 1913450021054240435}
   transitionSpeed: 10
---- !u!81 &1913450021389887850
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1913450021389887844}
-  m_Enabled: 1
 --- !u!1 &1913450021478758353
 GameObject:
   m_ObjectHideFlags: 0

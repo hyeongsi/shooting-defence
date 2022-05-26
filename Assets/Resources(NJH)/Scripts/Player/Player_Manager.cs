@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class Player_Manager : MonoBehaviour
 {
+    Player_SetValues PlayerSetValues;
     Player_Locomotion playerLocomotion;
     Player_Animation playerAnimation;
     [SerializeField] Player_CameraFunction cameraFunction;
@@ -14,6 +15,11 @@ public class Player_Manager : MonoBehaviour
     [Header("방향 입력")]
     public float horizontal;
     public float vertical;
+
+    [Header("플레이어 설정값")]
+    public GameObject[] weapon_Guns;
+    public int skinSelectNumber;
+    public int gunSelectNumber;
 
     [Header("플레이어 상태")]
     public bool sprintFlag;
@@ -29,7 +35,6 @@ public class Player_Manager : MonoBehaviour
     [Header("UI")]
     public Text bulletText;
     public Text reloadText;
-    public Slider hpBar;
     public Slider staminaBar;
     public Sprite aimPointSprite;
     public Sprite disableAimPointSprite;
@@ -37,6 +42,29 @@ public class Player_Manager : MonoBehaviour
     public GameObject targetGuide;
 
     Vector3 moveDirection;
+
+    private void Awake()
+    {
+        PlayerSetValues = FindObjectOfType<Player_SetValues>();
+        
+        // 선택한 스킨, 무기 사용
+        if (PlayerSetValues != null)
+        {
+            skinSelectNumber = PlayerSetValues.skinNumber;
+            gunSelectNumber = PlayerSetValues.gunNumber;
+        }
+
+        if (gunSelectNumber == 0)
+        {
+            weapon_Guns[0].gameObject.SetActive(true);
+            weapon = weapon_Guns[0].GetComponent<Weapon_Gun>();
+        }
+        else
+        {
+            weapon_Guns[1].gameObject.SetActive(true);
+            weapon = weapon_Guns[1].GetComponent<Weapon_Gun>();
+        }
+    }
 
     private void Start()
     {
@@ -48,9 +76,7 @@ public class Player_Manager : MonoBehaviour
 
         playerLocomotion = GetComponent<Player_Locomotion>();
         playerAnimation = GetComponent<Player_Animation>();
-        weapon = GetComponentInChildren<Weapon_Gun>();
-
-        hpBar.maxValue = playerLocomotion.hp;
+        
         staminaBar.maxValue = playerLocomotion.stamina;
 
         cameraFunction.Initialize();
@@ -72,7 +98,6 @@ public class Player_Manager : MonoBehaviour
         sprintFlag = Input.GetButton("Sprint") && aimFlag == false && isShooting == false;
         aimFlag = cameraFunction.aimCamFlag;
 
-        hpBar.value = playerLocomotion.hp;
         staminaBar.value = playerLocomotion.stamina;
 
         playerLocomotion.UpdateFunction();

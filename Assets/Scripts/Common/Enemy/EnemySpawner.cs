@@ -8,6 +8,7 @@ public class EnemySpawner : MonoBehaviour
     public List<SpawnEnemyInfo> spawnEnemyInfoList; // 스테이지에서 스폰될 적 정보들
     public IEnumerator myCoroutine;
     public Text waveHelpText;   // 웨이브 안내 텍스트
+    public UpgradeSelection upgradeSelection;
 
     public void Init(Vector3 position, List<SpawnEnemyInfo> spawnEnemyInfoList)
     {
@@ -40,9 +41,11 @@ public class EnemySpawner : MonoBehaviour
             yield break;
         }
 
+
         for (int i = 0; i < spawnEnemyInfoList[stage].spawnEnemyList.Count; i++)
         {
             currentWave++;
+
             Debug.Log("몹 소환 전 대기");
             yield return new WaitForSeconds(spawnEnemyInfoList[stage].waitTimeBeforeSpawnList[currentWave]);    // 스테이지 시작 전 대기
 
@@ -78,6 +81,9 @@ public class EnemySpawner : MonoBehaviour
             // 클리어 관련 정보 저장하던지, 추가로 처리 필요
             yield break;
         }
+
+        Debug.Log("옵션 선택");
+        upgradeSelection.Initialize();
 
         for (int i = 10; i > 0; i--)
         {

@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Title
+    uniqueID: 816512627
+    locked: 0
+  - name: Stage
+    uniqueID: 1631312055
+    locked: 0
+  - name: Character
+    uniqueID: 3426483193
+    locked: 0

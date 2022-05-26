@@ -112,7 +112,7 @@ public class InGameMapController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             checkPlayState = true;
-            
+
             enemySpawner.StartStage(INIT_STAGE);
             waveHelpText.text = "";
         }
