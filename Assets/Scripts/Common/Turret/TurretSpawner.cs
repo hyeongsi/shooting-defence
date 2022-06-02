@@ -15,33 +15,40 @@ public class TurretSpawner : MonoBehaviour
     private IEnumerator m_Coroutine;
     public Text needMoneyText;
 
-    const int turret1 = 5;
-    const int turret2 = 10;
-    const int turret3 = 20;
-    const int turret4 = 30;
+    const int turret1 = 30;
+    const int turret2 = 50;
+    const int turret3 = 100;
+    const int turret4 = 200;
     const int turret5 = 40;
 
     void Start()
     {
-        moneyBox = GameObject.Find("MoneyBox").GetComponent<MoneyBox>();
-        needMoneyText = GameObject.Find("ScreenUI").transform.Find("NeedMoney").GetComponent<Text>();
-        m_Coroutine = PrintNeedMoneyText();
-
-        GameObject findTurretSpawnUiGameObject = GameObject.Find("ScreenUI");
-        if(findTurretSpawnUiGameObject == null)
+        try 
         {
-            isMapEditor = true;
-            return;
-        }
-        turretSpawnUI = findTurretSpawnUiGameObject.GetComponent<TurretSpawnUI>();
+            moneyBox = GameObject.Find("MoneyBox").GetComponent<MoneyBox>();
+            needMoneyText = GameObject.Find("ScreenUI").transform.Find("NeedMoney").GetComponent<Text>();
+            m_Coroutine = PrintNeedMoneyText();
 
-        GameObject findPlayerManagerGameObject = GameObject.Find("Player");
-        if (findPlayerManagerGameObject == null)
-        {
-            isMapEditor = true;
-            return;
+            GameObject findTurretSpawnUiGameObject = GameObject.Find("ScreenUI");
+            if (findTurretSpawnUiGameObject == null)
+            {
+                isMapEditor = true;
+                return;
+            }
+            turretSpawnUI = findTurretSpawnUiGameObject.GetComponent<TurretSpawnUI>();
+
+            GameObject findPlayerManagerGameObject = GameObject.Find("Player");
+            if (findPlayerManagerGameObject == null)
+            {
+                isMapEditor = true;
+                return;
+            }
+            playerManager = findPlayerManagerGameObject.GetComponent<Player_Manager>();
         }
-        playerManager = findPlayerManagerGameObject.GetComponent<Player_Manager>();
+        catch
+        {
+
+        }
     }
 
     public GameObject SpawnTurret(TurretManager.TurretName turretName)

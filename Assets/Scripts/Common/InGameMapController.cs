@@ -18,6 +18,8 @@ public class InGameMapController : MonoBehaviour
     public const string NULL_MAP_NAME = "test3";
     public const string INIT_MAP_NAME = "TestStage_3";
 
+    bool isStart = false;
+
     void Start()
     {
         coroutine = StartCoroutine(LoadCustomMap(GameManager.Instance.stageName.ToString()));
@@ -111,7 +113,11 @@ public class InGameMapController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            if(isStart)
+                return;
+
             checkPlayState = true;
+            isStart = true;
 
             enemySpawner.StartStage(INIT_STAGE);
             waveHelpText.text = "";
