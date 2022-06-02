@@ -31,6 +31,7 @@ public class GameManager : Singleton<GameManager>
             switch ((StageName)stage)
             {
                 case StageName.stage1:
+                case StageName.stage2:
                 case StageName.TestStage_2:
                     StartCoroutine(LoadAsyncSceneCourtine(nextstate, ((StageName)stage).ToString()));
                     break;
@@ -101,7 +102,8 @@ public class GameManager : Singleton<GameManager>
     public enum StageName
     {
         stage1 = 0,
-        TestStage_2 = 1,
+        stage2 = 1,
+        TestStage_2 = 2,
     }
     #endregion
 }
