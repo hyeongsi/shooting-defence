@@ -5487,7 +5487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9787a4d82efbd354683ea3c6aaef5d9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSetValues: {fileID: 616721296}
+  playerSetValues: {fileID: 0}
   stageIndex: 0
 --- !u!1 &1606077857
 GameObject:
