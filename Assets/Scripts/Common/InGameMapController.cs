@@ -27,7 +27,7 @@ public class InGameMapController : MonoBehaviour
 
     public IEnumerator LoadCustomMap(string mapName)
     {
-        while (!(BlockManager.Instance.isLoadAll && EnemyManager.Instance.isLoadAll  && EnemyManager.Instance.isLoadStaticData && ObjManager.Instance.isLoadAll))
+        while (!(BlockManager.Instance.isLoadAll && EnemyManager.Instance.isLoadAll  && EnemyManager.Instance.isLoadStaticData && ObjManager.Instance.isLoadAll && MapStageManager.Instance.isLoadAll))
         {
             yield return null;
         }
@@ -36,8 +36,14 @@ public class InGameMapController : MonoBehaviour
         {
             mapName = NULL_MAP_NAME;
         }
-        TextAsset text = Resources.Load(mapName) as TextAsset;
-        customTileMap = JsonUtility.FromJson<MapEditorController.CustomTileMap>(text.ToString());
+
+        // MapStageManager.Instance.GetMap((MapStageManager.MapName)mapName)
+
+        //Text tempText = Resources.Load(mapName) as Text;
+        //customTileMap = JsonUtility.FromJson<MapEditorController.CustomTileMap>(tempText.text);
+
+        string getStr = MapStageManager.Instance.GetMap((MapStageManager.MapName)System.Enum.Parse(typeof(MapStageManager.MapName), mapName));
+        customTileMap = JsonUtility.FromJson<MapEditorController.CustomTileMap>(getStr);
 
         customTileMap.CreateCustomMap();
         cc.enabled = false;
@@ -94,6 +100,7 @@ public class InGameMapController : MonoBehaviour
             }
             
             checkPlayState = true;
+            MapStageManager.Instance.LoadAll();
             BlockManager.Instance.LoadAll();
             EnemyManager.Instance.LoadAll();
             TurretManager.Instance.LoadAll();
