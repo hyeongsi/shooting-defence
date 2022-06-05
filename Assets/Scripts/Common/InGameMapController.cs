@@ -15,7 +15,7 @@ public class InGameMapController : MonoBehaviour
     public Text waveHelpText;   // 웨이브 안내 텍스트
     public Coroutine coroutine;
 
-    public const string NULL_MAP_NAME = "test3";
+    public const string NULL_MAP_NAME = "TestStage_2";
     public const string INIT_MAP_NAME = "TestStage_2";
 
     bool isStart = false;
@@ -27,7 +27,7 @@ public class InGameMapController : MonoBehaviour
 
     public IEnumerator LoadCustomMap(string mapName)
     {
-        while (!(BlockManager.Instance.isLoadAll && EnemyManager.Instance.isLoadAll  && EnemyManager.Instance.isLoadStaticData && ObjManager.Instance.isLoadAll && MapStageManager.Instance.isLoadAll))
+        while (!(BlockManager.Instance.isLoadAll && EnemyManager.Instance.isLoadAll && TurretManager.Instance.isLoadData && TurretManager.Instance.isLoadStaticData && ObjManager.Instance.isLoadAll && MapStageManager.Instance.isLoadAll))
         {
             yield return null;
         }
@@ -43,6 +43,7 @@ public class InGameMapController : MonoBehaviour
         //customTileMap = JsonUtility.FromJson<MapEditorController.CustomTileMap>(tempText.text);
 
         string getStr = MapStageManager.Instance.GetMap((MapStageManager.MapName)System.Enum.Parse(typeof(MapStageManager.MapName), mapName));
+
         customTileMap = JsonUtility.FromJson<MapEditorController.CustomTileMap>(getStr);
 
         customTileMap.CreateCustomMap();

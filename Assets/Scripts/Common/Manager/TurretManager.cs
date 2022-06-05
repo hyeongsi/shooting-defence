@@ -16,6 +16,9 @@ public class TurretManager : Singleton<TurretManager>
     private TurretStaticData loadTurretStaticData;
     private Dictionary<int, TurretStaticData> turretStaticDataDictionary = new Dictionary<int, TurretStaticData>();
 
+    public bool isLoadStaticData = false;
+    public bool isLoadData = false;
+
     private void Awake()
     {
         if (null == instance)
@@ -64,6 +67,8 @@ public class TurretManager : Singleton<TurretManager>
 
                         turretStaticDataDictionary.Add(int.Parse(csvString[i][(int)TurretCsvColumn.INDEX]), newTurretStaticData);
                     }
+
+                    isLoadStaticData = true;
                 }
                 catch
                 {
@@ -89,6 +94,7 @@ public class TurretManager : Singleton<TurretManager>
                 {
                     turretDictionary.Add((int)turretName, asyncOperationHandle);
                     Debug.Log(turretName.ToString() + " Turret 로드 완료");
+                    isLoadData = true;
                 };
         }
         else
