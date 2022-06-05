@@ -8,6 +8,11 @@ public class UI_Popup_SelectCharacter : MonoBehaviour
 
     public int stageIndex;
 
+    private void Start()
+    {
+        playerSetValues = FindObjectOfType<Player_SetValues>();
+    }
+
     public void SelectSkin(int skinIndex)
     {
         playerSetValues.skinNumber = skinIndex;
