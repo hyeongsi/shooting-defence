@@ -22,6 +22,12 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine(myCoroutine);
     }
 
+    public void EndStage()
+    {
+        StopAllCoroutines();
+        GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
+    }
+
     public IEnumerator SpawnEnemy(int stage)
     {
         int currentWave = -1;

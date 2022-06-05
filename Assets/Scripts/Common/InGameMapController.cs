@@ -16,7 +16,7 @@ public class InGameMapController : MonoBehaviour
     public Coroutine coroutine;
 
     public const string NULL_MAP_NAME = "test3";
-    public const string INIT_MAP_NAME = "TestStage_3";
+    public const string INIT_MAP_NAME = "TestStage_2";
 
     bool isStart = false;
 
@@ -133,6 +133,12 @@ public class InGameMapController : MonoBehaviour
         if(checkPlayState == true)
         {
             GameManager.Instance.PlayeState = GameManager.PlayStates.IN_GAME;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            StopAllCoroutines();
+            enemySpawner.EndStage();
         }
     }
 
