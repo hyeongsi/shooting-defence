@@ -83,6 +83,7 @@ public class MapEditorController : MonoBehaviour
     }
     private void Start()
     {
+        MapStageManager.Instance.LoadAll();
         BlockManager.Instance.LoadAll();
         EnemyManager.Instance.LoadAll();
         TurretManager.Instance.LoadAll();

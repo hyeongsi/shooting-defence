@@ -27,6 +27,7 @@ public class UI_Popup_SelectCharacter : MonoBehaviour
     {
         stageIndex = this.stageIndex;
 
+        MapStageManager.Instance.LoadAll();
         BlockManager.Instance.LoadAll();
         EnemyManager.Instance.LoadAll();
         TurretManager.Instance.LoadAll();
