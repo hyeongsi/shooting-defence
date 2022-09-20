@@ -98,5 +98,6 @@ public class BlockManager : Singleton<BlockManager>
         Block1_Gray = 0,
         Block1_White = 1,
         Block1_Yellow = 2,
+        Block1_Green = 3,
     }
 }

@@ -127,5 +127,13 @@ public class ObjManager : Singleton<ObjManager>
         Path_Straight = 29,
         Path_T = 30,
         Turret_Spawner = 31,
+        DeadTree = 32,
+        CurveWall = 33,
+        FlatWall = 34,
+        Rocks1 = 35,
+        Rocks2 = 36,
+        Weed1 = 37,
+        Weed2 = 38,
+        TreeStump = 39,
     }
 }
