@@ -14,6 +14,9 @@ public class GameManager : Singleton<GameManager>
     private Scene nextScene;
     const string INIT_STAGE_NAME = "TestStage_2";
     public string stageName = INIT_STAGE_NAME;
+    public MapEditorController.CustomTileMap customTileMap = new MapEditorController.CustomTileMap();
+
+    public const int CUSTOM_MAP = 100;
 
     #region Property
     public PlayStates PlayeState { set { playState = value; }  get { return playState; } }
@@ -25,6 +28,10 @@ public class GameManager : Singleton<GameManager>
         if (stage < 0)
         {
             StartCoroutine(LoadAsyncSceneCourtine(nextstate, INIT_STAGE_NAME));
+        }
+        else if (stage == CUSTOM_MAP)
+        {
+            StartCoroutine(LoadAsyncSceneCourtine(PlayStates.IN_GAME, "CUSTOM"));
         }
         else
         {
@@ -86,6 +93,7 @@ public class GameManager : Singleton<GameManager>
 
         UI_Scene_Loading loadingUI = null;
         loadingUI = UIManager.Instance.SceneUIData.ui_scene as UI_Scene_Loading;
+
 
         loadingUI.LoadScene(stageName);
     }

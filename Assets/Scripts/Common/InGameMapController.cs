@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
+using System;
 
 public class InGameMapController : MonoBehaviour
 {
@@ -42,19 +43,34 @@ public class InGameMapController : MonoBehaviour
         //Text tempText = Resources.Load(mapName) as Text;
         //customTileMap = JsonUtility.FromJson<MapEditorController.CustomTileMap>(tempText.text);
 
-        string getStr = MapStageManager.Instance.GetMap((MapStageManager.MapName)System.Enum.Parse(typeof(MapStageManager.MapName), mapName));
+        if(mapName == "CUSTOM")
+        {
+            customTileMap = GameManager.Instance.customTileMap;
+        }
+        else
+        {
+            string getStr = MapStageManager.Instance.GetMap((MapStageManager.MapName)System.Enum.Parse(typeof(MapStageManager.MapName), mapName));
+            customTileMap = JsonUtility.FromJson<MapEditorController.CustomTileMap>(getStr);
+        }
 
-        customTileMap = JsonUtility.FromJson<MapEditorController.CustomTileMap>(getStr);
+        try
+        {
+            customTileMap.CreateCustomMap();
+            cc.enabled = false;
+            player.transform.position = customTileMap.spawnPosition.placeGameTransform;
+            cc.enabled = true;
 
-        customTileMap.CreateCustomMap();
-        cc.enabled = false;
-        player.transform.position = customTileMap.spawnPosition.placeGameTransform;
-        cc.enabled = true;
+            CreateCheckPointChildObject();  // 체크포인트 위치 맵 정보에 따라 새로 지정
+            checkPoint.SetCheckPoint();     // 체크포인트 위치 등록함
 
-        CreateCheckPointChildObject();  // 체크포인트 위치 맵 정보에 따라 새로 지정
-        checkPoint.SetCheckPoint();     // 체크포인트 위치 등록함
+            enemySpawner.Init(customTileMap.spawnEnemyPosition.placeGameTransform, customTileMap.spawnEnemyInfoList);
+        }
+        catch(Exception e)
+        {
+            StopAllCoroutines();
+            enemySpawner.EndStage();
+        }
 
-        enemySpawner.Init(customTileMap.spawnEnemyPosition.placeGameTransform, customTileMap.spawnEnemyInfoList);
         yield return null;
     }
 

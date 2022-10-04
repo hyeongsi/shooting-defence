@@ -25,14 +25,20 @@ public class UI_Popup_SelectCharacter : MonoBehaviour
 
     public void StartStage(int stageIndex)
     {
-        stageIndex = this.stageIndex;
-
         MapStageManager.Instance.LoadAll();
         BlockManager.Instance.LoadAll();
         EnemyManager.Instance.LoadAll();
         TurretManager.Instance.LoadAll();
         ObjManager.Instance.LoadAll();
 
-        GameManager.Instance.LoadScene(GameManager.PlayStates.IN_GAME, stageIndex);
+        if (this.stageIndex == GameManager.CUSTOM_MAP)
+        {
+            GameManager.Instance.LoadScene(GameManager.PlayStates.IN_GAME, GameManager.CUSTOM_MAP);
+        }
+        else
+        {
+            stageIndex = this.stageIndex;
+            GameManager.Instance.LoadScene(GameManager.PlayStates.IN_GAME, stageIndex);
+        }
     }
 }
