@@ -9,11 +9,16 @@ public class EnemySpawner : MonoBehaviour
     public IEnumerator myCoroutine;
     public Text waveHelpText;   // 웨이브 안내 텍스트
     public UpgradeSelection upgradeSelection;
+    public GameObject playerLifeObject;
+    private Life playerHp = null;
+    
 
     public void Init(Vector3 position, List<SpawnEnemyInfo> spawnEnemyInfoList)
     {
         transform.position = position;
         this.spawnEnemyInfoList = spawnEnemyInfoList;
+
+        playerHp = playerLifeObject.GetComponent<Life>();
     }
 
     public void StartStage(int stage)
@@ -73,23 +78,40 @@ public class EnemySpawner : MonoBehaviour
         
         if (spawnEnemyInfoList.Count <= (stage+1))
         {
-            waveHelpText.text = "스테이지 클리어\n\n 잠시 후 게임이 종료됩니다.";
-            yield return new WaitForSeconds(3f);
-            GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
-            // 클리어 관련 정보 저장하던지, 추가로 처리 필요
+            waveHelpText.text = "스테이지 클리어";
+            yield return new WaitForSeconds(2f);
+
+            // 클리어 UI 출력
+            playerHp.OnClearUI();
+
             yield break;
         }
         if (spawnEnemyInfoList[(stage + 1)].spawnEnemyList.Count <= 0)
         {
-            waveHelpText.text = "스테이지 클리어\n\n 잠시 후 게임이 종료됩니다.";
-            yield return new WaitForSeconds(3f);
-            GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
-            // 클리어 관련 정보 저장하던지, 추가로 처리 필요
+            waveHelpText.text = "스테이지 클리어";
+            yield return new WaitForSeconds(2f);
+
+            // 클리어 UI 출력
+            playerHp.OnClearUI();
+            
             yield break;
         }
 
-        Debug.Log("옵션 선택");
-        upgradeSelection.Initialize();
+        if(playerHp.lifeLeft <= 0)
+        {
+            waveHelpText.text = "스테이지 실패";
+            yield return new WaitForSeconds(2f);
+
+            // 실패 UI 출력
+            playerHp.OnFailedUI();
+
+            yield break;
+        }
+        else
+        {
+            Debug.Log("옵션 선택");
+            upgradeSelection.Initialize();
+        }
 
         for (int i = 10; i > 0; i--)
         {
@@ -100,5 +122,11 @@ public class EnemySpawner : MonoBehaviour
         myCoroutine = SpawnEnemy(++stage);
         StartCoroutine(myCoroutine);
         yield break;
+    }
+
+    public void MoveMainMenu()
+    {
+        Time.timeScale = 1;
+        GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
     }
 }

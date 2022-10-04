@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
     public bool isDie = false;
     GameObject moneyBoxObject;
     GameObject playerLife;
+    Life life;
 
     public float HP { get { return hp; }  set { hp = value; } }
     public float SPEED { get { return speed; } set { speed = value; } }
@@ -32,6 +33,7 @@ public class Enemy : MonoBehaviour
         Debug.Log("에너미 데이터 " + enemyStaticData);
         moneyBoxObject = GameObject.Find("MoneyBox");
         playerLife = GameObject.Find("Life");
+        life = playerLife.GetComponent<Life>();
 
         hp = enemyStaticData.maxHp;
         speed = enemyStaticData.moveSpeed;
@@ -87,11 +89,12 @@ public class Enemy : MonoBehaviour
 
             if(checkPointNumber >= CheckPoint.checkPoint.Length) // 마지막 체크포인트에 도착
             {
-                // 라이프 감소
-                playerLife.GetComponent<Life>().LifeLoss();
                 ParticleSystem explosion = Instantiate(explosionEffect, transform.position, Quaternion.LookRotation(Vector3.up));  // 폭발 이펙트 실행
                 SoundManager.instance.PlaySound("Enemy Explosion", explosionSound, 1f, transform.position);
                 DestroyImmediate(gameObject);
+
+                // 라이프 감소
+                life.LifeLoss();
             }
             else
             {

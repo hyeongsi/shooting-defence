@@ -7,6 +7,16 @@ public class Life : MonoBehaviour
 {
     public int lifeLeft = 5;
     public Text lifeText;
+    public GameObject screenUI;
+    private GameObject clearUI = null;
+    private GameObject failedUI = null;
+
+
+    public void Start()
+    {
+        clearUI = screenUI.transform.Find("Clear").gameObject;
+        failedUI = screenUI.transform.Find("Fail").gameObject;
+    }
 
     public void LifeEarn()
     {
@@ -16,14 +26,26 @@ public class Life : MonoBehaviour
 
     public void LifeLoss()
     {
-        if(lifeLeft == 0)
+        lifeLeft--;
+        lifeText.text = lifeLeft.ToString();
+
+        if (lifeLeft <= 0)
         {
-            // 게임 종료
+            OnFailedUI();
         }
-        else
-        {
-            lifeLeft--;
-            lifeText.text = lifeLeft.ToString();
-        }
+    }
+
+    public void OnClearUI()
+    {
+        Cursor.visible = true;
+        clearUI.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void OnFailedUI()
+    {
+        Cursor.visible = true;
+        failedUI.SetActive(true);
+        Time.timeScale = 0;
     }
 }
