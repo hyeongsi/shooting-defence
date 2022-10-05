@@ -20,32 +20,35 @@ public class Player_SetSkin : MonoBehaviour
     {
         switch (playerManager.skinSelectNumber)
         {
-            case 1:
+            case 0:
                 skinnedMeshRenderer.sharedMesh = meshes[0];
                 break;
-            case 2:
+            case 1:
                 skinnedMeshRenderer.sharedMesh = meshes[1];
                 break;
-            case 3:
+            case 2:
                 skinnedMeshRenderer.sharedMesh = meshes[2];
                 break;
-            case 4:
+            case 3:
                 skinnedMeshRenderer.sharedMesh = meshes[3];
                 break;
-            case 5:
+            case 4:
                 skinnedMeshRenderer.sharedMesh = meshes[4];
                 break;
-            case 6:
+            case 5:
                 skinnedMeshRenderer.sharedMesh = meshes[5];
                 break;
-            case 7:
+            case 6:
                 skinnedMeshRenderer.sharedMesh = meshes[6];
                 break;
-            case 8:
+            case 7:
                 skinnedMeshRenderer.sharedMesh = meshes[7];
                 break;
-            case 9:
+            case 8:
                 skinnedMeshRenderer.sharedMesh = meshes[8];
+                break;
+            default:
+                skinnedMeshRenderer.sharedMesh = meshes[0];
                 break;
         }
     }

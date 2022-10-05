@@ -5,7 +5,7 @@ using UnityEngine;
 public class UI_Popup_SelectStage : MonoBehaviour
 {
     public Canvas CharacterCanvas;
-    [SerializeField] UI_Popup_SelectCharacter uI_Popup_SelectCharacter;
+    [SerializeField] UI_Popup_SelectCharacter ui_Popup_SelectCharacter;
 
     static int initCount = 0;
     private void Start()
@@ -23,7 +23,7 @@ public class UI_Popup_SelectStage : MonoBehaviour
 
     public void SelectCharacter(int stageIndex)
     {
-        uI_Popup_SelectCharacter.stageIndex = stageIndex;
+        ui_Popup_SelectCharacter.stageIndex = stageIndex;
         CharacterCanvas.gameObject.SetActive(true);
     }
 

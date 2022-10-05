@@ -515,6 +515,11 @@ MonoBehaviour:
   weapon: {fileID: 7100995398663477009}
   horizontal: 0
   vertical: 0
+  animHorizontal: 0
+  animVertical: 0
+  weapon_Guns: []
+  skinSelectNumber: 0
+  gunSelectNumber: 0
   sprintFlag: 0
   aimFlag: 0
   moveFlag: 0
@@ -526,12 +531,12 @@ MonoBehaviour:
   rotateLock: 0
   bulletText: {fileID: 0}
   reloadText: {fileID: 0}
-  hpBar: {fileID: 0}
   staminaBar: {fileID: 0}
   aimPointSprite: {fileID: 21300000, guid: 8dc3d3dbd6e7514499554034b14fd152, type: 3}
   disableAimPointSprite: {fileID: 21300000, guid: a34eee5b8ef74d84a9460973be1ea04a,
     type: 3}
   targetGuide: {fileID: 0}
+  characterRotate: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &1913450021389887846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -549,7 +554,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 3221225472
-  hp: 100
+  lifePoint: 10
   stamina: 100
   moveSpeed: 4
   sprintSpeed: 6

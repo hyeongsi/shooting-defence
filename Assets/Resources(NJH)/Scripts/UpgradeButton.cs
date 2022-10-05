@@ -57,7 +57,8 @@ public class UpgradeButton : MonoBehaviour
         }
         Cursor.visible = false;
         canvas.gameObject.SetActive(false);
-        Time.timeScale = 1;
+        playerManager.rotateLock = false;
+        playerManager.triggerLock = false;
     }
 
     void FireRateUpgrade()

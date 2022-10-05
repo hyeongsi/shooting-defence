@@ -16,6 +16,10 @@ public class Player_Manager : MonoBehaviour
     public float horizontal;
     public float vertical;
 
+    [Header("애니메이션 전용 방향")]
+    public float animHorizontal;
+    public float animVertical;
+
     [Header("플레이어 설정값")]
     public GameObject[] weapon_Guns;
     public int skinSelectNumber;
@@ -31,6 +35,7 @@ public class Player_Manager : MonoBehaviour
     public bool isGrounded;
     public bool isBehind;
     public bool rotateLock;
+    public bool triggerLock;
 
     [Header("UI")]
     public Text bulletText;
@@ -42,6 +47,9 @@ public class Player_Manager : MonoBehaviour
     public GameObject targetGuide;
 
     Vector3 moveDirection;
+    public Vector3 animDirection;
+    public float mouseHorizontal;
+    public float mouseVertical;
 
     private void Awake()
     {
@@ -150,6 +158,12 @@ public class Player_Manager : MonoBehaviour
             lookDir = hit.point - transform.position;                                                   // 플레이어가 바라보는 방향(조준점 위치 - 자신의 위치)
             lookDir = new Vector3(lookDir.x, 0, lookDir.z);
         }
+
+        mouseHorizontal = lookDir.normalized.x;
+        mouseVertical = lookDir.normalized.z;
+
+        animHorizontal = (lookDir.normalized.x + lookDir.normalized.z) * horizontal;
+        animVertical = (lookDir.normalized.x + lookDir.normalized.z) * vertical;
 
         return lookDir.normalized;
     }

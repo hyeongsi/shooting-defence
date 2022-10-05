@@ -160,7 +160,7 @@ public class Weapon_Gun : MonoBehaviour
 
         if(weaponInfo.weaponType == WeaponType.weaponTypeID.shotgun)
         {
-            SoundManager.instance.PlaySound("Fire", pumpSound, 0.3f);
+            SoundManager.instance.PlaySound("Fire", pumpSound);
         }
     }
 
@@ -227,7 +227,7 @@ public class Weapon_Gun : MonoBehaviour
         bullet.bulletDir = bulletDir + randomDir;
 
         // 사격 소리 재생
-        SoundManager.instance.PlaySound("Fire", shootingSound, 0.3f);
+        SoundManager.instance.PlaySound("Fire", shootingSound);
 
         Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward)); // 총구 화염 생성
         Instantiate(bullet, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward)); // 총알 생성
@@ -252,7 +252,7 @@ public class Weapon_Gun : MonoBehaviour
         }
 
         // 사격 소리 재생
-        SoundManager.instance.PlaySound("Fire", shootingSound, 0.3f);
+        SoundManager.instance.PlaySound("Fire", shootingSound);
 
         // 총구 화염 생성
         Instantiate(muzzleFlash, muzzleFlashPosition.position, Quaternion.LookRotation(muzzleFlashPosition.forward));
@@ -270,7 +270,7 @@ public class Weapon_Gun : MonoBehaviour
         }
 
         StartCoroutine(Co_Reloading());
-        SoundManager.instance.PlaySound("Reload", reloadSound, 0.5f);
+        SoundManager.instance.PlaySound("Reload", reloadSound);
     }
 
     void Weapon_Reaload_Shell()
@@ -281,7 +281,7 @@ public class Weapon_Gun : MonoBehaviour
         }
 
         StartCoroutine(Co_Reloading_Shell());
-        SoundManager.instance.PlaySound("Reload", reloadSound, 0.5f);
+        SoundManager.instance.PlaySound("Reload", reloadSound);
     }
 
     IEnumerator Co_Reloading()

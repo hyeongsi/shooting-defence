@@ -90,16 +90,18 @@ public class Player_Locomotion : MonoBehaviour
 
     void Loco_Rotate()
     {
-        Quaternion characterRotation;
-        if(playerManager.GetMousePosition() != Vector3.zero)
+        if (!playerManager.rotateLock)
         {
-            characterRotation = Quaternion.LookRotation(playerManager.GetMousePosition());
-            characterRotation.x = 0;
-            characterRotation.z = 0;
+            Quaternion characterRotation;
+            if (playerManager.GetMousePosition() != Vector3.zero)
+            {
+                characterRotation = Quaternion.LookRotation(playerManager.GetMousePosition());
+                characterRotation.x = 0;
+                characterRotation.z = 0;
 
-            transform.rotation = characterRotation;
-        }
-        
+                transform.rotation = characterRotation;
+            }
+        }        
         //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(playerManager.GetMousePosition()), 15f);
         //transform.forward = playerManager.GetMousePosition();
     }
@@ -194,6 +196,9 @@ public class Player_Locomotion : MonoBehaviour
         {
             return;
         }
-        playerManager.weapon.WeaponKeyInput();
+        if (!playerManager.triggerLock)
+        {
+            playerManager.weapon.WeaponKeyInput();
+        }
     }
 }

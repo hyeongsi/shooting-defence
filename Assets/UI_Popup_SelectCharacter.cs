@@ -13,14 +13,10 @@ public class UI_Popup_SelectCharacter : MonoBehaviour
         playerSetValues = FindObjectOfType<Player_SetValues>();
     }
 
-    public void SelectSkin(int skinIndex)
-    {
-        playerSetValues.skinNumber = skinIndex;
-    }
-
     public void SelectGun(int gunIndex)
     {
         playerSetValues.gunNumber = gunIndex;
+        playerSetValues.skinNumber = Random.Range(0, 8);
     }
 
     public void StartStage(int stageIndex)

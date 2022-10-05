@@ -51,8 +51,8 @@ public class Player_Animation : MonoBehaviour
 
     void SetAnimatorParameter()
     {
-        animator.SetFloat(horizontalID, playerManager.horizontal, 0.1f, Time.deltaTime);
-        animator.SetFloat(verticalID, playerManager.vertical, 0.1f, Time.deltaTime);
+        animator.SetFloat(horizontalID, playerManager.animHorizontal, 0.1f, Time.deltaTime);
+        animator.SetFloat(verticalID, playerManager.animVertical, 0.1f, Time.deltaTime);
         animator.SetBool(sprintID, playerManager.sprintFlag);
         animator.SetBool(aimID, playerManager.aimFlag);
         animator.SetBool(fireID, playerManager.weapon.isShooting);
