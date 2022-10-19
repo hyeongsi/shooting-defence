@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviour
             if (moneyBoxObject != null)
             {
                 MoneyBox moneyBox = moneyBoxObject.GetComponent<MoneyBox>();
-                moneyBox.SetMoneyText(moneyBox.money + Random.Range(1, 21));
+                moneyBox.SetMoneyText(moneyBox.money + Random.Range(3,10));
             }
 
             Destroy(gameObject, 2.5f);

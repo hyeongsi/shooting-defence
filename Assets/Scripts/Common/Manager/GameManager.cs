@@ -40,6 +40,7 @@ public class GameManager : Singleton<GameManager>
                 case StageName.stage1:
                 case StageName.stage2:
                 case StageName.TestStage_2:
+                case StageName.stage3:
                     StartCoroutine(LoadAsyncSceneCourtine(nextstate, ((StageName)stage).ToString()));
                     break;
                 default:
@@ -112,6 +113,7 @@ public class GameManager : Singleton<GameManager>
         stage1 = 0,
         stage2 = 1,
         TestStage_2 = 2,
+        stage3 = 3,
     }
     #endregion
 }

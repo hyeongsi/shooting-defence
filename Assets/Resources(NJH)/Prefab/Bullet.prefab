@@ -112,7 +112,8 @@ MonoBehaviour:
   bulletTrail: {fileID: 5361146263939502726, guid: 2497b84da266f624cb9a8cd793fe5347,
     type: 3}
   bulletSpeed: 30
-  bulletDamage: 14
+  bulletDamage: 8
+  bulletDir: {x: 0, y: 0, z: 0}
 --- !u!96 &8921112537978390684
 TrailRenderer:
   serializedVersion: 2

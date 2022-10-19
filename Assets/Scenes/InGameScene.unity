@@ -2559,7 +2559,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &222841790
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2578,7 +2578,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1402, y: 1018}
+  m_AnchoredPosition: {x: -1402, y: 901}
   m_SizeDelta: {x: 500, y: 40}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &222841791
@@ -12416,7 +12416,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 998962358}
-  m_LocalRotation: {x: 0.1608018, y: 0.82242614, z: -0.2837271, w: 0.4661084}
+  m_LocalRotation: {x: 0.16080178, y: 0.82242614, z: -0.28372714, w: 0.46610832}
   m_LocalPosition: {x: -40.71, y: 20.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -14292,7 +14292,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 31.5, y: -63.1}
+  m_AnchoredPosition: {x: 31.5, y: -26}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1147773529
@@ -20226,7 +20226,7 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 5, y: -3.5}
   m_SizeDelta: {x: -10, y: -7}
   m_Pivot: {x: 0, y: 1}
@@ -29347,7 +29347,7 @@ PrefabInstance:
         type: 3}
       propertyPath: weapon
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1913450022109071345}
     - target: {fileID: 1913450021389887849, guid: fb95d897620071d4497df965db86f304,
         type: 3}
       propertyPath: LifeText
@@ -29430,6 +29430,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7100995399661612965, guid: fb95d897620071d4497df965db86f304,
         type: 3}
+      propertyPath: damage
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7100995399661612965, guid: fb95d897620071d4497df965db86f304,
+        type: 3}
       propertyPath: isburstShot
       value: 0
       objectReference: {fileID: 0}
@@ -29446,6 +29451,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 41680dad0f0243748b4e228f49a2e3c4, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb95d897620071d4497df965db86f304, type: 3}
+--- !u!114 &1913450022109071345 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7100995399661612965, guid: fb95d897620071d4497df965db86f304,
+    type: 3}
+  m_PrefabInstance: {fileID: 1913450022109071344}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 303719019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a56639f86489d4787d6c9737640529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &1955513854611747064
 CanvasRenderer:
   m_ObjectHideFlags: 0

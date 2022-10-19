@@ -21,20 +21,22 @@ MonoBehaviour:
     m_Address: TestStage_2
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 4900000, guid: 69c1e73b531a3cd40a492bb453d3f627, type: 3}
-    m_TargetAsset: {fileID: 4900000, guid: 69c1e73b531a3cd40a492bb453d3f627, type: 3}
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b7818715510ea1440b9b94f0d10148e6
     m_Address: stage1
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 4900000, guid: b7818715510ea1440b9b94f0d10148e6, type: 3}
-    m_TargetAsset: {fileID: 4900000, guid: b7818715510ea1440b9b94f0d10148e6, type: 3}
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4ae4d4adae78e8643a21ec4d7ecd7047
     m_Address: stage2
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 4900000, guid: 4ae4d4adae78e8643a21ec4d7ecd7047, type: 3}
-    m_TargetAsset: {fileID: 4900000, guid: 4ae4d4adae78e8643a21ec4d7ecd7047, type: 3}
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c41fb5e7193390b4ca2805f55d084c80
+    m_Address: stage3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0e906e2dec284c04da74c1451ddcc7b7, type: 2}
   m_SchemaSet:

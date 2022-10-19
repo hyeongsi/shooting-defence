@@ -98,5 +98,6 @@ public class MapStageManager : Singleton<MapStageManager>
         stage1 = 0,
         stage2 = 1,
         TestStage_2 = 2,
+        stage3 = 3,
     }
 }
