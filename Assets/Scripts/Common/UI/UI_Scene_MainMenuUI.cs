@@ -45,11 +45,11 @@ public class UI_Scene_MainMenuUI :MonoBehaviour
 
     public void ExitGame()
     {
-
-#if UNITY_EDITOR 
-        UnityEditor.EditorApplication.isPlaying=false; 
-#else 
-        Application.Quit();
+        
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        System.Diagnostics.Process.GetCurrentProcess().Kill();
 #endif
     }
 }

@@ -299,6 +299,7 @@ public class MapEditorController : MonoBehaviour
 
     public void ExitGame()
     {
+        UIManager.Instance.ClearUI();
         GameManager.Instance.LoadScene(GameManager.PlayStates.MAIN_MENU, -1);
     }
     #endregion

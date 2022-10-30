@@ -66,6 +66,12 @@ public class UIManager : Singleton<UIManager>
     }
     #endregion
 
+    public void ClearUI()
+    {
+        uiPopupDictionary.Clear();
+        popupList.Clear();
+        sceneUIData = null;
+    }
     public void AddPopupUI(UI_Popup ui_popup, Canvas canvas)
     {
         UI_PopupData ui_popdata = new UI_PopupData(ui_popup, canvas);
