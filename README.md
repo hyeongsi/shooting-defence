@@ -63,7 +63,7 @@
 <details>
   <summary>-</summary>
   <img width="976" src=""/>
-</details>
+  </details>
 <details>
   <summary>-</summary>
   <img width="976" src=""/>
