@@ -59,6 +59,17 @@
 
 <br>
 
+## 맵에디터 저장 데이터
+<details>
+  <summary>-</summary>
+  <img width="976" src="https://user-images.githubusercontent.com/71202869/246597606-276262e5-9ad7-4a79-9944-decce02f6e44.PNG"/>
+</details>
+<details>
+  <summary>-</summary>
+  <img width="976" src="https://user-images.githubusercontent.com/71202869/246597607-3daeede8-2458-45dc-b275-48bc33034880.PNG"/>
+</details>
+  
+
 ## 시연 영상
 <details>
   <summary>-</summary>
