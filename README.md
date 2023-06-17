@@ -61,12 +61,9 @@
 
 ## 맵에디터 저장 데이터
 <details>
-  <summary>-</summary>
-  <img width="976" src="https://user-images.githubusercontent.com/71202869/246597606-276262e5-9ad7-4a79-9944-decce02f6e44.PNG"/>
-</details>
-<details>
-  <summary>-</summary>
-  <img width="976" src="https://user-images.githubusercontent.com/71202869/246597607-3daeede8-2458-45dc-b275-48bc33034880.PNG"/>
+  <summary>json</summary>
+  <img width="500" src="https://user-images.githubusercontent.com/71202869/246597606-276262e5-9ad7-4a79-9944-decce02f6e44.PNG"/>
+  <img width="500" src="https://user-images.githubusercontent.com/71202869/246597607-3daeede8-2458-45dc-b275-48bc33034880.PNG"/>
 </details>
   
 
@@ -99,7 +96,9 @@
     </tr>
   </table>
 </details>
+<br/>
 
+## 아쉬운점
 ```
 * 처음부터 체계적인 구조를 잡아서 짜임새 있는 프로그램을 만들려 했으나
 경험 부족으로 구조를 잘못 잡는 바람에 더 복잡한 코드로 되어버림
