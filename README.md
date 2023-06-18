@@ -61,7 +61,7 @@
 
 ## 맵에디터 저장 데이터
 <details>
-  <summary>json</summary>
+  <summary><h4>.json 양식</h4></summary>
   <img width="500" src="https://user-images.githubusercontent.com/71202869/246597606-276262e5-9ad7-4a79-9944-decce02f6e44.PNG"/>
   <img width="500" src="https://user-images.githubusercontent.com/71202869/246597607-3daeede8-2458-45dc-b275-48bc33034880.PNG"/>
 </details>
