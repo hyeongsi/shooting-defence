@@ -69,33 +69,52 @@
 
 ## 시연 영상
 <details>
-  <summary>-</summary>
-  <img width="976" src=""/>
-  </details>
+  <summary><h5>시작</h5></summary>
+  <video src="https://user-images.githubusercontent.com/71202869/246639787-1008e188-e993-40cf-9493-3ba5d349675f.mp4"></video>
+</details>
 <details>
-  <summary>-</summary>
-  <img width="976" src=""/>
+  <summary><h5>맵 에디터</h5></summary>
+  <video src="https://user-images.githubusercontent.com/71202869/246639843-330d5dc9-d9bf-4b60-8d87-693737215762.mp4"></video>
+</details>
+<details>
+  <summary><h5>커스텀 맵</h5></summary>
+  <video src="https://user-images.githubusercontent.com/71202869/246639911-05badc89-aa11-4355-85d5-99c68f6c6de9.mp4"></video>
 </details>
 <br>
 
 ## 기타 / 조작법
-<details>
-  <summary>조작법</summary>
-  <table>
-    <tr>
-      <td><b>조작법</b></td>
-      <td><b>W S A D</b></td>
-    </tr>
-    <tr>
-      <td>공격</td>
-      <td>클릭</td>
-    </tr>
-    <tr>
-      <td>재장전</td>
-      <td>R</td>
-    </tr>
-  </table>
-</details>
+<ul>
+  <li>
+    <table>
+      <tr>
+        <td><b>조작법</b></td>
+        <td><b>W S A D</b></td>
+      </tr>
+      <tr>
+        <td>공격</td>
+        <td>클릭</td>
+      </tr>
+      <tr>
+        <td>재장전</td>
+        <td>R</td>
+      </tr>
+    </table>
+  </li>
+  <li>
+    <h4>맵 에디터 참고사항</h4>
+  </li>
+</ul>
+
+```
+* 노란색 발판 오브젝트: 캐릭터 스폰 위치
+
+* 빨간색 발판 오브젝트: 적 스폰 위치
+
+* 파란색 발판 오브젝트: 적 이동 경로
+
+- 적은 파란색 발판 오브젝트를 따라가며 마지막 파란색 발판 오브젝트에 도달하면 소멸처리
+```
+  
 <br/>
 
 ## 아쉬운점
